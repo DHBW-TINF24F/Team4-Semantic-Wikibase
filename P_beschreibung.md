@@ -39,7 +39,7 @@ Das Projekt „Semantic Wikibase“ beschäftigt sich damit, wie Begriffe aus de
 
 ---
 
-## Was macht ihr im Projekt konkret?
+## Projektstruktur
 
 1. **Verstehen, wie Begriffe heute beschrieben werden:** Einarbeitung in AAS Concept Descriptions, Wikibase, vorhandene Standards.
 2. **Wikibase aufsetzen und konfigurieren:** Testen, wie Begriffe angelegt und beschriftet werden können.
