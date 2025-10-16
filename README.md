@@ -11,6 +11,7 @@ This repo contains the results of project: https://github.com/DHBW-TINF24F/.gith
 | 1.0     | 15.10.2025 | Zuteil KI generiert | Erster Überblick |
 
 <br>
+
 ## Inhaltsverzeichnis
 
 1. Übersicht
