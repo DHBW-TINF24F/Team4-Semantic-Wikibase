@@ -45,43 +45,48 @@ Wird noch ergänzt
 
 
 - Auflösbare URIs für Konzepte bereitstellen:  
-   - Jeder Begriff hat eine eigene URL, die man im Browser oder per API aufrufen kann.  
-   - Akzeptanzkriterium: Aufruf von /concept/{id} liefert die Beschreibung.
+   - Jedes Konzept (also z. B. ein Merkmal oder eine Eigenschaft) bekommt eine eigene Web-Adresse (URL).
+   Wenn man diese URL im Browser oder über eine API aufruft, sieht man die Beschreibung des Konzepts.
 
 - REST‑API zum Abrufen von Concept Descriptions:  
-   - GET /concept/{id}?lang=de|en liefert die Daten in IEC61360‑ähnlichem JSON.  
-   - Akzeptanzkriterium: API gibt für ein Beispiel‑Item validen JSON‑Output zurück.
+   - Es gibt eine Programmierschnittstelle (API), über die man Konzepte abrufen, anlegen, ändern oder löschen kann.
+    - Die Daten werden als JSON geliefert, damit andere Systeme sie leicht nutzen können. (Vermutlich - bin ich mir noch nicht sicher)
 
 
 
 - Mehrsprachigkeit:  
-   - Labels/Definitionen mindestens in de und en möglich.  
-   - Akzeptanzkriterium: ?lang=de liefert deutsche Strings, ?lang=en englische.
+   - Alle Konzepte sollen mindestens auf Deutsch und Englisch verfügbar sein.
+    - Man kann also in der API angeben, in welcher Sprache die Beschreibung geliefert werden soll.
 
 
 - Mapping auf IEC61360‑Datentemplate:  
-   - API liefert Felder wie preferredName, definition, dataType, unit, valueFormat.  
-   - Akzeptanzkriterium: Beispiel‑Item zeigt alle relevanten IEC61360‑Felder.
+    - Die gespeicherten Konzepte sollen nach dem internationalen Standard IEC 61360 aufgebaut sein. (wird nochmnal genau überprüft welches Standard)
+    - Das bedeutet: Es gibt feste Felder wie Name, Definition, Datentyp, Einheit usw., damit alles einheitlich beschrieben ist.
 
 - Import/Export / Integration mit AAS:  
-   - Import von AASX oder Abgleich mit AAS‑Servern testen.  
-   - Akzeptanzkriterium: Ein AASX‑Beispiel kann Daten einlesen / referenzieren.
+    - Die Wikibase soll mit der Asset Administration Shell (AAS) zusammenarbeiten.
+    - Das heißt: AAS-Daten (z. B. aus einer AASX-Datei) können importiert oder verknüpft werden.
+    - Damit können AAS-Tools direkt auf die semantischen Konzepte zugreifen.
 
 - Verlinkung zu externen Standards:  
-    - Möglichkeit, Referenzen/Redirects zu ECLASS/IEC/QUDT zu speichern.  
-    - Akzeptanzkriterium: Item enthält externen Link / IRDI‑Referenz.
+    - Ein Konzept kann auf andere Standards verweisen, zum Beispiel auf ECLASS, IEC-CDD oder QUDT.
+    - So bleibt die Verbindung zu bestehenden Normen erhalten, auch wenn das Konzept in der Wikibase gespeichert ist.
 
 
 - Niedrigschwelliger Zugang / offene Plattform (Wiki‑Ansatz):
-    -  Bedeutung: Jeder kann semantische Definitionen erstellen oder finden, ähnlich wie Wikipedia/Wikibase.
+    -  Die Plattform soll offen und leicht nutzbar sein – ähnlich wie Wikipedia.
+    - Jeder soll Konzepte suchen und eintragen können, ohne komplizierte Hürden oder teure Lizenzen.
 
 - Leichte Spezifikation & Governance:
-    - Bedeutung: Eine kurze, klare Anleitung (z. B. „Registry of Semantics“), die festlegt, welche Informationen ein Begriff mindestens enthalten muss (z. B. Name, Kurzdefinition, Sprache, Datentyp, Einheit, Quelle), wie Einträge dokumentiert und versioniert werden.
+    - Es soll einfache Regeln und Vorgaben geben, wie ein Konzept aufgebaut sein muss.
+    - Zum Beispiel: Jedes Konzept braucht einen Namen, eine kurze Definition, eine Sprache, einen Datentyp und eine Quelle.
+    So bleibt alles übersichtlich und nachvollziehbar.
 
 
 - Wikibase‑Konfigurationen / Workflow‑Definition:
 
-    - Bedeutung: Technische Umsetzung der Regeln in Wikibase: vordefinierte Eingabeformulare, Properties (z. B. preferredName, definition, dataType, unit), Pflichtfelder und Validierungsregeln.
+    - Die Wikibase wird technisch so eingerichtet, dass sie diesen Ablauf unterstützt:
+    z. B. bestimmte Eingabefelder, Pflichtangaben, Validierungen und Workflows (z. B. Entwurf → Review → Freigabe).
 
 
 
