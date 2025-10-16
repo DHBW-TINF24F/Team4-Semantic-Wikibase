@@ -4,6 +4,28 @@ This repo contains the results of project: https://github.com/DHBW-TINF24F/.gith
 
 # Projekt 4: Semantic Wikibase
 
+## Versionskontrolle:
+
+| Version | Datum      | Autor       | Kommentar                         |
+|-|-|-|-|
+| 1.0     | 15.10.2025 | Zuteil KI generiert | Erster Überblick |
+
+<br>
+## Inhaltsverzeichnis
+
+1. Übersicht
+2. Die aktuelle Problemstellung
+3. Lösungsansatz des Projekts
+4. AAS
+5. Überblick der Projektstruktur
+6. Ziele des Projekts
+7. Notwendigkeit des Projekts
+8. Quellen und Links
+
+<br>
+
+
+
 ## Übersicht
 
 Das Projekt „Semantic Wikibase“ beschäftigt sich damit, wie Begriffe aus der Industrie (wie Maßeinheiten, Bauteile, Eigenschaften) eindeutig, offen und für Computer verständlich im Internet beschrieben werden können. Ziel ist es, eine Plattform zu bauen, auf der jeder solche Begriffe anlegen, beschreiben und wiederverwenden kann – ähnlich wie bei Wikipedia, aber speziell für industrielle Begriffe.
