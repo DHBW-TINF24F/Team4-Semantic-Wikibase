@@ -63,7 +63,7 @@ Das Projekt „Semantic Wikibase“ beschäftigt sich damit, wie Begriffe aus de
 
 ---
 
-## Warum ist das wichtig?
+## Notwendigkeit des Projekts
 
 - Maschinen und Programme können so eindeutige Begriffe verwenden und verstehen.
 - Firmen können weltweit besser zusammenarbeiten.
