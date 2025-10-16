@@ -8,7 +8,7 @@ This repo contains the results of project: https://github.com/DHBW-TINF24F/.gith
 
 | Version | Datum      | Autor       | Kommentar                         |
 |-|-|-|-|
-| 1.0     | 15.10.2025 | Zuteil KI generiert | Erster Überblick |
+| 1.0     | 15.10.2025 | Zuteil KI generiert & Kristanna Pfeil | Erster Überblick |
 
 <br>
 
