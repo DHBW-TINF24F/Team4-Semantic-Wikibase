@@ -5,11 +5,11 @@
 
 ## Überblick der Protokolle
 
-| Protokoll Nummer   | Datum      | Überblick Inhalt   |
-|--------------------|------------|--------------------|
-| 00                 | 26.09.2025 | Gruppenfindung, Projekt Auswahl und Rollenverteilung|
-| 01                 | 08.10.2025 | Auswahl des Vorgehensmodell |
-| 02                 |            |                    |
+|Protokoll Nummer|Datum|Autor|Überblick Inhalt|
+|-|-|-|-|
+|00| 26.09.2025 |Yvonne Wagner|Gruppenfindung, Projekt Auswahl und Rollenverteilung|
+|01| 08.10.2025 |Yvonne Wagner|Auswahl des Vorgehensmodell|
+|02| 17.10.2025 |Yvonne Wagner|Abnahme Vorgehensmodell & Fortschritte Anforderungsanalyse|
 
 <br><br>
 
@@ -79,7 +79,34 @@ Vorschlag: Wasserfallmodell
 
 <br><br>
 
-## 02 Protokoll vom XX.XX.XXXX
+## 02 Protokoll vom 17.10.2025
+***Status:***
+* Meilensteine: (~~genehmigt~~/~~abgelehnt~~/in arbeit)
+* Anforderungsanalyse: (~~genehmigt~~/~~abgelehnt~~/in arbeit)
+
+***Beschlüsse:***
+* Wasserfallmodell mit den Meilensteinen wie im Projektplan beschrieben (genehmigt/~~abgelehnt~~/~~in arbeit~~)
+* Konventionen für Dokumentenerstellung (~~genehmigt~~/~~abgelehnt~~/in arbeit)
+* To-Do's bis zum nächstes Meeting
+  * Anforderungsanalyse abschließen
+  * Meilensteine abschließen
+  * Zeitplan, Kostenplan, Ressourcenplan finalisieren
+
+***Ergebnisse:***
+* Nächstes Teammeeting: 24.10.25
+
+***Issue Tracker:***
+* Projektverständnis
+* Anforderungsanalyse, durch fehlende Erfahrung
+
+----------------------------------------------
+### Protokoll Notizen:
+* Es wurde bei der Einarbeitung in die Projektbeschreibung, viel mit KI-Programmen gearbeitet, da diese für alle Projektmitglieder einfacher und schneller zu verstehen waren
+
+----------------------------------------------
+<br><br>
+
+## 03 Protokoll vom XX.XX.XXXX
 ***Status:***
 
 
