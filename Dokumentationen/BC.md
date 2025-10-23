@@ -1,35 +1,46 @@
 # Business Case
 
-*Dokumentverantwortlicher: Projektleiter, Yvonne Wagner*
+|Dokumentverantwortlicher|Rolle|
+|-|-|
+|Yvonne Wagner|Projektleiterin|
 
-## Versionskontrolle:
+## Versionskontrolle
 
 | Version | Datum      | Autor       | Kommentar                         |
 |-|-|-|-|
 | 1.0     | 10.10.2025 | Yvonne Wagner | Erstellung & erster Überblick |
-| 1.1 | 16.10.2025 | Yvonne Wagner | Entwurf für Zeitplan, Ressorucenplan, Kostenplan, Aufteilung der Arbeitsstunden, Vorgehensmodell, Meilensteine hinzugefügt & kleinere Änderungen |
+| 1.1 | 16.10.2025 | Yvonne Wagner | Entwurf für Zeitplan, Ressourcenplan, Kostenplan, Aufteilung der Arbeitsstunden, Vorgehensmodell, Meilensteine hinzugefügt & kleinere Änderungen |
+|1.2|23.10.2025|Yvonne Wagner|Überarbeitung der Ressourcen- & Kostenplanung|
 
 
 <br>
 
 ## Inhaltsverzeichnis
 
-1. Einleitung
-2. Ausgangssituation
-   1.  Problemstellung
-3. Projektziel und Lösungsansätze
-   1. Projektziel
-   2. Lösungsansätze 
-4. Wirtschaftlicher Nutzen und Bewertung
-5. Zielgruppen und Marktpotenzial
-6. Kosten und Ressourcen
-   1. Kostenplan
-   2. Ressourcenplan
-7. Vorgehensmodell - Wasserfallmodell
-8. GANTT - Diagramm
-9.  Risikoanalyse
-10. Aufteilung der Arbeitsstunden
-11. Quellenverzeichnis
+- [Business Case](#business-case)
+  - [Versionskontrolle](#versionskontrolle)
+  - [Inhaltsverzeichnis](#inhaltsverzeichnis)
+  - [1. Einführung](#1-einführung)
+  - [2. Ausgangssituation](#2-ausgangssituation)
+    - [2.1 Analyse des Ist-Zustandes](#21-analyse-des-ist-zustandes)
+    - [2.2 Analyse der Problemstellung](#22-analyse-der-problemstellung)
+  - [3. Projektziel und Lösungsansätze](#3-projektziel-und-lösungsansätze)
+    - [3.1 Projektziel](#31-projektziel)
+    - [3.2 Lösungsansätze](#32-lösungsansätze)
+  - [4. Wirtschaftlicher Nutzen und Bewertung](#4-wirtschaftlicher-nutzen-und-bewertung)
+  - [5. Zielgruppen und Marktpotenzial](#5-zielgruppen-und-marktpotenzial)
+  - [6. Ressourcen und Kosten](#6-ressourcen-und-kosten)
+    - [6.1 Ressourcenplan](#61-ressourcenplan)
+      - [Personal Ressourcen](#personal-ressourcen)
+      - [Hardware Ressorcen](#hardware-ressorcen)
+      - [Software Ressourcen](#software-ressourcen)
+      - [Räumliche Ressourcen](#räumliche-ressourcen)
+    - [6.1 Kostenplan](#61-kostenplan)
+  - [7. Vorgehensmodell - Wasserfallmodell](#7-vorgehensmodell---wasserfallmodell)
+  - [8. GANTT - Diagramm](#8-gantt---diagramm)
+  - [9. Risikoanalyse](#9-risikoanalyse)
+  - [10. Aufteilung der Arbeitsstunden](#10-aufteilung-der-arbeitsstunden)
+  - [Quellenverzeichnis](#quellenverzeichnis)
 
 <br>
 
@@ -112,31 +123,11 @@ Bei Nutzung durch mehrere Unternehmen und Förderprojekten ist der ROI (Return o
 
 <br><br>
 
-## 6. Kosten und Ressourcen
+## 6. Ressourcen und Kosten
 
-### 6.1 Kostenplan
+Das Projekt der Semantischen Wikibase braucht hauptsächlich Software-Ressorcen, hier werde auf die Open-Source Lösungen wie zum Beispiel die Plattformen Wikibase oder MediaWiki. Personelle Kapazitäten sind bei 6 Mitarbeitern angesetzt.
 
-
-1. **Personalkosten**  
-   6 Personen * 80 € pro Stunde * 180 std (für 31 Wochen) = 86.400 € 
-
-2. **Software & Infrastruktur**  
-   - Wikibase Installation und Hosting: ca. 5.000 €  
-   - Testumgebungen, Server: ca. 3.000 €
-
-3. **Sonstiges (Dokumentation, Puffer)**  
-   - ca. 20.000 €
-
-**Gesamtkosten:** ca. **106.408 €**
-
-
-
-*Der Plan berücksichtigt den Zeitraum KW 39 bis KW 22 im nächsten Jahr, inklusive der Pause von KW 44 bis KW 47 und dem Meilenstein des ersten Prototyps in KW 48.*
-
-
-<br>
-
-### 6.2 Ressourcenplan
+### 6.1 Ressourcenplan
 
 #### Personal Ressourcen
 
@@ -155,7 +146,9 @@ Bei Nutzung durch mehrere Unternehmen und Förderprojekten ist der ROI (Return o
 
 #### Hardware Ressorcen
 
-Es werden mit den vorhandenen Ressourcen gearbeitet, mit der Voraussetzung, das jeder einen Computer besitzt, mit dem an dem Projekt aktiv mitentwickelt werden kann.
+Es werden mit den vorhandenen Ressourcen gearbeitet, mit der Voraussetzung, das jeder Mitarbeiter einen Computer besitzt, mit dem an dem Projekt aktiv mitentwickelt werden kann.
+
+* Server & deren Wartung
 
 <br>
 
@@ -172,22 +165,51 @@ Es wird ausschließlich mit Open Source Software gearbeitet.
 
 #### Räumliche Ressourcen
 
--wird nachgetragen -
+Es werden lediglich Büroräume für die Entwicklung und anstehende wöchentliche Meetings benötigt.
+
+<br>
+
+
+### 6.1 Kostenplan
+
+
+1. **Personalkosten**  
+   6 Personen * 80 € pro Stunde * 180 std (für 31 Wochen) = 86.400 € 
+
+2. **Software & Infrastruktur**  
+   - Wikibase Installation und Hosting: ca. 5.000 €  
+   - Testumgebungen, Server: ca. 3.000 €
+
+3. **Sonstiges (Dokumentation, Puffer)**  
+   - Arbeitsaufwand für Dokumentation: ca. 2000€
+   - Weiterbildungen: ca. 1000€ pro Person
+   - Kosten für zeitlichen Puffer: ca. 10.000 €
+
+4. **Büroräume für den Projektzeitraum**
+   - ca. 30.000€
+
+**Gesamtkosten:** ca. **142.400 €**
+
+
+
+*Der Plan berücksichtigt den Zeitraum KW 39 bis KW 22 im nächsten Jahr, inklusive der Pause von KW 44 bis KW 47 und dem Meilenstein des ersten Prototyps in KW 48.*
 
 
 <br><br>
 
 ## 7. Vorgehensmodell - Wasserfallmodell
+Als Grundlage des Vorgehensmodells dient in diesem Projekt das Wasserfallmodell. Da dieses jedoch nur eingeschränkt flexibel ist und zeitliche Puffer in diesem Projekt eine zentrale Rolle spielen, wird eine angepasste, flexiblere Variante des klassischen Wasserfallmodells verwendet. Diese Modifikation ermöglicht es, Meilensteine bei Bedarf nachträglich anzupassen oder deren Abschluss zeitlich zu verschieben.
 
+<br>
 
-| Phase                  | Aufgaben                                   | Zeitraum             | Meilenstein                  |
-|------------------------|--------------------------------------------|----------------------|------------------------------|
+|Phase|Aufgaben|Zeitraum|Meilenstein|
+|-|-|-|-|
 | Analyse, Planung & Prototypentwicklung | Analyse bestehender Beschreibungen, Projektplanung & Detaildefinition | KW 39 - KW 42 | Abschluss Analyse, Planung &  (KW 42) |
-| Designphase | Theoretischer Prototyp fertigen | KW 42 - 43 | Prototypentwicklung (KW 43) |
+| Designphase 1 | Theoretischer Prototyp fertigen | KW 42 - 43 | Prototypentwicklung (KW 43) |
 | Pause | - | KW 44 - KW 47 | - |
 | Präsentation des Zwischenstands | - | KW 48 | Präsentation (KW 48) |
-| Designphase 2.0 | Ggf. Feedback in Design übernehmen | KW 49 - 51 | Verbessertes Design (KW 51) |
-| Entwicklungsphase | Erweiterung API, Implementierung, UI, Entwicklung von Tests für kleinere Module | KW 51 - KW 13 | Prototyp-Erweiterung abgeschlossen (KW 10) |
+| Designphase 2 | Ggf. Feedback in Design übernehmen | KW 49 - 51 | Verbessertes Design (KW 51) |
+| Entwicklungsphase | Erweiterung API, Implementierung, UI, Entwicklung von Tests für kleinere Module | KW 51 - KW 13 | Prototyp-Erweiterung auf Finales Produkt abgeschlossen (KW 10) |
 | Testphase | API- und Systemtests, Bugfixing | KW 13 - KW 16 | Abschluss Tests (KW 16) |
 | Abschluss | Dokumentation, Anwenderdokumentation & Abschlusspräsentation | KW 17 - KW 22 | Projektabschluss & Präsentation (KW 22) |
 
@@ -201,7 +223,17 @@ Es wird ausschließlich mit Open Source Software gearbeitet.
 
 ## 9. Risikoanalyse
 
--wird nachgetragen-
+Im folgenden werden mögliche identifizierte Risiken aufgezählt:
+
+* Abhängigkeit von Open-Source Lösungen, statt eine eigene zu entwickeln
+* Systemperformance und Skalierbarkeit
+* Datenintegrität
+* Schnittstellenprobleme (API)
+* Möglicher Missbrauch bei Open Source und frei zugänglichen Daten
+* Probleme durch die mangelnde Kommunikation im Team
+* Budgetüberschreitung
+* Verlust von Open-Source-Lösungen
+* Uneinheitliche Terminologien der Begriffe
 
 <br><br>
 
@@ -209,7 +241,7 @@ Es wird ausschließlich mit Open Source Software gearbeitet.
 
 Jeder der Mitarbeiter muss ein Soll-Stunden-Konto von insgesamt 180 Stunden absolvieren. Dabei sind die Rollen zu gleichen Teilen aufgeteilt, jeweils 90 Stunden für die spezialisierte Rolle und jeweils 90 Stunden als Entwickler.
 
-||Yvonne Wagner|Kristanna Pfeil|Mariv Igrec|Colin Dietschman|Lucrezia Trabalza|Marina Hidalgo Burova|
+||Yvonne Wagner|Kristanna Pfeil|Marvin Igrec|Colin Dietschman|Lucrezia Trabalza|Marina Hidalgo Burova|
 |-|-|-|-|-|-|-|
 |Anforderungsanalyse|5|15|5|5|5|5|
 |Organisation & Kommunikation|15|5|5|5|10|10|
