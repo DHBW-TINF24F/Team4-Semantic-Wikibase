@@ -92,3 +92,9 @@ Eigenschaft: *Nennspannung*
 | Datentyp | Datentyp | Float |
 | ID | Eindeutige Kennung | 0112/2///61360_4#AAA123#001 |
 
+## URI
+
+Eine URI steht für Uniform Resource Identifier und ist ein eindeutiger Bezeichner für eine Ressource im Internet oder in einem Informationssystem.
+Sie dient also dazu, etwas eindeutig zu identifizieren oder zu adressieren, egal ob es sich um eine Webseite, ein Dokument, ein Datenelement oder z. B. eine semantische Definition handelt.
+
+URL und URN sind Unterarten einer URI.
