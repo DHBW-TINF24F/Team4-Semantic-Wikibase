@@ -66,16 +66,6 @@ Das Projekt „Semantic Wikibase“ beschäftigt sich damit, wie Begriffe aus de
 
 ---
 
-## Überblick der Projektstruktur
-
-1. **Verstehen, wie Begriffe heute beschrieben werden:** Einarbeitung in AAS Concept Descriptions, Wikibase, vorhandene Standards.
-2. **Wikibase aufsetzen und konfigurieren:** Testen, wie Begriffe angelegt und beschriftet werden können.
-3. **Eine API entwickeln:** Damit andere Programme Begriffe abfragen können.
-4. **Testen und vergleichen:** Funktioniert die Lösung besser als die alten Systeme?
-5. **Community einbinden:** Lösung vorstellen, Feedback einholen, gemeinsam verbessern.
-
----
-
 ## Ziele des Projekts
 
 - **Offene, auflösbare URIs** für Begriffe schaffen.
