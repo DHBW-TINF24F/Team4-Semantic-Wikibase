@@ -10,6 +10,7 @@
 |00| 26.09.2025 |Yvonne Wagner|Gruppenfindung, Projekt Auswahl und Rollenverteilung|
 |01| 08.10.2025 |Yvonne Wagner|Auswahl des Vorgehensmodell|
 |02| 17.10.2025 |Yvonne Wagner|Abnahme Vorgehensmodell & Fortschritte Anforderungsanalyse|
+|03|24.10.2025|Yvonne Wagner|Issue-Tracker auf GitHub nutzen & Beginn von der Systemarchitektur|
 
 <br><br>
 
@@ -106,8 +107,54 @@ Vorschlag: Wasserfallmodell
 ----------------------------------------------
 <br><br>
 
-## 03 Protokoll vom XX.XX.XXXX
+## 03 Protokoll vom 24.10.2025
+***Status:***
+* Anforderungsanalyse: (genehmigt/~~abgelehnt~~/~~in arbeit~~)
+
+***Beschlüsse:***
+* Issue Tracker in GitHub benutzen für einzelne Aufgaben
+
+***Ergebnisse:***
 * IEC61360 Einarbeitung (https://cdd.iec.ch/CDD/iec61360/iec61360.nsf/TreeFrameset?OpenFrameSet)
+* Anfang der Systemarchitektur-Analyse (Vorlesung: "Einführung UML")
+  * Möglichkeit die Wikibase-Cloud zu benutzen
+* Einarbeitung in Wikibase (Möglichkeiten der Verwendung)
+* Nächstes Meeting: 31.10.25
+
+***Issue Tracker:***
+* Systemarchitektur
+
+----------------------------------------------
+### Protokoll Notizen:
+* Mögliche passende Diagramme für UML Beschreibungen des Projekts (Vorlage Vorlesung):
+  * Verteilungsdiagramm (Client/Server)
+  * siehe UML aus der Aufgabenstellung (Aufbau einer Seite)
+  * Use-Case-Diagramm (Daten erstellen, bearbeiten, löschen)
+
+----------------------------------------------
+<br><br>
+
+## 04 Protokoll vom 31.10.2025
+***Status:***
+* Systemarchitektur:  (genehmigt/abgelehnt/in arbeit)
+
+***Beschlüsse:***
+
+
+***Ergebnisse:***
+
+
+***Issue Tracker:***
+
+
+----------------------------------------------
+### Protokoll Notizen:
+
+
+----------------------------------------------
+<br><br>
+
+## 05 Protokoll vom XX.XX.XXXX
 ***Status:***
 
 
@@ -125,3 +172,5 @@ Vorschlag: Wasserfallmodell
 
 
 ----------------------------------------------
+
+
