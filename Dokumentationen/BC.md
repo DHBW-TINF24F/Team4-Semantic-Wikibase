@@ -11,6 +11,7 @@
 | 1.0     | 10.10.2025 | Yvonne Wagner | Erstellung & erster Überblick |
 | 1.1 | 16.10.2025 | Yvonne Wagner | Entwurf für Zeitplan, Ressourcenplan, Kostenplan, Aufteilung der Arbeitsstunden, Vorgehensmodell, Meilensteine hinzugefügt & kleinere Änderungen |
 |1.2|23.10.2025|Yvonne Wagner|Überarbeitung der Ressourcen- & Kostenplanung|
+|1.3|28.10.2025|Yvonne Wagner|Anpassung des Zeitplans, kleine Änderungen & Anpassung der IEC Beschreibung|
 
 
 <br>
@@ -57,9 +58,11 @@ Hierbei wird der Ist-Zustand zu Beginn des Projekts beschrieben, die angestrebte
 
 Bestehende Datenbanken, die sich mit diesem Themenfeld befassen, sind häufig schwer auffindbar und zudem nicht uneingeschränkt zugänglich. Die enthaltenen Begriffsdefinitionen sind in der Regel nicht standardisiert, wodurch identische Sachverhalte unterschiedlich benannt und Inhalte mehrfach angelegt werden. In der Industrie 4.0 entstehen durch den Einsatz digitaler Zwillinge (Asset Administration Shell, AAS) enorme Datenmengen. Begriffe und Merkmale wie Maßeinheiten oder Materialeigenschaften sollten daher eindeutig und maschinenlesbar definiert sein. Bestehende Lösungen wie IEC-CDD oder ECLASS sind jedoch oft geschlossen, schwer zugänglich und teuer in der Integration.
 
-Das IEC-CDD (Common Data Dictionary) ist ein Allgemeines Datenwörterbuch, dass von der Internationalen Elektronischen Kommission (IEC) verwaltet wird. Dabei umfasst das Repository alle ISO- und IEC-technischen Bereiche. Es werden standardisierte Definitionen für Messgrößen bereitstellt und somit eine gemeinsame Semantik ermöglicht. <sup>[1]</sup>
+Das IEC-CDD (Common Data Dictionary) ist ein Allgemeines Datenwörterbuch, dass von der Internationalen Elektronischen Kommission (IEC) verwaltet wird. Dabei umfasst das Repository alle ISO- und IEC-technischen Bereiche. Es werden standardisierte Definitionen für Messgrößen bereitstellt und somit eine gemeinsame Semantik ermöglicht.<sup>[1]</sup>
 
-ECLASS ist hingegen ein branchenübergreifendes Klassifikationssystem zur eindeutigen Beschreibung von Produkten und Dienstleistungen. Es dient als globaler Referenzdatenstandard und ist ISO/IEC-normenkonform, was bedeutet, dass es weltweit angewendet wird. <sup>[2]</sup> ECLASS ermöglicht den digitalen Austausch von Produktstammdaten über verschiedene Branchen, Länder und Sprachen hinweg, was die Effizienz in Einkauf, Warenwirtschaft und Vertrieb steigert. <sup>[3]</sup>
+In diesem Kontext ist der Standard IEC-61360 zu betrachten.<sup>[2]</sup> 
+
+ECLASS ist hingegen ein branchenübergreifendes Klassifikationssystem zur eindeutigen Beschreibung von Produkten und Dienstleistungen. Es dient als globaler Referenzdatenstandard und ist ISO/IEC-normenkonform, was bedeutet, dass es weltweit angewendet wird.<sup>[3]</sup> ECLASS ermöglicht den digitalen Austausch von Produktstammdaten über verschiedene Branchen, Länder und Sprachen hinweg, was die Effizienz in Einkauf, Warenwirtschaft und Vertrieb steigert.<sup>[4]</sup>
 
 Abschließend lässt sich zusammenfassen, das IEC-CDD und ECLASS  etablierte, aber geschlossene und teilweise kostenpflichtige Standardsysteme für technische und Produktdaten, während das Projekt der Semantischen Wikibase eine offene und frei zugängliche Wissensbasis für Industriebegriffe schaffen soll, die direkt und unkompliziert von Programmen, Maschinen und Anwendern genutzt werden kann.
 
@@ -86,7 +89,7 @@ Entwicklung einer offenen, kollaborativen und semantisch klaren Wissensbasis (�
 
 ### 3.2 Lösungsansätze
 
--wird nachgetragen-
+Aufbauend auf die Open-Source Lösung Wikibase, soll eine Semantische Wissensdatenbank nach dem Standard IEC-61360 entwickelt werden. Darüber hinaus soll die Lösung "auflösbare URLs", für das AAS-Concept bereitstellen.
 
 
 <br><br>
@@ -115,8 +118,7 @@ Indirekte Effekte:
 * Anbieter von Industrie-Software und Plattformen
 * Mittelständische Unternehmen, die offene Standards bevorzugen
 
-Ein offenes semantisches Repository kann zum zentralen Infrastrukturbaustein für Industrie 4.0-Ökosysteme werden, ähnlich wie Wikidata für Wissensmanagement im Web.
-
+Ein offenes semantisches Repository kann zum zentralen Infrastrukturbaustein für Industrie 4.0-Ökosystemen werden, ähnlich wie Wikidata für Wissensmanagement im Web. Ebenfalls könnte die Anzahl an potentiellen Kunden steigen durch die erhöhte Nachfrage in der Digitalisierung und Automatisierung von der Produktion.
 
 Bewertung:
 Bei Nutzung durch mehrere Unternehmen und Förderprojekten ist der ROI (Return on Investment) bereits innerhalb von 2–3 Jahren realistisch, vor allem durch Wiederverwendung von Begriffen, offene Schnittstellen und Wegfall redundanter Datenpflege.
@@ -148,7 +150,7 @@ Das Projekt der Semantischen Wikibase braucht hauptsächlich Software-Ressorcen,
 
 Es werden mit den vorhandenen Ressourcen gearbeitet, mit der Voraussetzung, das jeder Mitarbeiter einen Computer besitzt, mit dem an dem Projekt aktiv mitentwickelt werden kann.
 
-* Server & deren Wartung
+* Server & deren Wartung (bestehende Möglichkeit zur Nutzung der kostenlosen Wikibase Cloud)
 
 <br>
 
@@ -192,7 +194,7 @@ Es werden lediglich Büroräume für die Entwicklung und anstehende wöchentlich
 
 
 
-*Der Plan berücksichtigt den Zeitraum KW 39 bis KW 22 im nächsten Jahr, inklusive der Pause von KW 44 bis KW 47 und dem Meilenstein des ersten Prototyps in KW 48.*
+*Der Plan berücksichtigt den Zeitraum KW 39 bis KW 22 im nächsten Jahr, inklusive der Pause von KW 45 bis KW 47 und dem Meilenstein des ersten Prototyps in KW 47.*
 
 
 <br><br>
@@ -204,10 +206,11 @@ Als Grundlage des Vorgehensmodells dient in diesem Projekt das Wasserfallmodell.
 
 |Phase|Aufgaben|Zeitraum|Meilenstein|
 |-|-|-|-|
-| Analyse, Planung & Prototypentwicklung | Analyse bestehender Beschreibungen, Projektplanung & Detaildefinition | KW 39 - KW 42 | Abschluss Analyse, Planung &  (KW 42) |
-| Designphase 1 | Theoretischer Prototyp fertigen | KW 42 - 43 | Prototypentwicklung (KW 43) |
-| Pause | - | KW 44 - KW 47 | - |
-| Präsentation des Zwischenstands | - | KW 48 | Präsentation (KW 48) |
+| Analyse, Planung & Prototypentwicklung | Analyse bestehender Beschreibungen, Projektplanung & Detaildefinition | KW 39 - KW 43 | Abschluss Analyse, Planung &  (KW 43) |
+| Designphase 1 | Theoretischer Prototyp fertigen | KW 42 - 43 | Prototypentwicklung (KW 44) |
+| Pause 1 | - | KW 45 - KW 47 | - |
+| Präsentation des Zwischenstands | - | KW 47 | Präsentation (KW 47) |
+| Pause 2 | - | KW 48 | - |
 | Designphase 2 | Ggf. Feedback in Design übernehmen | KW 49 - 51 | Verbessertes Design (KW 51) |
 | Entwicklungsphase | Erweiterung API, Implementierung, UI, Entwicklung von Tests für kleinere Module | KW 51 - KW 13 | Prototyp-Erweiterung auf Finales Produkt abgeschlossen (KW 10) |
 | Testphase | API- und Systemtests, Bugfixing | KW 13 - KW 16 | Abschluss Tests (KW 16) |
@@ -235,6 +238,8 @@ Im folgenden werden mögliche identifizierte Risiken aufgezählt:
 * Verlust von Open-Source-Lösungen
 * Uneinheitliche Terminologien der Begriffe
 
+Die Risiken können im allgemeinen durch genügend Puffer in Arbeitszeit und Budgetkalkulationen minimiert werden.
+
 <br><br>
 
 ## 10. Aufteilung der Arbeitsstunden
@@ -260,6 +265,7 @@ Jeder der Mitarbeiter muss ein Soll-Stunden-Konto von insgesamt 180 Stunden abso
 
 | Nummer | Link zur Quelle | Datum |
 |-|-|-|
-|[1]|https://www.bing.com/search?q=was%20ist%20IEC-CDD&qs=n&form=QBRE&sp=-1&lq=0&pq=was%20ist%20iec-cdd&sc=0-15&sk=&cvid=5F22EEE0E137469FB93BBCE16BE35D02|16.10.2025|
-|[2]|https://nexoma.de/eclass/|16.10.2025|
-|[3]|https://eclass.eu/eclass-standard/einfuehrung|16.10.2025|
+|[1]|https://cdd.iec.ch/|28.10.2025|
+|[2]|https://cdd.iec.ch/CDD/iec61360/iec61360.nsf/TreeFrameset?OpenFrameSet|28.10.2025|
+|[3]|https://nexoma.de/eclass/|16.10.2025|
+|[4]|https://eclass.eu/eclass-standard/einfuehrung|16.10.2025|
