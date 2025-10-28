@@ -107,6 +107,7 @@ Vorschlag: Wasserfallmodell
 <br><br>
 
 ## 03 Protokoll vom XX.XX.XXXX
+* IEC61360 Einarbeitung (https://cdd.iec.ch/CDD/iec61360/iec61360.nsf/TreeFrameset?OpenFrameSet)
 ***Status:***
 
 
