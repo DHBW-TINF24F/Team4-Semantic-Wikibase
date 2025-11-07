@@ -135,8 +135,11 @@ Vorschlag: Wasserfallmodell
 <br><br>
 
 ## 04 Protokoll vom 31.10.2025
+
+Spezielles Meeting mit dem Kunden.
+
 ***Status:***
-* Systemarchitektur:  (genehmigt/abgelehnt/in arbeit)
+* Systemarchitektur:  (~~genehmigt/abgelehnt~~/in arbeit)
 
 ***Beschlüsse:***
 
@@ -149,12 +152,32 @@ Vorschlag: Wasserfallmodell
 
 ----------------------------------------------
 ### Protokoll Notizen:
-
+* aus der Vorlesungs ist hervor gegangen, dass ein Verteilungsdiagramm zwingend notwendig ist in der SAS
 
 ----------------------------------------------
 <br><br>
 
-## 05 Protokoll vom XX.XX.XXXX
+## 05 Protokoll vom 07.11.2025
+***Status:***
+* Systemarchitektur:  (~~genehmigt/abgelehnt~~/in arbeit)
+
+***Beschlüsse:***
+
+
+***Ergebnisse:***
+* Probleme mit der Anforderungen und der Vorgabe vom Kunden
+
+***Issue Tracker:***
+
+
+----------------------------------------------
+### Protokoll Notizen:
+
+
+----------------------------------------------
+
+
+## 06 Protokoll vom XX.XX.XXXX
 ***Status:***
 
 
@@ -172,5 +195,3 @@ Vorschlag: Wasserfallmodell
 
 
 ----------------------------------------------
-
-
