@@ -95,7 +95,7 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 | Nachbedingung bei Erfolg | Nutzer erhält ein JSON mit allen relevanten Infos zum Konzept. |
 | Auslösendes Ereignis | Aufruf der URI über das Tool/API. |
 
-![Diagramm](images\UseCase_01.png)
+![Diagramm](images/UseCase_01.png)
 
 ### 5.2 Use Case 02 - Suche & Detailansicht
 
@@ -108,7 +108,7 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 | Nachbedingung bei Erfolg | Detailseite mit allen Infos und Verlinkungen wird angezeigt. |
 | Auslösendes Ereignis | Suche und Öffnen eines Concepts. |
 
-![Diagramm](images\UseCase_02.png)
+![Diagramm](images/UseCase_02.png)
 
 ### 5.3 Use Case 03 - REST-Abfrage für AAS
 
@@ -121,7 +121,7 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 | Nachbedingung bei Erfolg | JSON mit allen Concept-Informationen wird zurückgegeben. |
 | Auslösendes Ereignis | Request gegen API-Endpunkt. |
 
-![Diagramm](images\UseCase_03.png)
+![Diagramm](images/UseCase_03.png)
 
 ### 5.4 Use Case 04 - Quellenverweis
 
@@ -134,7 +134,7 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 | Nachbedingung bei Erfolg | Klickbare Links werden dargestellt. |
 | Auslösendes Ereignis | Aufruf der Detailansicht eines Concepts. |
 
-![Diagramm](images\UseCase_04.png)
+![Diagramm](images/UseCase_04.png)
 
 ### 5.5 Use Case 05 - Pflege der Datensätze
 
@@ -147,7 +147,7 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 | Nachbedingung bei Erfolg | Neue Properties sind angelegt und abrufbar. |
 | Auslösendes Ereignis | Erstellen eines Eintrags im System. |
 
-![Diagramm](images\UseCase_05.png)
+![Diagramm](images/UseCase_05.png)
 
 
 
