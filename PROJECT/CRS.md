@@ -9,52 +9,54 @@
 | 1.0     | 15.10.2025 | Kristanna Pfeil | Erstellung & erster Entwurf |
 | 2.0     | 23.10.2025 | Kristanna Pfeil | Überarbeitung & Ergänzung   |
 |3.0    | 07.11.2025 | Kristanna Pfeil | Überarbeitung & neue Formatierung |
-
+|4.0     | 12.11.2025 | Kristanna Pfeil | Überarbeitung nach Herr Rentschlers Empfehlung |
 
 <br>
 
 ## Inhaltsverzeichnis
 
 - [Lastenheft](#lastenheft)
-  - [Versionskontrolle:](#versionskontrolle)
-  - [Inhaltsverzeichnis](#inhaltsverzeichnis)
-  - [1. Einführung in das Lastenheft - CRS](#1-einführung-in-das-lastenheft---crs)
-  - [2. Ausgangssituation](#2-ausgangssituation)
-  - [3. Projektziel](#3-projektziel)
-  - [4. Stakeholder](#4-stakeholder)
-  - [5. Anwendungsfälle - Use Cases](#5-anwendungsfälle---use-cases)
-    - [5.1 Use Case 01 - URI](#51-use-case-01---uri)
-    - [5.2 Use Case 02 - Suche \& Detailansicht](#52-use-case-02---suche--detailansicht)
-    - [5.3 Use Case 03 - REST-Abfrage für AAS](#53-use-case-03---rest-abfrage-für-aas)
-    - [5.4 Use Case 04 - Quellenverweis](#54-use-case-04---quellenverweis)
-    - [5.5 Use Case 05 - Pflege der Datensätze](#55-use-case-05---pflege-der-datensätze)
-  - [6. Anforderungen](#6-anforderungen)
-    - [6.1 Funktionale Anforderungen](#61-funktionale-anforderungen)
-      - [6.1.1 FA-001 - Auflösbare URIs für Concept Descriptions bereitstellen](#611-fa-001---auflösbare-uris-für-concept-descriptions-bereitstellen)
-      - [6.1.2 FA.002 - REST‑API zum Abrufen von Concept Descriptions](#612-fa002---restapi-zum-abrufen-von-concept-descriptions)
-      - [6.1.3 FA.003 - Mapping auf IEC61360‑Datentemplate](#613-fa003---mapping-auf-iec61360datentemplate)
-      - [6.1.4 FA.004 - REST‑API Sprache](#614-fa004---restapi-sprache)
-      - [6.1.5 FA.005 - Edit‑Workflow](#615-fa005---editworkflow)
-      - [6.1.6 FA.006 - Verlinkung externen Quellen](#616-fa006---verlinkung-externen-quellen)
-      - [6.1.7 FA.007 - Import/Export mit AAS](#617-fa007---importexport-mit-aas)
-      - [6.1.8 FA.008 - Leichte Spezifikation \& Governance](#618-fa008---leichte-spezifikation--governance)
-      - [6.1.9 FA.009 - Standardisierung](#619-fa009---standardisierung)
-      - [6.1.10 FA.010 - Benutzerfreundlichkeit](#6110-fa010---benutzerfreundlichkeit)
-    - [6.2 Nicht-funktionale Anforderungen (NFR)](#62-nicht-funktionale-anforderungen-nfr)
-      - [6.2.1  NFA.001 - Verfügbarkeit / Stabilität](#621--nfa001---verfügbarkeit--stabilität)
-      - [6.2.2 NFA.002 - Performance](#622-nfa002---performance)
-      - [6.2.3 NFA.003 - Sicherheit](#623-nfa003---sicherheit)
-      - [6.2.4 NFA.004 - Usability](#624-nfa004---usability)
-      - [6.2.5 NFA.005 - Wartbarkeit / Codequalität](#625-nfa005---wartbarkeit--codequalität)
-    - [6.3 Randbedingungen](#63-randbedingungen)
-  - [7. Anhang](#7-anhang)
+	- [Versionskontrolle:](#versionskontrolle)
+	- [Inhaltsverzeichnis](#inhaltsverzeichnis)
+	- [1. Einführung in das Lastenheft - CRS](#1-einführung-in-das-lastenheft---crs)
+	- [2. Ausgangssituation](#2-ausgangssituation)
+	- [3. Projektziel](#3-projektziel)
+	- [4. Stakeholder](#4-stakeholder)
+	- [5. Anwendungsfälle - Use Cases](#5-anwendungsfälle---use-cases)
+		- [5.1 Use Case 01 - Auflösende URIs](#51-use-case-01---auflösende-uris)
+		- [5.2 Use Case 02 - Suche \& Detailansicht](#52-use-case-02---suche--detailansicht)
+		- [5.3 Use Case 03 - REST-Abfrage für AAS](#53-use-case-03---rest-abfrage-für-aas)
+		- [5.4 Use Case 04 - Quellenverweis](#54-use-case-04---quellenverweis)
+		- [5.5 Use Case 05 - Pflege der Datensätze](#55-use-case-05---pflege-der-datensätze)
+	- [6. Anforderungen](#6-anforderungen)
+		- [6.1 Funktionale Anforderungen](#61-funktionale-anforderungen)
+			- [6.1.1 FA-001 - Auflösbare URIs für Concept Descriptions bereitstellen](#611-fa-001---auflösbare-uris-für-concept-descriptions-bereitstellen)
+			- [6.1.2 FA.002 - REST‑API zum Abrufen von Concept Descriptions](#612-fa002---restapi-zum-abrufen-von-concept-descriptions)
+			- [6.1.3 FA.003 - Mapping auf IEC61360‑Datentemplate](#613-fa003---mapping-auf-iec61360datentemplate)
+			- [6.1.4 FA.004 - REST‑API Sprache](#614-fa004---restapi-sprache)
+			- [6.1.5 FA.005 - Edit‑Workflow](#615-fa005---editworkflow)
+			- [6.1.6 FA.006 - Verlinkung externen Quellen](#616-fa006---verlinkung-externen-quellen)
+			- [6.1.7 FA.007 - Import/Export mit AAS](#617-fa007---importexport-mit-aas)
+			- [6.1.8 FA.008 - Leichte Spezifikation \& Governance](#618-fa008---leichte-spezifikation--governance)
+			- [6.1.9 FA.009 - Standardisierung](#619-fa009---standardisierung)
+			- [6.1.10 FA.010 - Benutzerfreundlichkeit](#6110-fa010---benutzerfreundlichkeit)
+			- [6.1.11 FA.011 - Import und Verarbeitung von AASX-Dateien](#6111-fa011---import-und-verarbeitung-von-aasx-dateien)
+			- [6.1.12 FA.012 - Automatisierter Import externer Concept Descriptions per URI](#6112-fa012---automatisierter-import-externer-concept-descriptions-per-uri)
+		- [6.2 Nicht-funktionale Anforderungen (NFR)](#62-nicht-funktionale-anforderungen-nfr)
+			- [6.2.1  NFA.001 - Verfügbarkeit / Stabilität](#621--nfa001---verfügbarkeit--stabilität)
+			- [6.2.2 NFA.002 - Performance](#622-nfa002---performance)
+			- [6.2.3 NFA.003 - Sicherheit](#623-nfa003---sicherheit)
+			- [6.2.4 NFA.004 - Usability](#624-nfa004---usability)
+			- [6.2.5 NFA.005 - Wartbarkeit / Codequalität](#625-nfa005---wartbarkeit--codequalität)
+		- [6.3 Randbedingungen](#63-randbedingungen)
+	- [7. Anhang](#7-anhang)
 
 ---
 
 ## 1. Einführung in das Lastenheft - CRS
 
-Das Lastenheft enthält alle gewünschten Anforderungen vom Kunden (Anforderungen, Stakeholder) für das Projekt "Semantic Wikibase".
-Das Lastenheft ist ein Dokument, in dem der Auftraggeber alle Anforderungen, Wünsche und Ziele an das geplante Produkt oder Projekt beschreibt. Es legt also fest, was erreicht und zum Teil wie es umgesetzt werden soll. 
+Das Lastenheft enthält alle gewünschten Anforderungen vom Kunden (Anforderungen, Stakeholder) für das Projekt "Semantic Wikibase"(https://github.com/DHBW-TINF24F/.github/blob/main/project4_semantic_wikibase.md).
+Das Lastenheft ist ein Dokument, in dem der Auftraggeber alle Anforderungen, Wünsche und Ziele an das geplante Produkt oder Projekt beschreibt. Es legt also fest, was erreicht und zum Teil wie es umgesetzt werden soll.
 <br>
 
 Das Lastenheft dient als Grundlage für die Kommunikation zwischen Auftraggeber und Auftragnehmer und ist die Basis für die Erstellung des Pflichtenhefts. Ziel des Lastenhefts ist es, sicherzustellen, dass beide Seiten ein gemeinsames Verständnis über den Leistungsumfang und die Erwartungen haben.
@@ -72,7 +74,6 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 
 ## 4. Stakeholder
 
-
 | Stakeholder                                     | Ziel                                                               |
 | ----------------------------------------------- | ------------------------------------------------------------------------------- |
 | **Studierenden-Team (Entwicklung)**             | Klare Anforderungen und realisierbarer Umfang.   |
@@ -82,10 +83,10 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 | **Community**         | Offene Plattform mit niedrigen Einstiegshürden.|
 | **Externe Datenanbieter (IEC, ECLASS, QUDT)**   | Wahrung der Quellen, vermeidung von Lizenzverstößen und Verlinkung.      |
 
-
 ## 5. Anwendungsfälle - Use Cases
 
-### 5.1 Use Case 01 - URI
+### 5.1 Use Case 01 - Auflösende URIs
+
 | Use Case ID  | UC01 |
 |--------------|------|
 | Beschreibung | Das AAS-Tool nutzt die URI einer Eigenschaft (z.B. Nennspannung) und erhält direkt alle Basisinformationen maschinenlesbar. |
@@ -114,10 +115,10 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 
 | Use Case ID  | UC03 |
 |--------------|------|
-| Beschreibung | REST-Abfrage für AAS: `/api/v1/iec61360/{id}?lang=de`. Liefert schlankes JSON mit den Beschreibungselementen in der angegeben Sprache. |
+| Beschreibung | REST-Abfrage für AAS: /api/v1/iec61360/{id}?lang=de. Liefert ein schlankes, sprachabhängiges JSON basierend auf dem IEC-61360-Datentemplate. Wird benötigt, damit AAS-Systeme semantische Definitionen zentral und webbasiert abrufen können, unabhängig von ihrem eigenen lokalen CD-Repository. |
 | Beteiligte Rollen | Entwickler, AAS-Systeme |
 | Systemgrenze | API |
-| Vorbedingung | Konzept existiert. |
+| Vorbedingung | Ein Concept Description-Eintrag existiert in der Semantic Wikibase und besitzt eine auflösbare URI. |
 | Nachbedingung bei Erfolg | JSON mit allen Concept-Informationen wird zurückgegeben. |
 | Auslösendes Ereignis | Request gegen API-Endpunkt. |
 
@@ -148,8 +149,6 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 | Auslösendes Ereignis | Erstellen eines Eintrags im System. |
 
 ![Diagramm](images/UseCase_05.png)
-
-
 
 ## 6. Anforderungen
 
@@ -225,6 +224,20 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 |Übersicht|Die Plattform muss benutzerfreundlich gestaltet sein, sodass Nutzer direkt verstehen, wie sie die wichtigsten Funktionen verwenden können. Die Bedienung soll intuitiv sein, mit klar strukturierten Oberflächen und selbsterklärenden Elementen.|
 |Erfüllungskriterium|Die UI enthält eine verständliche Anleitung und Hinweise für alle wesentlichen Schritte. Pflichtfelder, Buttons und Aktionen sind eindeutig gekennzeichnet. Nutzer gelangen mit möglichst wenigen Klicks zum Ziel und finden alle wichtigen Funktionen schnell und ohne Umwege. Die Oberfläche unterstützt visuelles Feedback (z. B. Bestätigung oder Fehlermeldung), Tooltips oder Hilfetexte.|
 
+#### 6.1.11 FA.011 - Import und Verarbeitung von AASX-Dateien
+
+|Requirement ID|FA.011|
+|--------------|------|
+|Übersicht|Das System soll eine Funktion bereitstellen, mit der AASX-Dateien importiert und die darin enthaltenen ConceptDescriptions (CDs) sowie EmbeddedDataSpecifications (EDSs) automatisiert erkannt, analysiert und in der Wikibase abgebildet werden.|
+|Erfüllungskriterium|Beim Hochladen einer AASX-Datei wird der Inhalt automatisch gescannt. Das System erkennt alle enthaltenen CDs und EDSs, gleicht sie mit bestehenden Einträgen in der Wikibase ab und zeigt dem Nutzer Mapping-Vorschläge an. Für nicht vorhandene Elemente erstellt das System neue Wikibase-Einträge gemäß dem IEC-61360-Datentemplate. Der Importprozess ist abgeschlossen, wenn alle gefundenen Elemente entweder gemappt oder neu angelegt wurden und im System sichtbar sind.|
+
+#### 6.1.12 FA.012 - Automatisierter Import externer Concept Descriptions per URI
+
+|Requirement ID|FA.012|
+|--------------|------|
+|Übersicht|Das System soll eine Funktion bereitstellen, mit der Nutzer eine externe URI (z. B. zu einem IEC-CDD-, ECLASS- oder anderen semantischen Katalogeintrag) angeben können. Das System ruft die verlinkte Ressource ab, extrahiert automatisch die relevanten Informationen (z. B. Name, Definition, Einheit, Datentyp, Identifier) aus der HTML- oder API-Antwort und überführt diese Daten in das interne IEC-61360-Datenformat der Semantic Wikibase. Falls ein passender Eintrag bereits existiert, wird ein Mapping vorgeschlagen; andernfalls wird ein neuer Concept-Description-Eintrag angelegt.|
+|Erfüllungskriterium|Gibt der Nutzer eine gültige externe URI zu einer Concept Description an, wird die Ressource vom System automatisch geladen und analysiert. Das System zeigt dem Nutzer eine Zusammenfassung der erkannten Metadaten sowie Mapping-Vorschläge auf bestehende Konzepte an. Nach Bestätigung durch den Nutzer werden entweder bestehende Einträge verknüpft oder neue IEC-61360-konforme Concept Descriptions in der Wikibase erzeugt. Die importierten Einträge sind anschließend über URI, REST-API und Detailansicht abrufbar.|
+
 ### 6.2 Nicht-funktionale Anforderungen (NFR)
 
 #### 6.2.1  NFA.001 - Verfügbarkeit / Stabilität
@@ -234,13 +247,12 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 | Übersicht           | Die Plattform soll für Demonstrationen und Tests zuverlässig verfügbar sein.                   |
 | Erfüllungskriterium | Der Dienst ist während der Test- und Demo-Phasen erreichbar und reagiert stabil ohne Abstürze. |
 
-#### 6.2.2 NFA.002 - Performance 
+#### 6.2.2 NFA.002 - Performance
 
 | Requirement ID      |NFA.002                                                                                        |
 |--------------|------|
 | Übersicht           | Die Plattform soll eine angemessene Performance und kurze Antwortzeiten der API gewährleisten.                             |
 | Erfüllungskriterium | API-Anfragen werden ohne wahrnehmbare Verzögerungen (z. B. < 2 Sek.) beantwortet, um eine flüssige Nutzung zu ermöglichen. |
-
 
 #### 6.2.3 NFA.003 - Sicherheit
 
@@ -263,8 +275,6 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 | Übersicht           | Der Quellcode soll leicht wartbar, verständlich und dokumentiert sein.                             |
 | Erfüllungskriterium | Der Code ist klar strukturiert, enthält ein README und eine nachvollziehbare Deployment-Anleitung. |
 
-
-
 ### 6.3 Randbedingungen
 
 - Open‑Source‑kompatible Komponenten (Wikibase).
@@ -272,7 +282,6 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 - Datenschutz: keine personenbezogenen Daten.
 
 - Nur Inhalte nutzen, die wir modellieren/entscheiden dürfen (Beispieldaten selbst erstellt oder auf frei nutzbare Quellen verlinken).
-
 
 ## 7. Anhang
 
