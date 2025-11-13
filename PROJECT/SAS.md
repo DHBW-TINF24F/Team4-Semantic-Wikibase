@@ -12,6 +12,7 @@ Institution: DHBW Stuttgart
 |-|-|-|-|
 | 0.1     | 29.10.2025 | Colin Dietschmann | First draft |
 |1.0|08.011.2025|Colin Dietschmann|First Version|
+|1.1|13.11.2025| Coln Dietschmann| adjustments of 1.0|
 ### 1. Overview
 
 # 1.1 Scope:
@@ -71,25 +72,29 @@ References: IEEE Std 1471-2000 (Basis for this AD); AAS Specification Part 3a: D
 
 
 # 4 onceptual Framework
-### 4.1 System Context
-The integrated system has two principal subsystems:
-1. AAS Repository Subsystem and AAS Connect Backend Service:
-- Neo4j graph database
-- Backend service exposing OpenAPI/REST and GraphQL endpoints.
-- BaSyx Web UI integrated 
-- Docker Compose depolyment (docker-compose.yml from repo)
+### 4.1 System Contex
+The system consists two subsystems:
+1. AAS Repository Subsystem
+- Unchanged AAS Connect Backend Service (Nei4j, REST/GraphQL BaSyx UI, Docker compose/Podman)
+- Stores AAS artifacts only, no semantic data is persisted here.
 
-2. Semantic Registry Subsystem
-- Wikibase instance or standalone Wikibase
-- REST facade delivering IEC61360 formatted response per concept
-- Admin UI for community editing and governance. 
+2. Semantic Registry Subsystem (Wikibase)
+- Stand-alone Wikibase instance (MediaWiki and Wikibase extension)
+- Acts as the single source of truth for all Concept Descriptions
+- Provides REST and SPARQL APIs for import/export of CD data.
+- No duplication of data from AAS repository. The AAS backend queries this service when resolving semantic references.
 
-Integration Layers:
-- API Gateway, provides Get /semantic/{id}?lang=de returning IEC61360 JSON. Handels rewrite rules for pretty URIs and proxies request to Wikibase SPARQL or RDF store.
-- Sync/Mapping Services, background jobs or API endpoints for mapping external IEC/ECLASS entries into Wiki itemns and for periodic synchronization from AAS repository to Wikibase.
+Integration Layer: 
+Semantic API Gateway (Facade) in front of Wikibase:
+- Implements AAS-conform endpoints (for example GET /semantic /{id]lang=de)
+- Translates between Wikibase RDF model and IEC 61360 JSON used by AAS
+- Allows optional POST/PUT for importing or exporting CDs between AAS clients an Wikibase
+- No presistant storage, only transforming and routing
 
-External system: AASX Explorer, third-party IEC/ECLASS sources.
-
+External Systems:
+- AASX Explorer
+- ECLASS/IEC registries
+- Catena-X Semantic Hub
 
 ### 4.2 Identification of Stakeholders and Concerns
 
@@ -147,11 +152,21 @@ Interfaces:
 
 ### 5.1.2 Behavioral View
 
-1. Concept Resolution in AAS path
-- AAS client request submodel that references sid (Semantic URI)
-- AAS Backend that sees semantic reference, calls SemanticFacade "semantics/{sid}?lang=de"
-- SemanticFacade queries Wikibase SPARQL or item API and consturcts IEC61360 JSON
-- Backend responds to client with a submodel + resolved semantic definition.
+1. Concept Resolution
+- AAS client requests a Submodel referencing a Semantic URI
+- AAS Backend calls GET /semantic/{sid}?lang=de on Semantic Facade
+- The Facade retrieves data directly from Wikibase (SPARQL/REST) and retrurns an IE0 61360 formated JSON
+- No data is stored or synchronized, the AAS Backend uses the response transiently.
+
+2. Import/Export Concept Descriptions
+- AAS clients may push new Concept Descriptions vis POST /semantic
+- The Facade translates JSON to Wikibase API format an creates/update an item.
+- Wikibase remains the single authoritative store for semantic data.
+
+3. Deployment
+- The docker-compose stack adds only two new servies: wikibase and semantic-facade
+- The existing AAS Backend runs unchanged
+- No background synchronization containers are needed
 
 2. Create/Edit Concept
 - User who uses Wikibase UI to create a item with properties aligned to IEC61360 fields 
@@ -163,22 +178,86 @@ Interfaces:
 
 
 ### 5.1.3 Information View and Data Model (IEC61360)
-Primary entity: ConceptDescription with fields:
+The information View defines the data sturctures and information flow for Concept Desciptions (CDs) within the system.
+This view focuses on how semantic information is modeled, stored and exchanged between the AAS Connect Backend and Semantic Wikibase through the API Facade.
 
-- id (SID URI) — e.g. https://semantic.example.org/id/Q21
-- prefLabel / preferredName {lang-tagged}
-- definition {lang-tagged}
-- unit (linked to unit concept, optional QID)
-- valueFormat (dataType / format)
-- sourceReferences (links to IEC/ ECLASS entries, with provenance)
-- version (history)
-- createdBy, createdAt, approvedBy, approvedAt
-- externalIdentifiers (for example, IEC CDD property ID, ECLASS code)
 
-Representation outputs:
+Data Ownership and Storage
 
-- IEC61360 JSON (for API): matches template (preferredName, shortName, definition, dataType, unit, valueList, source).
-- RDF/Turtle (for SPARQL and linked data).
+- The Wikibase acts as the single source of truth for all semantic concept data.
+- The AAS Connect Backend (Neo4j database) does not store semantic metadata (e.g., names, definitions, units).
+It only stores semantic references (URIs) that point to Wikibase items.
+- The Semantic Facade is stateless and serves only as a translator between AAS and Wikibase representations.
+
+
+Core Entity: ConceptDescription
+
+Each Concept Description (CD) in the system corresponds to one Wikibase item and follows the IEC 61360 data template.
+A CD defines the meaning of an AAS submodel element by describing its semantic attributes.
+
+Attributes (based on IEC 61360):
+
+| Field                       | Description                                                                             |
+| --------------------------- | --------------------------------------------------------------------------------------- |
+| **id (SID URI)**            | Globally unique identifier for the concept, e.g. `https://semantic.example.org/id/Q21`. |
+| **preferredName**           | Multilingual human-readable name (language-tagged literals).                            |
+| **definition**              | Multilingual description explaining the concept.                                        |
+| **unit**                    | Optional reference to a unit entity (another Wikibase item, e.g. “millimetre”).         |
+| **valueFormat**             | Data type or encoding used for values (e.g., `xsd:string`, `xsd:decimal`).              |
+| **sourceReference**         | Reference to external standard systems (e.g., IEC CDD, ECLASS IRDI).                    |
+| **version**                 | Internal version or revision number of the concept.                                     |
+| **createdBy / createdAt**   | Metadata about the concept’s creation.                                                  |
+| **modifiedBy / modifiedAt** | Metadata about the last modification.                                                   |
+| **externalIdentifiers**     | Optional list of identifiers in external registries (e.g., IEC, ECLASS).                |
+
+
+Representation Formats
+The system supports two main representations for interoperability:
+1. IEC 61360 JSON
+- Returned by the Semantic Facade’s REST endpoint (GET /semantic/{sid}?lang={lang})
+- Structured to be directly consumable by AAS repositories and clients.
+- Example output:
+
+{
+  "id": "https://semantic.example.org/id/Q21",
+  "preferredName": { "en": "diameter", "de": "Durchmesser" },
+  "definition": { "en": "Length through the center of a circle", "de": "Länge durch das Zentrum eines Kreises" },
+  "unit": { "id": "https://semantic.example.org/id/Q174789", "label": { "en": "millimetre" } },
+  "valueFormat": "xsd:decimal",
+  "sourceReferences": [
+    { "system": "IEC CDD", "id": "0112-2---61360_4#AFD116" }
+  ],
+  "version": "1.0",
+  "provenance": {
+    "createdBy": "editor1",
+    "createdAt": "2025-10-05T12:00:00Z"
+  }
+}
+
+2. RDF / Turtle (SPARQL-accessible)
+- Used internally by Wikibase and available through its SPARQL endpoint.
+- Enables linking to external ontologies such as QUDT, ECLASS, or IEC CDD.
+
+Data Flow
+1. Read (AAS → Wikibase)
+- An AAS element stores only the semantic reference URI.
+- When queried, the AAS Backend sends a request to the Semantic Facade.
+- The Facade fetches the corresponding RDF entity from Wikibase and returns it in IEC 61360 JSON format.
+
+2. Write (AAS → Wikibase)
+- When a new Concept Description is created in an AAS tool, the AAS client sends it via POST /semantic to the Facade.
+- The Facade converts the AAS JSON structure into Wikibase’s API format and creates or updates the item directly in Wikibase.
+- The new concept immediately becomes accessible via its URI.
+
+3. Query (External Tools → Wikibase)
+- Tools or services can use the Wikibase SPARQL endpoint to query, filter, or federate semantic data.
+- The AAS Backend does not replicate or transform this data; it relies entirely on Wikibase for retrieval.
+
+Information Consistency and Provenance
+- Single source of truth: Wikibase.
+- References only: AAS Connect Backend (Neo4j).
+- Transformation only: Semantic Facade (no persistence).
+- Provenance and versioning are managed within Wikibase through its built-in revision system.
 
 ### 5.1.4 Deployment View: Containers & Topology Baseline (from repo)
 - aas-backend container (existing)
@@ -200,10 +279,10 @@ Env configuration: .env (extend .env.sample), new variables for Wikibase DB, SPA
 - Known inconsistency: The existing AAS Connect backend may embed semantic references as simple IRDIs or strings; a migration adapter is required to map those to full HTTP SIDs. This adapter is specified in Mapping Service.
 
 ### 5.3 Architectural Rationale
-- Resuse: Keeping the exiting forprs/aas-connect-repository stack unchanged wherever possible to minimize the risk.
-- Seperation of concerns: Put the translation and URI resolution into the SemanticFacade. Keeps the AAS backend simpler and allows diffrent Wikibase implementations.
-- Deployment: Docker compose keeps consistent deployment experience.
-- Governance and Provenance: Wikibase gives edit history and moderation features.
+- Avoids duplicate data storage: Only Wikibase holds semantic data.
+- Lightweight integration: The Semantic Facade API acts as translator, not as repository
+- Reduced complexity: No sync, mapping, or consistency managment needed
+- Future proof: Other AAS repositories can reuse the same Facade without thight copling.
 
 # 6 Quality Attributes & Requirements
 Functional Requierments:
@@ -221,18 +300,20 @@ Non-Functional Requirments:
 
 # 7 Implementation Notes (practical steps)
 
-1. Fork & clone foprs/aas-connect-repository. Start the existing stack via docker compose up -d to verify baseline.
+1. Start the existing AAS Connect stack unchanged (docker compose up -d)
+2. Add two new containers
+- "wikibase" for MediaWiki and Wikibase
+- "semantic-facade" for statless REST API
 
-2. Extend docker-compose.yml to include wikibase, blazegraph, semantic-facade, and sync-service containers. Use separate networks to allow controlled access.
+3. Implement Facade API (Node.js/FastAPI)
+- Endpoints:
+    - GET /semantic/{sid}?lang=de -> returns IEC 61360 JSON
+    - POST /semantic -> imports new CDs into Wikibase
+- Translates directly to Wikibase SPARQL or REST API calls.
+- No presistent storage, no synchronization logic.     
 
-3. implement SemanticFacade:
 
-- Language: Node.js (Express) or Python (FastAPI/Flask).
-- Endpoints: GET /semantics/{sid} (lang param), admin endpoints for sync.
-- Connectors: call Wikibase SPARQL or MediaWiki REST API.
-- Output: IEC61360 JSON (example mapping provided in code).
-
-4. Wikibase configuration:
+5. Wikibase configuration:
 - Create properties for IEC61360 fields (preferred name, definition, unit, value format, IRDI, external IDs).
 - Configure pretty URIs and allow rewriting, e.g. https://semantic.example.org/id/Q{item}.
 
@@ -254,4 +335,6 @@ Basic mapping script can import at least one submodel template into Wikibase.
 
 # 9 Conclusion
 
-This SAS specifies how to adapt the existing foprs/aas-connect-repository to host and consume semantic ConceptDescriptions via a Semantic Wikibase. The approach minimizes changes to the existing AAS Connect backend while adding a separate, decoupled semantic registry (Wikibase) with a small translation façade and mapping/synchronization components.
+This SAS defines an API-based integration between the existing AAS Connect Backend and a Semantic Wikibase.
+The Wikibase becomes the sole registry for Concept Descriptions, accessed via a lightweight REST API Facade that translates between AAS and Wikibase data models.
+This eliminates redundant data storage and synchronization, ensuring a clean separation of concerns and straightforward deployment.
