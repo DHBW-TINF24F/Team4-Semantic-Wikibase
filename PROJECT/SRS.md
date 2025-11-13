@@ -311,7 +311,7 @@ Siehe auch: [Use Case 05 - Pflege der Datensätze - im CRS](CRS.md#45-use-case-0
 
 - Aus Sicherheitsgründen dürfen Bearbeitungen nur von registrierten Benutzern durchgeführt werden.
 
-- Außerdem muss der Server sicher betrieben werden – also mit HTTPS, aktivem Zugriffsschutz und funktionierendem URI-Rewriting für die schönen URLs.
+- Außerdem muss der Server sicher betrieben werden. Also mit HTTPS, aktivem Zugriffsschutz und funktionierendem URI-Rewriting für die schönen URLs.
 
 ## 7. UI
 
