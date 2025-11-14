@@ -41,7 +41,7 @@
       - [5.1.6 FA.006 - Verlinkung externen Quellen](#516-fa006---verlinkung-externen-quellen)
       - [6.1.11 FA.007 - Import und Verarbeitung von AASX-Dateien](#6111-fa007---import-und-verarbeitung-von-aasx-dateien)
       - [6.1.8 FA.008 - Leichte Spezifikation \& Governance](#618-fa008---leichte-spezifikation--governance)
-      - [6.1.9 FA.009 - Standardisierung](#619-fa009---standardisierung)
+      - [6.1.9 FA.009 - Verwaltung und Bereitstellung standardisierbarer Begriffe](#619-fa009---verwaltung-und-bereitstellung-standardisierbarer-begriffe)
       - [6.1.12 FA.010 - Automatisierter Import externer Concept Descriptions per URI](#6112-fa010---automatisierter-import-externer-concept-descriptions-per-uri)
     - [5.2 Nicht-funktionale Anforderungen (NFR)](#52-nicht-funktionale-anforderungen-nfr)
       - [5.2.1  NFA.001 - Verfügbarkeit / Stabilität](#521--nfa001---verfügbarkeit--stabilität)
@@ -252,7 +252,7 @@ Siehe auch: [Use Case 05 - Pflege der Datensätze - im CRS](CRS.md#45-use-case-0
 |Erfüllungskriterium|Die Plattform stellt bei der Erfassung sicher, dass alle Pflichtfelder ausgefüllt sind, sodass jedes Konzept eindeutig und nachvollziehbar dokumentiert ist.|
 |Priorität| Notwendig|
 
-#### 6.1.9 FA.009 - Standardisierung
+#### 6.1.9 FA.009 - Verwaltung und Bereitstellung standardisierbarer Begriffe
 
 |Requirement ID|FA.009|
 |--------------|------|

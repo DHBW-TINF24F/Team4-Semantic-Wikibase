@@ -32,7 +32,7 @@
 		- [5.6 Use Case 06 - AASX-Datei importieren](#56-use-case-06---aasx-datei-importieren)
 	- [6. Anforderungen](#6-anforderungen)
 		- [6.1 Funktionale Anforderungen](#61-funktionale-anforderungen)
-			- [6.1.1 FA-001 - Auflösbare URIs für Concept Descriptions bereitstellen](#611-fa-001---auflösbare-uris-für-concept-descriptions-bereitstellen)
+			- [6.1.1 FA-001 - Auflösbare URIs um Concept Descriptions bereit zustellen](#611-fa-001---auflösbare-uris-um-concept-descriptions-bereit-zustellen)
 			- [6.1.2 FA.002 - REST‑API zum Abrufen von Concept Descriptions](#612-fa002---restapi-zum-abrufen-von-concept-descriptions)
 			- [6.1.3 FA.003 - Mapping auf IEC61360‑Datentemplate](#613-fa003---mapping-auf-iec61360datentemplate)
 			- [6.1.4 FA.004 - REST‑API Sprache](#614-fa004---restapi-sprache)
@@ -40,7 +40,7 @@
 			- [6.1.6 FA.006 - Verlinkung externen Quellen](#616-fa006---verlinkung-externen-quellen)
 			- [6.1.11 FA.007 - Import und Verarbeitung von AASX-Dateien](#6111-fa007---import-und-verarbeitung-von-aasx-dateien)
 			- [6.1.8 FA.008 - Leichte Spezifikation \& Governance](#618-fa008---leichte-spezifikation--governance)
-			- [6.1.9 FA.009 - Standardisierung](#619-fa009---standardisierung)
+			- [6.1.9 FA.009 - Verwaltung und Bereitstellung standardisierbarer Begriffe](#619-fa009---verwaltung-und-bereitstellung-standardisierbarer-begriffe)
 			- [6.1.12 FA.010 - Automatisierter Import externer Concept Descriptions per URI](#6112-fa010---automatisierter-import-externer-concept-descriptions-per-uri)
 		- [6.2 Nicht-funktionale Anforderungen (NFR)](#62-nicht-funktionale-anforderungen-nfr)
 			- [6.2.1  NFA.001 - Verfügbarkeit / Stabilität](#621--nfa001---verfügbarkeit--stabilität)
@@ -119,7 +119,7 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 | Beteiligte Rollen | Entwickler, AAS-Systeme |
 | Systemgrenze | API |
 | Vorbedingung | Ein Concept Description-Eintrag existiert in der Semantic Wikibase und besitzt eine auflösbare URI. |
-| Nachbedingung bei Erfolg | JSON mit allen Concept-Informationen wird zurückgegeben. |
+| Nachbedingung bei Erfolg | JSON mit allen Concept-Informationen, inder jeweiligen Sprache, wird zurückgegeben. |
 | Auslösendes Ereignis | Request gegen API-Endpunkt. |
 
 ![Diagramm](images/UseCase_03.png)
@@ -167,7 +167,7 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 
 ### 6.1 Funktionale Anforderungen
 
-#### 6.1.1 FA-001 - Auflösbare URIs für Concept Descriptions bereitstellen
+#### 6.1.1 FA-001 - Auflösbare URIs um Concept Descriptions bereit zustellen
 
 |Requirement ID|FA.001|
 |--------------|------|
@@ -231,7 +231,7 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 |Erfüllungskriterium|Die Plattform stellt bei der Erfassung sicher, dass alle Pflichtfelder ausgefüllt sind, sodass jedes Konzept eindeutig und nachvollziehbar dokumentiert ist.|
 |Priorität| Notwendig|
 
-#### 6.1.9 FA.009 - Standardisierung
+#### 6.1.9 FA.009 - Verwaltung und Bereitstellung standardisierbarer Begriffe
 
 |Requirement ID|FA.009|
 |--------------|------|
