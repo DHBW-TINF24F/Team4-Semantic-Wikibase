@@ -29,6 +29,7 @@
     - [4.1 Use Case 01 - Auflösende URIs](#41-use-case-01---auflösende-uris)
     - [4.2 Use Case 02 - Suche \& Detailansicht](#42-use-case-02---suche--detailansicht)
     - [4.3 Use Case 03 - REST-Abfrage für AAS](#43-use-case-03---rest-abfrage-für-aas)
+    - [4.4 Use Case 06 - AASX-Datei importieren](#44-use-case-06---aasx-datei-importieren)
     - [4.4 Weitere Use Cases](#44-weitere-use-cases)
   - [5. Anforderungen](#5-anforderungen)
     - [5.1 Funktionale Anforderungen](#51-funktionale-anforderungen)
@@ -38,11 +39,10 @@
       - [5.1.4 FA.004 - REST‑API Sprache](#514-fa004---restapi-sprache)
       - [5.1.5 FA.005 - Edit‑Workflow](#515-fa005---editworkflow)
       - [5.1.6 FA.006 - Verlinkung externen Quellen](#516-fa006---verlinkung-externen-quellen)
-      - [5.1.7 FA.007 - Import/Export mit AAS](#517-fa007---importexport-mit-aas)
-      - [5.1.8 FA.008 - Leichte Spezifikation \& Governance](#518-fa008---leichte-spezifikation--governance)
-      - [5.1.9 FA.009 - Verwaltung und Bereitstellung standardisierbarer Begriffe](#519-fa009---verwaltung-und-bereitstellung-standardisierbarer-begriffe)
-      - [6.1.11 FA.010 - Import und Verarbeitung von AASX-Dateien](#6111-fa010---import-und-verarbeitung-von-aasx-dateien)
-      - [6.1.12 FA.011 - Automatisierter Import externer Concept Descriptions per URI](#6112-fa011---automatisierter-import-externer-concept-descriptions-per-uri)
+      - [6.1.11 FA.007 - Import und Verarbeitung von AASX-Dateien](#6111-fa007---import-und-verarbeitung-von-aasx-dateien)
+      - [6.1.8 FA.008 - Leichte Spezifikation \& Governance](#618-fa008---leichte-spezifikation--governance)
+      - [6.1.9 FA.009 - Standardisierung](#619-fa009---standardisierung)
+      - [6.1.12 FA.010 - Automatisierter Import externer Concept Descriptions per URI](#6112-fa010---automatisierter-import-externer-concept-descriptions-per-uri)
     - [5.2 Nicht-funktionale Anforderungen (NFR)](#52-nicht-funktionale-anforderungen-nfr)
       - [5.2.1  NFA.001 - Verfügbarkeit / Stabilität](#521--nfa001---verfügbarkeit--stabilität)
       - [5.2.2 NFA.002 - Performance](#522-nfa002---performance)
@@ -165,6 +165,19 @@ Ziel ist ein intuitives, wikiähnliches Interface, das von Benutzern ohne techni
 
 ![Diagramm](images/UseCase_03.png)
 
+### 4.4 Use Case 06 - AASX-Datei importieren
+
+| Use Case ID  | UC06 |
+|--------------|------|
+| Beschreibung | Ein Nutzer lädt eine AASX-Datei hoch. Das System scannt enthaltene ConceptDescriptions (CDs) und EmbeddedDataSpecifications (EDSs), macht Mappingvorschläge zu bestehenden Wikibase-Einträgen und legt bei Bedarf neue Einträge an. |
+| Beteiligte Rollen | Nutzer |
+| Systemgrenze | Semantic Wikibase (Web-UI + Importer-Komponente) |
+| Vorbedingung | Nutzer ist angemeldet und berechtigt, Daten zu importieren. Die AASX-Datei liegt lokal oder über einen Pfad/Upload vor. Die Wikibase ist erreichbar. |
+| Nachbedingung bei Erfolg | Alle in der AASX gefundenen CDs und EDSs sind entweder bestehenden Einträgen in der Wikibase zugeordnet oder als neue Einträge gemäß IEC-61360-Datentemplate angelegt und im System sichtbar. |
+| Auslösendes Ereignis | Nutzer wählt in der Web-UI die Funktion „AASX importieren“ und startet den Import mit einer ausgewählten Datei. |
+
+![Diagramm](images/UseCase_06.png)
+
 ### 4.4 Weitere Use Cases
 
 Siehe auch: [Use Case 04 - Quellenverweis - im CRS](CRS.md#44-use-case-04---quellenverweis)
@@ -223,15 +236,15 @@ Siehe auch: [Use Case 05 - Pflege der Datensätze - im CRS](CRS.md#45-use-case-0
 |Erfüllungskriterium|Für referenzierte Concept Descriptions mit externen Beziehungen werden in der Detailansicht klickbare Links angezeigt und führen korrekt zu den externen Quellen.|
 |Priorität| Optional|
 
-#### 5.1.7 FA.007 - Import/Export mit AAS
+#### 6.1.11 FA.007 - Import und Verarbeitung von AASX-Dateien
 
 |Requirement ID|FA.007|
 |--------------|------|
-|Übersicht|Die Semantic Wikibase ermöglicht den Import und Export von AAS-Daten und ist mit der Asset Administration Shell (AAS) integrierbar (z.B. mit AASX-Dateien).|
-|Erfüllungskriterium|AAS-Daten können von Nutzern importiert, verknüpft und im standardisierten Format exportiert werden. Die Daten stehen danach über die Plattform oder API zur Verfügung.|
-|Priorität| Optional|
+|Übersicht|Das System soll eine Funktion bereitstellen, mit der AASX-Dateien importiert und die darin enthaltenen ConceptDescriptions (CDs) sowie EmbeddedDataSpecifications (EDSs) automatisiert erkannt, analysiert und in der Wikibase abgebildet werden.|
+|Erfüllungskriterium|Beim Hochladen einer AASX-Datei wird der Inhalt automatisch gescannt. Das System erkennt alle enthaltenen CDs und EDSs, gleicht sie mit bestehenden Einträgen in der Wikibase ab und zeigt dem Nutzer Mapping-Vorschläge an. Für nicht vorhandene Elemente erstellt das System neue Wikibase-Einträge gemäß dem IEC-61360-Datentemplate. Der Importprozess ist abgeschlossen, wenn alle gefundenen Elemente entweder gemappt oder neu angelegt wurden und im System sichtbar sind.|
+|Priorität| Notwendig|
 
-#### 5.1.8 FA.008 - Leichte Spezifikation & Governance
+#### 6.1.8 FA.008 - Leichte Spezifikation & Governance
 
 |Requirement ID|FA.008|
 |--------------|------|
@@ -239,7 +252,7 @@ Siehe auch: [Use Case 05 - Pflege der Datensätze - im CRS](CRS.md#45-use-case-0
 |Erfüllungskriterium|Die Plattform stellt bei der Erfassung sicher, dass alle Pflichtfelder ausgefüllt sind, sodass jedes Konzept eindeutig und nachvollziehbar dokumentiert ist.|
 |Priorität| Notwendig|
 
-#### 5.1.9 FA.009 - Verwaltung und Bereitstellung standardisierbarer Begriffe
+#### 6.1.9 FA.009 - Standardisierung
 
 |Requirement ID|FA.009|
 |--------------|------|
@@ -247,17 +260,9 @@ Siehe auch: [Use Case 05 - Pflege der Datensätze - im CRS](CRS.md#45-use-case-0
 |Erfüllungskriterium|Jede im Wiki erzeugte URI und die dazugehörige Datenstruktur sind so gestaltet, dass sie mit den Identifiern und Strukturen etablierter Normsysteme kompatibel sind. Bei Migration eines Begriffs in einen offiziellen Standard lässt sich die ursprüngliche Wiki-URI technisch einfach (z. B. per Redirect) zur neuen Standard-URI weiterleiten.|
 |Priorität| Notwendig|
 
-#### 6.1.11 FA.010 - Import und Verarbeitung von AASX-Dateien
+#### 6.1.12 FA.010 - Automatisierter Import externer Concept Descriptions per URI
 
 |Requirement ID|FA.010|
-|--------------|------|
-|Übersicht|Das System soll eine Funktion bereitstellen, mit der AASX-Dateien importiert und die darin enthaltenen ConceptDescriptions (CDs) sowie EmbeddedDataSpecifications (EDSs) automatisiert erkannt, analysiert und in der Wikibase abgebildet werden.|
-|Erfüllungskriterium|Beim Hochladen einer AASX-Datei wird der Inhalt automatisch gescannt. Das System erkennt alle enthaltenen CDs und EDSs, gleicht sie mit bestehenden Einträgen in der Wikibase ab und zeigt dem Nutzer Mapping-Vorschläge an. Für nicht vorhandene Elemente erstellt das System neue Wikibase-Einträge gemäß dem IEC-61360-Datentemplate. Der Importprozess ist abgeschlossen, wenn alle gefundenen Elemente entweder gemappt oder neu angelegt wurden und im System sichtbar sind.|
-|Priorität| Notwendig|
-
-#### 6.1.12 FA.011 - Automatisierter Import externer Concept Descriptions per URI
-
-|Requirement ID|FA.011|
 |--------------|------|
 |Übersicht|Das System soll eine Funktion bereitstellen, mit der Nutzer eine externe URI (z. B. zu einem IEC-CDD-, ECLASS- oder anderen semantischen Katalogeintrag) angeben können. Das System ruft die verlinkte Ressource ab, extrahiert automatisch die relevanten Informationen (z. B. Name, Definition, Einheit, Datentyp, Identifier) aus der HTML- oder API-Antwort und überführt diese Daten in das interne IEC-61360-Datenformat der Semantic Wikibase. Falls ein passender Eintrag bereits existiert, wird ein Mapping vorgeschlagen; andernfalls wird ein neuer Concept-Description-Eintrag angelegt.|
 |Erfüllungskriterium|Gibt der Nutzer eine gültige externe URI zu einer Concept Description an, wird die Ressource vom System automatisch geladen und analysiert. Das System zeigt dem Nutzer eine Zusammenfassung der erkannten Metadaten sowie Mapping-Vorschläge auf bestehende Konzepte an. Nach Bestätigung durch den Nutzer werden entweder bestehende Einträge verknüpft oder neue IEC-61360-konforme Concept Descriptions in der Wikibase erzeugt. Die importierten Einträge sind anschließend über URI, REST-API und Detailansicht abrufbar.|
