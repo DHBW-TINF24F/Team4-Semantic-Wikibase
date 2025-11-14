@@ -3,14 +3,16 @@
 ---
 
 ## 1. Einleitung
-Dieser Software Test Plan (STP) definiert die Teststrategie, den Testumfang, die Testumgebung sowie die Testfälle für das Projekt *Semantic Wikibase*. Ziel ist es, die Qualität der Semantic Facade API, des Wikibase-Datenmodells und des AASX-Importers sicherzustellen.
+Der Software Test Plan (STP) beschreibt die Vorgehensweise zur Qualitätssicherung des Projekts Semantic Wikibase. Er legt fest, wie das System getestet wird, welche Komponenten geprüft werden, welche Testarten eingesetzt werden und wie die Testumgebung aufgebaut ist.
+Ziel des Dokuments ist es sicherzustellen, dass die Semantic Facade API, das Wikibase-Datenmodell sowie der Import von AASX-Dateien vollständig, korrekt und stabil funktionieren. Darüber hinaus dient der STP als Grundlage für die Nachvollziehbarkeit und Wiederholbarkeit aller Testaktivitäten innerhalb des Projekts.
 
 ---
 
 ## 2. Teststrategie
-- Funktionale Tests (REST-API)
-- Integrationstests (Wikibase ↔ Semantic Facade API)
-- Systemtests (Docker-Deployment)
-- AASX-Importtests (CD/EDS-Verarbeitung)
-- Performance-Tests (< 500 ms Antwortzeit)
-- Fehlertests (404, 500, invalid input)
+Die Teststrategie definiert, wie die Qualität des Systems überprüft wird und welche Testmethoden für die verschiedenen Komponenten angewendet werden. Für das Projekt werden folgende Testarten vorgesehen:
+- **Funktionale Tests:**
+- **Integrationstests:**
+- **Systemtests:**
+- **AASX-Importtests:**
+- **Performance-Tests:**
+- **Fehlertests:**
