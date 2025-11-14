@@ -160,6 +160,7 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 |--------------|------|
 |Übersicht|Für jedes Konzept wird eine eindeutige, auflösbare Web-Adresse (URI) bereitgestellt. Beim Aufruf im Browser oder per API wird die jeweilige Beschreibung angezeigt.|
 |Erfüllungskriterium|Beim Aufrufen der URI erscheint die  Detailseite (HTML).|
+|Priorität| Notwendig|
 
 #### 6.1.2 FA.002 - REST‑API zum Abrufen von Concept Descriptions
 
@@ -167,6 +168,7 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 |--------------|------|
 |Übersicht|Es wird eine REST-API angeboten, über die Concept Descriptions abgerufen, angelegt, bearbeitet und gelöscht werden können. Die API liefert strukturierte JSON-Daten im IEC 61360 Format.|
 |Erfüllungskriterium|Die API deckt alle geforderten Funktionen ab und gibt die Concept Descriptions entsprechend des IEC 61360 Standards als JSON-Objekte aus.|
+|Priorität| Notwendig|
 
 #### 6.1.3 FA.003 - Mapping auf IEC61360‑Datentemplate
 
@@ -174,6 +176,7 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 |--------------|------|
 |Übersicht|Concept Descriptions werden nach dem internationalen IEC 61360 Standard modelliert und enthalten alle zugehörigen Felder (Name, Definition, Datentyp, Einheit, IRDI Identifier).|
 |Erfüllungskriterium|Jedes gespeicherte Konzept enthält alle relevanten Felder des IEC 61360 Standards und kann über die Plattform und API abgerufen werden.|
+|Priorität| Notwendig|
 
 #### 6.1.4 FA.004 - REST‑API Sprache
 
@@ -181,6 +184,7 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 |--------------|------|
 |Übersicht|Der REST-API Endpunkt `/api/v1/iec61360/{id}?lang=xx` gibt die geforderten Felder eines Konzepts im kompakten, und in der gewählten Sprache im JSON-Format zurück.|
 |Erfüllungskriterium|Das API-JSON entspricht dem im Anhang gezeigten Beispiel und enthält alle konzeptrelevanten Felder, gefiltert nach gewünschter Sprache.|
+|Priorität| Notwendig|
 
 #### 6.1.5 FA.005 - Edit‑Workflow
 
@@ -188,6 +192,7 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 |--------------|------|
 |Übersicht|Die Plattform erlaubt es, neue Concept Descriptions einfach zu erfassen und bestehende zu bearbeiten.|
 |Erfüllungskriterium|Nutzer können selbstständig neue Einträge anlegen und vorhandene bearbeiten.|
+|Priorität| Optional|
 
 #### 6.1.6 FA.006 - Verlinkung externen Quellen
 
@@ -195,6 +200,7 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 |--------------|------|
 |Übersicht|Die Detailansicht eines Konzepts enthält anklickbare Links zu externen Quellen und Normen (beispielsweise IEC-CDD, ECLASS, QUDT).|
 |Erfüllungskriterium|Für referenzierte Concept Descriptions mit externen Beziehungen werden in der Detailansicht klickbare Links angezeigt und führen korrekt zu den externen Quellen.|
+|Priorität| Optional|
 
 #### 6.1.7 FA.007 - Import/Export mit AAS
 
@@ -202,6 +208,7 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 |--------------|------|
 |Übersicht|Die Semantic Wikibase ermöglicht den Import und Export von AAS-Daten und ist mit der Asset Administration Shell (AAS) integrierbar (z.B. mit AASX-Dateien).|
 |Erfüllungskriterium|AAS-Daten können von Nutzern importiert, verknüpft und im standardisierten Format exportiert werden. Die Daten stehen danach über die Plattform oder API zur Verfügung.|
+|Priorität| Optional|
 
 #### 6.1.8 FA.008 - Leichte Spezifikation & Governance
 
@@ -209,13 +216,15 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 |--------------|------|
 |Übersicht|Für die Erstellung und Pflege von Concept Descriptions gelten eindeutige und einfache Mindestvorgaben: Name, Definition, Sprache, Datentyp und Quelle sind verpflichtend.|
 |Erfüllungskriterium|Die Plattform stellt bei der Erfassung sicher, dass alle Pflichtfelder ausgefüllt sind, sodass jedes Konzept eindeutig und nachvollziehbar dokumentiert ist.|
+|Priorität| Notwendig|
 
 #### 6.1.9 FA.009 - Standardisierung
 
 |Requirement ID|FA.009|
 |--------------|------|
 |Übersicht|Die in der Semantic Wikibase gespeicherten Begriffe und Definitionen sollen so aufgebaut und verwaltet werden, dass sie später problemlos auf internationale Standard-Systeme (z. B. IEC-CDD, ECLASS, QUDT) migriert oder automatisch weitergeleitet werden können.|
-|Erfüllungskriterium|Jede im Wiki erzeugte URI und die dazugehörige Datenstruktur sind so gestaltet, dass sie mit den Identifiern und Strukturen etablierter Normsysteme kompatibel sind. Bei Migration eines Begriffs in einen offiziellen Standard lässt sich die ursprüngliche Wiki-URI technisch einfach (z. B. per Redirect) zur neuen Standard-URI weiterleiten.
+|Erfüllungskriterium|Jede im Wiki erzeugte URI und die dazugehörige Datenstruktur sind so gestaltet, dass sie mit den Identifiern und Strukturen etablierter Normsysteme kompatibel sind. Bei Migration eines Begriffs in einen offiziellen Standard lässt sich die ursprüngliche Wiki-URI technisch einfach (z. B. per Redirect) zur neuen Standard-URI weiterleiten.|
+|Priorität| Notwendig|
 
 #### 6.1.11 FA.010 - Import und Verarbeitung von AASX-Dateien
 
@@ -223,6 +232,7 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 |--------------|------|
 |Übersicht|Das System soll eine Funktion bereitstellen, mit der AASX-Dateien importiert und die darin enthaltenen ConceptDescriptions (CDs) sowie EmbeddedDataSpecifications (EDSs) automatisiert erkannt, analysiert und in der Wikibase abgebildet werden.|
 |Erfüllungskriterium|Beim Hochladen einer AASX-Datei wird der Inhalt automatisch gescannt. Das System erkennt alle enthaltenen CDs und EDSs, gleicht sie mit bestehenden Einträgen in der Wikibase ab und zeigt dem Nutzer Mapping-Vorschläge an. Für nicht vorhandene Elemente erstellt das System neue Wikibase-Einträge gemäß dem IEC-61360-Datentemplate. Der Importprozess ist abgeschlossen, wenn alle gefundenen Elemente entweder gemappt oder neu angelegt wurden und im System sichtbar sind.|
+|Priorität| Notwendig|
 
 #### 6.1.12 FA.011 - Automatisierter Import externer Concept Descriptions per URI
 
@@ -230,6 +240,7 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 |--------------|------|
 |Übersicht|Das System soll eine Funktion bereitstellen, mit der Nutzer eine externe URI (z. B. zu einem IEC-CDD-, ECLASS- oder anderen semantischen Katalogeintrag) angeben können. Das System ruft die verlinkte Ressource ab, extrahiert automatisch die relevanten Informationen (z. B. Name, Definition, Einheit, Datentyp, Identifier) aus der HTML- oder API-Antwort und überführt diese Daten in das interne IEC-61360-Datenformat der Semantic Wikibase. Falls ein passender Eintrag bereits existiert, wird ein Mapping vorgeschlagen; andernfalls wird ein neuer Concept-Description-Eintrag angelegt.|
 |Erfüllungskriterium|Gibt der Nutzer eine gültige externe URI zu einer Concept Description an, wird die Ressource vom System automatisch geladen und analysiert. Das System zeigt dem Nutzer eine Zusammenfassung der erkannten Metadaten sowie Mapping-Vorschläge auf bestehende Konzepte an. Nach Bestätigung durch den Nutzer werden entweder bestehende Einträge verknüpft oder neue IEC-61360-konforme Concept Descriptions in der Wikibase erzeugt. Die importierten Einträge sind anschließend über URI, REST-API und Detailansicht abrufbar.|
+|Priorität| Notwendig|
 
 ### 6.2 Nicht-funktionale Anforderungen (NFR)
 
