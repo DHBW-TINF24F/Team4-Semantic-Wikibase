@@ -177,7 +177,29 @@ Spezielles Meeting mit dem Kunden.
 ----------------------------------------------
 
 
-## 06 Protokoll vom XX.XX.XXXX
+## 06 Protokoll vom 14.11.2025
+***Status:***
+* Systemarchitektur:  (~~genehmigt/abgelehnt~~/in arbeit)
+
+***Beschlüsse:***
+
+
+***Ergebnisse:***
+* Hardware und Softwarelösung wurden nach Absprache mit dem Kunden überarbeitet
+  (Serverlösung mit Wikibase Lösung für mehr Individualisierungsmöglichkeiten)
+
+***Issue Tracker:***
+
+
+----------------------------------------------
+### Protokoll Notizen:
+
+
+----------------------------------------------
+
+
+
+## 07 Protokoll vom XX.XX.XXXX
 ***Status:***
 
 
