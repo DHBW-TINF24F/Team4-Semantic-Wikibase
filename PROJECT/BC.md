@@ -33,7 +33,7 @@
       - [Hardware Ressorcen](#hardware-ressorcen)
       - [Software Ressourcen](#software-ressourcen)
       - [Räumliche Ressourcen](#räumliche-ressourcen)
-    - [6.1 Kostenplan](#61-kostenplan)
+    - [6.2 Kostenplan](#62-kostenplan)
   - [7. Risikoanalyse](#7-risikoanalyse)
   - [Quellenverzeichnis](#quellenverzeichnis)
 
@@ -155,7 +155,7 @@ Es werden lediglich Büroräume für die Entwicklung und anstehende wöchentlich
 <br>
 
 
-### 6.1 Kostenplan
+### 6.2 Kostenplan
 
 
 
@@ -172,6 +172,8 @@ Es werden lediglich Büroräume für die Entwicklung und anstehende wöchentlich
 
 
 *Der Plan berücksichtigt den Zeitraum KW 39 bis KW 22 im nächsten Jahr, inklusive der Pause von KW 45 bis KW 47 und dem Meilenstein des ersten Prototyps in KW 47.*
+
+Ein Überblick über das Projekt wird in dem Dokument "Projektplanung" näher erläutert sowie die Darstellung eines GANTT-Diagramms.
 
 <br><br>
 
