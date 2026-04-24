@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>QUDT Testseite</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; }
+    input, button { padding: 0.5rem; font-size: 1rem; }
+    pre { background: #f4f4f4; padding: 1rem; margin-top: 1rem; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>QUDT-Test</h1>
+
+  <input id="searchInput" type="text" value="Volt" />
+  <button id="searchBtn">Suchen</button>
+
+  <pre id="result">Noch keine Anfrage gesendet.</pre>
+
+  <script>
+    document.getElementById("searchBtn").addEventListener("click", async () => {
+      const term = document.getElementById("searchInput").value.trim();
+      const resultBox = document.getElementById("result");
+
+      if (!term) {
+        resultBox.textContent = "Bitte einen Suchbegriff eingeben.";
+        return;
+      }
+
+      resultBox.textContent = "Lade...";
+
+      const url = `http://127.0.0.1:5000/api/v3/search?search=${encodeURIComponent(term)}&lang=en&types=unit`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP-Fehler ${response.status}`);
+        }
+
+        const data = await response.json();
+        resultBox.textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        resultBox.textContent = "Fehler beim Abruf: " + error.message;
+      }
+    });
+  </script>
+</body>
+</html>
