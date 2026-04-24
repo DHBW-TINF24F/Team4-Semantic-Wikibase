@@ -2,8 +2,8 @@ const ENDPOINT = "https://qudt.org/fuseki/qudt/query";
 
 // Filterung von Sprachen
 const languages = ["en", "de"];
-const language = "en";
-//const langValues = languages.map(l => `"${l}"`).join(" ");
+const selectedLanguage = 1;
+
 
 const query = `
 PREFIX qudt: <http://qudt.org/schema/qudt/>
@@ -21,11 +21,10 @@ WHERE {
     OPTIONAL { ?unit dcterms:description ?description . }
     OPTIONAL { ?unit qudt:description ?description . }
     
-    FILTER(LANG(?label) = "${language}")
+    FILTER(LANG(?label) = "${languages[selectedLanguage]}")
 }
 `; 
-// den Filter noch anpassen, das er eine Sprache übergeben bekommt und nicht hartkodiert ist
-// FILTER(LANG(?label) IN ("en", "de")) -> alter Filter
+
 
 
 
