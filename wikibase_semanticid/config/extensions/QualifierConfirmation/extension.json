@@ -1,0 +1,52 @@
+{
+	"name": "QualifierConfirmation",
+	"version": "1.0.0",
+	"author": ["FoP Consult GmbH"],
+	"url": "",
+	"descriptionmsg": "qualifierconfirmation-desc",
+	"license-name": "proprietary",
+	"type": "wikibase",
+	"requires": {
+		"MediaWiki": ">= 1.42.0",
+		"extensions": {
+			"WikibaseRepository": "*"
+		}
+	},
+	"MessagesDirs": {
+		"QualifierConfirmation": [
+			"i18n"
+		]
+	},
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\QualifierConfirmation\\": "includes/"
+	},
+	"ResourceModules": {
+		"ext.qualifierconfirmation": {
+			"scripts": [
+				"resources/ext.qualifierconfirmation.js"
+			],
+			"messages": [
+				"qualifierconfirmation-dialog-title"
+			],
+			"dependencies": [
+				"mediawiki.base",
+				"oojs-ui-windows"
+			]
+		}
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "",
+		"remoteExtPath": "extensions/QualifierConfirmation"
+	},
+	"config": {
+		"QualifierConfirmationRules": {
+			"value": [],
+			"description": "List of qualifier confirmation rules. Each rule is an object with qualifierProperty (e.g. 'P4'), qualifierValue (e.g. 'yes'), and confirmationMessage (string)."
+		}
+	},
+	"Hooks": {
+		"BeforePageDisplay": "MediaWiki\\Extension\\QualifierConfirmation\\Hooks::onBeforePageDisplay"
+	},
+	"ServiceWiring": {},
+	"manifest_version": 2
+}

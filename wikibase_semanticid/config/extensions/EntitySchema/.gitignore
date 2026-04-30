@@ -1,0 +1,13 @@
+.*.swp
+*~
+/.project
+/composer.lock
+/vendor
+/node_modules
+.eslintcache
+/.stylelintcache
+
+cypress/.cache
+cypress/videos
+cypress/screenshots
+cypress/downloads

@@ -1,0 +1,34 @@
+{
+	"name": "UniquePropertyValidator",
+	"version": "1.0.0",
+	"author": ["FoP Consult GmbH"],
+	"url": "",
+	"descriptionmsg": "uniquepropertyvalidator-desc",
+	"license-name": "proprietary",
+	"type": "wikibase",
+	"requires": {
+		"MediaWiki": ">= 1.42.0",
+		"extensions": {
+			"WikibaseRepository": "*"
+		}
+	},
+	"MessagesDirs": {
+		"UniquePropertyValidator": [
+			"i18n"
+		]
+	},
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\UniquePropertyValidator\\": "includes/"
+	},
+	"config": {
+		"UniqueProperties": {
+			"value": ["P2"],
+			"description": "List of property IDs that should have unique values across all items"
+		}
+	},
+	"Hooks": {
+		"ApiCheckCanExecute": "MediaWiki\\Extension\\UniquePropertyValidator\\Hooks::onApiCheckCanExecute"
+	},
+	"ServiceWiring": {},
+	"manifest_version": 2
+}

@@ -1,0 +1,32 @@
+{
+	"name": "SemanticIdResolver",
+	"version": "1.0.0",
+	"author": ["FoP Consult GmbH"],
+	"url": "",
+	"descriptionmsg": "semanticidresolver-desc",
+	"license-name": "proprietary",
+	"type": "specialpage",
+	"requires": {
+		"MediaWiki": ">= 1.43.0"
+	},
+	"MessagesDirs": {
+		"SemanticIdResolver": [
+			"i18n"
+		]
+	},
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\SemanticIdResolver\\": "includes/"
+	},
+	"SpecialPages": {
+		"GoBySemanticId": {
+			"class": "MediaWiki\\Extension\\SemanticIdResolver\\Specials\\SpecialGoBySemanticId"
+		}
+	},
+	"config": {
+		"SemanticIdProperty": {
+			"value": "P1",
+			"description": "The property ID used for semantic IDs (e.g., P1)"
+		}
+	},
+	"manifest_version": 2
+}

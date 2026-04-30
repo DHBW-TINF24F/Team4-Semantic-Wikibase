@@ -1,0 +1,158 @@
+# traefik dynamic configuration
+
+http:
+  services:
+    # Dummy service for redirect-only routers (never actually called)
+    redirect-dummy:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:1"
+
+    wikibase:
+      loadBalancer:
+        servers:
+          - url: "http://wikibase:80"
+
+    wdqs:
+      loadBalancer:
+        servers:
+          - url: "http://wdqs:9999"
+
+    wdqs-frontend:
+      loadBalancer:
+        servers:
+          - url: "http://wdqs-frontend:80"
+
+    quickstatements:
+      loadBalancer:
+        servers:
+          - url: "http://quickstatements:80"
+
+    entityshape-api:
+      loadBalancer:
+        servers:
+          - url: "http://entityshape-api:8000"
+
+  routers:
+    # WWW to non-WWW redirect for Wikibase - highest priority
+    wikibase-www-redirect:
+      rule: 'Host(`www.{{ env "WIKIBASE_PUBLIC_HOST" }}`)'
+      service: redirect-dummy
+      middlewares: [ www-to-non-www-redirect ]
+      priority: 100
+
+    # Semantic ID resolver - rewrite /{value} or /?p={value} to /wiki/Special:GoBySemanticId?p={value}
+    # Supports all semantic ID formats: IRDI, URI/URL, UUID, IEC61360-IRDI
+    # Only matches if there's a path segment OR query parameter 'p'
+    semantic-id-router:
+      rule: 'Host(`{{ env "WIKIBASE_PUBLIC_HOST" }}`) && (PathRegexp(`^/[^/]+$`) || (Path(`/`) && QueryRegexp(`p`, `.+`))) && !PathPrefix(`/wiki`) && !PathPrefix(`/w`) && !PathPrefix(`/tools`) && !PathPrefix(`/api`) && !PathPrefix(`{{ env "ENTITYSHAPE_PATH" }}`) && !PathPrefix(`/index`) && !PathPrefix(`/rest`) && !PathPrefix(`/load.php`) && !PathPrefix(`/opensearch_desc.php`)'
+      service: wikibase
+      middlewares: [ semantic-id-rewrite, wikibase-cors-headers{{ if eq (env "BASIC_AUTH_ENABLED") "true" }}, basic-auth{{ end }} ]
+      priority: 10
+
+    wikibase-router:
+      rule: 'Host(`{{ env "WIKIBASE_PUBLIC_HOST" }}`) && !PathPrefix(`/tools`)'
+      service: wikibase
+      middlewares: [ wikibase-cors-headers{{ if eq (env "BASIC_AUTH_ENABLED") "true" }}, basic-auth{{ end }} ]
+      priority: 1
+
+    wdqs-router:
+      rule: 'Host(`{{ env "WDQS_PUBLIC_HOST" }}`) && PathPrefix(`/sparql`) && (Method(`GET`) || Method(`OPTIONS`) || Method(`POST`))'
+      service: wdqs
+      middlewares: [ wdqs-prefix, wdqs-headers, wdqs-cors-headers, wdqs-rate-limit{{ if eq (env "BASIC_AUTH_ENABLED") "true" }}, basic-auth{{ end }} ]
+
+    wdqs-frontend-router:
+      rule: 'Host(`{{ env "WDQS_PUBLIC_HOST" }}`) && !PathPrefix(`/sparql`)'
+      service: wdqs-frontend
+      middlewares: [ {{ if eq (env "BASIC_AUTH_ENABLED") "true" }}basic-auth{{ end }} ]
+
+    quickstatements-router:
+      rule: 'Host(`{{ env "WIKIBASE_PUBLIC_HOST" }}`) && PathPrefix(`/tools/quickstatements`)'
+      service: quickstatements
+      middlewares: [ quickstatements-redirectregex, quickstatements-stripprefix{{ if eq (env "BASIC_AUTH_ENABLED") "true" }}, basic-auth{{ end }} ]
+
+    entityshape-api-router:
+      rule: 'Host(`{{ env "WIKIBASE_PUBLIC_HOST" }}`) && PathPrefix(`{{ env "ENTITYSHAPE_PATH" }}`)'
+      service: entityshape-api
+      middlewares: [ entityshape-stripprefix, entityshape-cors-headers{{ if eq (env "BASIC_AUTH_ENABLED") "true" }}, basic-auth{{ end }} ]
+      priority: 15
+
+  middlewares:
+    www-to-non-www-redirect:
+      redirectRegex:
+        regex: "^https://www\\.semantic-hub\\.io/(.*)"
+        replacement: "https://semantic-hub.io/$1"
+        permanent: true
+
+    basic-auth:
+      basicAuth:
+        users:
+          - '{{ env "BASIC_AUTH_CREDENTIALS_HASH" }}'
+        realm: "Wikibase Authentication"
+
+    semantic-id-rewrite:
+      replacePathRegex:
+        # Matches: / (root with query param) OR /{singleSegment} (path format)
+        # Replaces with: /wiki/Special:GoBySemanticId (preserves query string) OR /wiki/Special:GoBySemanticId/{segment}
+        regex: "^/(([^/]+))?$"
+        replacement: "/wiki/Special:GoBySemanticId/$2"
+
+    wdqs-prefix:
+      addPrefix:
+        prefix: /bigdata/namespace/wdq/
+
+    wdqs-headers:
+      headers:
+        accessControlAllowMethods: "GET,OPTIONS,POST"
+        customResponseHeaders:
+          VARY: Accept
+        customRequestHeaders:
+          X-BIGDATA-READ-ONLY: yes
+          X-BIGDATA-MAX-QUERY-MILLIS: "300000"
+
+    wdqs-cors-headers:
+      headers:
+        accessControlAllowHeaders: "*"
+
+    wikibase-cors-headers:
+      headers:
+        accessControlAllowOriginList:
+          - "https://shex-simple.toolforge.org"
+        accessControlAllowMethods: "GET,OPTIONS"
+        accessControlAllowHeaders: "*"
+        accessControlAllowCredentials: true
+        accessControlMaxAge: 100
+        addVaryHeader: true
+
+    wdqs-rate-limit:
+      rateLimit:
+        burst: 30
+        average: 60
+        period: 1m
+
+    quickstatements-redirectregex:
+      redirectRegex:
+        regex: /tools/quickstatements$
+        replacement: /tools/quickstatements/
+        permanent: true
+
+    quickstatements-stripprefix:
+      stripPrefix:
+        prefixes: [ /tools/quickstatements ]
+
+    entityshape-stripprefix:
+      stripPrefix:
+        prefixes: [ '{{ env "ENTITYSHAPE_PATH" }}' ]
+
+    entityshape-cors-headers:
+      headers:
+        customRequestHeaders:
+          X-Forwarded-Prefix: '{{ env "ENTITYSHAPE_PATH" }}'
+        accessControlAllowOriginList:
+          - "https://shex-simple.toolforge.org"
+          - 'https://{{ env "WIKIBASE_PUBLIC_HOST" }}'
+        accessControlAllowMethods: "GET,OPTIONS,POST"
+        accessControlAllowHeaders: "*"
+        accessControlAllowCredentials: true
+        accessControlMaxAge: 100
+        addVaryHeader: true

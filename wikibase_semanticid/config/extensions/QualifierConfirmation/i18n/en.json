@@ -1,0 +1,7 @@
+{
+	"@metadata": {
+		"authors": []
+	},
+	"qualifierconfirmation-desc": "Shows a confirmation dialog when saving a statement with a qualifier that has been marked as standardized.",
+	"qualifierconfirmation-dialog-title": "Confirmation required"
+}
