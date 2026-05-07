@@ -1,0 +1,418 @@
+openapi: 3.0.3
+
+info:
+  title: QUDT to IEC61360 Mapping API
+  version: 1.0.0
+  description: >
+    Diese API sucht semantische Begriffe, QUDT-URIs oder CURIEs in QUDT
+    und mappt die gefundenen RDF-Daten auf eine IEC61360-nahe
+    ConceptDescription-Struktur. Die API kann über Swagger UI getestet werden.
+
+servers:
+  - url: http://127.0.0.1:8000
+    description: Lokaler Entwicklungsserver
+
+tags:
+  - name: Mapping
+    description: Endpunkte für das Mapping von QUDT-Daten auf IEC61360
+  - name: System
+    description: Allgemeine Systeminformationen
+
+paths:
+  /:
+    get:
+      tags:
+        - System
+      summary: API-Startseite
+      description: Gibt eine kurze Information zur API zurück.
+      operationId: getRootInfo
+      responses:
+        "200":
+          description: Erfolgreiche Antwort mit Basisinformationen
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RootResponse"
+              example:
+                message: QUDT to IEC61360 Mapping API
+                swagger: /docs
+                endpoint: /map
+
+  /map:
+    get:
+      tags:
+        - Mapping
+      summary: QUDT-Begriff suchen und auf IEC61360 mappen
+      description: >
+        Sucht einen Begriff, eine vollständige QUDT-URI oder eine CURIE wie
+        `unit:V` in QUDT. Das gefundene Objekt wird anschließend in eine
+        IEC61360-nahe ConceptDescription-Struktur transformiert.
+      operationId: mapQudtToIec61360
+      parameters:
+        - name: search
+          in: query
+          required: true
+          description: >
+            Suchbegriff, vollständige QUDT-URI oder CURIE.
+            Beispiele: `Volt`, `unit:V`, `http://qudt.org/vocab/unit/V`
+          schema:
+            type: string
+            minLength: 1
+          examples:
+            term:
+              summary: Begriffssuche
+              value: Volt
+            curie:
+              summary: CURIE-Suche
+              value: unit:V
+            uri:
+              summary: URI-Suche
+              value: http://qudt.org/vocab/unit/V
+
+        - name: lang
+          in: query
+          required: false
+          description: Sprache für Labels und Beschreibungen.
+          schema:
+            type: string
+            enum:
+              - en
+              - de
+            default: en
+          example: en
+
+        - name: types
+          in: query
+          required: false
+          description: >
+            QUDT-Typen, die durchsucht werden sollen. Der Parameter kann
+            mehrfach angegeben werden, zum Beispiel:
+            `/map?search=Volt&types=unit&types=quantitykind`
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - unit
+                - quantitykind
+                - dimensionvector
+                - constant
+                - sou
+                - soqk
+          example:
+            - unit
+
+      responses:
+        "200":
+          description: Erfolgreiche Antwort. Kann ein Ergebnis oder kein Ergebnis enthalten.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MappingResponse"
+              examples:
+                found:
+                  summary: Erfolgreich gefundenes Mapping
+                  value:
+                    query:
+                      search: Volt
+                      mode: term
+                      lang: en
+                      types:
+                        - unit
+                    total: 1
+                    result:
+                      modelType: ConceptDescription
+                      id: http://qudt.org/vocab/unit/V
+                      idShort: V
+                      embeddedDataSpecifications:
+                        - dataSpecification:
+                            type: ExternalReference
+                            keys:
+                              - type: GlobalReference
+                                value: http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0
+                          dataSpecificationContent:
+                            modelType: DataSpecificationIec61360
+                            semanticId:
+                              property: P1
+                              value: http://qudt.org/vocab/unit/V
+                            preferredName:
+                              property: P35
+                              value:
+                                - value: Volt
+                                  lang: en
+                            shortName:
+                              property: P36
+                              value: null
+                            unit:
+                              property: P37
+                              value: Volt
+                            sourceOfDefinition:
+                              property: P40
+                              value: null
+                            Symbol:
+                              property: P41
+                              value: V
+                            dataType:
+                              property: P42
+                              value: qudt:Unit
+                            unitId:
+                              property: P43
+                              value: null
+                            Definition:
+                              property: P44
+                              value: null
+                            valueFormat:
+                              property: P45
+                              value: null
+                            valueList:
+                              property: P46
+                              value: null
+                            value:
+                              property: P47
+                              value: null
+                            levelType:
+                              property: P48
+                              value: null
+                      additionalProperties: {}
+                notFound:
+                  summary: Kein Ergebnis gefunden
+                  value:
+                    query:
+                      search: UnknownTerm
+                      mode: term
+                      lang: en
+                      types:
+                        - unit
+                    total: 0
+                    result: null
+
+        "400":
+          description: Ungültige Anfrage, zum Beispiel leerer Suchbegriff.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                detail: Parameter 'search' darf nicht leer sein.
+
+        "500":
+          description: Fehler beim Zugriff auf QUDT oder interner Serverfehler.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                detail: Fehler beim Zugriff auf QUDT.
+
+components:
+  schemas:
+    RootResponse:
+      type: object
+      description: Basisinformationen zur API.
+      properties:
+        message:
+          type: string
+          example: QUDT to IEC61360 Mapping API
+        swagger:
+          type: string
+          example: /docs
+        endpoint:
+          type: string
+          example: /map
+      required:
+        - message
+        - swagger
+
+    MappingResponse:
+      type: object
+      description: Antwort der Mapping-API.
+      properties:
+        query:
+          $ref: "#/components/schemas/QueryInfo"
+        total:
+          type: integer
+          description: Anzahl der gefundenen und gemappten Ergebnisse.
+          example: 1
+        result:
+          nullable: true
+          oneOf:
+            - $ref: "#/components/schemas/ConceptDescription"
+            - type: "null"
+      required:
+        - query
+        - total
+        - result
+
+    QueryInfo:
+      type: object
+      description: Informationen zur ausgeführten Suche.
+      properties:
+        search:
+          type: string
+          description: Ursprünglicher Suchbegriff.
+          example: Volt
+        mode:
+          type: string
+          description: Suchmodus der API.
+          enum:
+            - term
+            - id
+          example: term
+        lang:
+          type: string
+          description: Verwendete Sprache.
+          enum:
+            - en
+            - de
+          example: en
+        types:
+          type: array
+          description: Verwendete QUDT-Typen.
+          items:
+            type: string
+          example:
+            - unit
+      required:
+        - search
+        - mode
+        - lang
+        - types
+
+    ConceptDescription:
+      type: object
+      description: IEC61360-nahe ConceptDescription-Struktur.
+      properties:
+        modelType:
+          type: string
+          example: ConceptDescription
+        id:
+          type: string
+          format: uri
+          description: Globale ID des semantischen Konzepts.
+          example: http://qudt.org/vocab/unit/V
+        idShort:
+          type: string
+          description: Kurzname aus der URI.
+          example: V
+        embeddedDataSpecifications:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmbeddedDataSpecification"
+        additionalProperties:
+          type: object
+          description: Nicht direkt gemappte RDF-Properties.
+          additionalProperties: true
+      required:
+        - modelType
+        - id
+        - idShort
+        - embeddedDataSpecifications
+        - additionalProperties
+
+    EmbeddedDataSpecification:
+      type: object
+      description: Eingebettete IEC61360-Datenspezifikation.
+      properties:
+        dataSpecification:
+          $ref: "#/components/schemas/DataSpecificationReference"
+        dataSpecificationContent:
+          $ref: "#/components/schemas/DataSpecificationIec61360"
+      required:
+        - dataSpecificationContent
+
+    DataSpecificationReference:
+      type: object
+      description: Referenz auf das IEC61360-Datenspezifikationstemplate.
+      properties:
+        type:
+          type: string
+          example: ExternalReference
+        keys:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReferenceKey"
+
+    ReferenceKey:
+      type: object
+      properties:
+        type:
+          type: string
+          example: GlobalReference
+        value:
+          type: string
+          example: http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0
+
+    DataSpecificationIec61360:
+      type: object
+      description: Gemappte IEC61360-nahe Datenfelder.
+      properties:
+        modelType:
+          type: string
+          example: DataSpecificationIec61360
+        semanticId:
+          $ref: "#/components/schemas/Iec61360Field"
+        preferredName:
+          $ref: "#/components/schemas/Iec61360Field"
+        shortName:
+          $ref: "#/components/schemas/Iec61360Field"
+        unit:
+          $ref: "#/components/schemas/Iec61360Field"
+        sourceOfDefinition:
+          $ref: "#/components/schemas/Iec61360Field"
+        Symbol:
+          $ref: "#/components/schemas/Iec61360Field"
+        dataType:
+          $ref: "#/components/schemas/Iec61360Field"
+        unitId:
+          $ref: "#/components/schemas/Iec61360Field"
+        Definition:
+          $ref: "#/components/schemas/Iec61360Field"
+        valueFormat:
+          $ref: "#/components/schemas/Iec61360Field"
+        valueList:
+          $ref: "#/components/schemas/Iec61360Field"
+        value:
+          $ref: "#/components/schemas/Iec61360Field"
+        levelType:
+          $ref: "#/components/schemas/Iec61360Field"
+
+    Iec61360Field:
+      type: object
+      description: Einzelnes IEC61360-Feld mit Property-Nummer und Wert.
+      properties:
+        property:
+          type: string
+          description: IEC61360-Property-Nummer.
+          example: P35
+        value:
+          nullable: true
+          description: Wert des Feldes.
+      required:
+        - property
+        - value
+
+    LangString:
+      type: object
+      description: Sprachabhängiger Textwert.
+      properties:
+        value:
+          type: string
+          example: Volt
+        lang:
+          type: string
+          example: en
+      required:
+        - value
+        - lang
+
+    ErrorResponse:
+      type: object
+      description: Fehlerantwort der API.
+      properties:
+        detail:
+          type: string
+          example: Fehler beim Zugriff auf QUDT.
+      required:
+        - detail
