@@ -1,0 +1,86 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix prefix: <http://qudt.org/vocab/prefix/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix qkdv: <http://qudt.org/vocab/dimensionvector/> .
+@prefix quantitykind: <http://qudt.org/vocab/quantitykind/> .
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix si-unit: <https://si-digital-framework.org/SI/units/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix sou: <http://qudt.org/vocab/sou/> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix vaem: <http://www.linkedmodel.org/schema/vaem#> .
+@prefix voag: <http://voag.linkedmodel.org/schema/voag#> .
+
+unit:V
+  a qudt:Unit ;
+  dcterms:description """$\\textit{Volt}$ is the SI unit of electric potential.
+  Separating electric charges creates potential energy, which can be measured in energy units such as joules.
+  Electric potential is defined as the amount of potential energy present per unit of charge.
+  Electric potential is measured in volts, with one volt representing a potential of one joule per coulomb of charge.
+  The name of the unit honors the Italian scientist Count Alessandro Volta (1745-1827), the inventor of the first battery.
+  The volt also may be expressed with a variety of other units.
+  For example, a volt is also equal to one watt per ampere ($W/A$) and one joule per ampere per second ($J/A/s$).
+  """^^qudt:LatexString ;
+  qudt:applicableSystem sou:CGS-EMU ;
+  qudt:applicableSystem sou:CGS-GAUSS ;
+  qudt:applicableSystem sou:PLANCK ;
+  qudt:applicableSystem sou:SI ;
+  qudt:conversionMultiplier 1.0 ;
+  qudt:conversionMultiplierSN 1.0E0 ;
+  qudt:dbpediaMatch "http://dbpedia.org/resource/Volt"^^xsd:anyURI ;
+  qudt:hasDimensionVector qkdv:A0E-1L2I0M1H0T-3D0 ;
+  qudt:hasFactorUnit [
+    a qudt:FactorUnit ;
+    qudt:exponent 1 ;
+    qudt:hasUnit unit:W ;
+  ] ;
+  qudt:hasFactorUnit [
+    a qudt:FactorUnit ;
+    qudt:exponent -1 ;
+    qudt:hasUnit unit:A ;
+  ] ;
+  qudt:hasQuantityKind quantitykind:ElectricPotential ;
+  qudt:hasQuantityKind quantitykind:ElectricPotentialDifference ;
+  qudt:hasQuantityKind quantitykind:EnergyPerElectricCharge ;
+  qudt:hasQuantityKind quantitykind:Voltage ;
+  qudt:iec61360Code "0112/2///62720#UAA296" ;
+  qudt:informativeReference "https://cdd.iec.ch/cdd/iec62720/iec62720.nsf/Units/0112-2---62720%23UAA296"^^xsd:anyURI ;
+  qudt:informativeReference "https://en.wikipedia.org/wiki/Volt?oldid=494812083"^^xsd:anyURI ;
+  qudt:latexDefinition "$\\textit{V}\\ \\equiv\\ \\text{volt}\\ \\equiv\\ \\frac{\\text{J}}{\\text{C}}\\ \\equiv\\ \\frac{\\text{joule}}{\\text{coulomb}}\\ \\equiv\\ \\frac{\\text{W.s}}{\\text{C}}\\ \\equiv\\ \\frac{\\text{watt.second}}{\\text{coulomb}}\\ \\equiv\\ \\frac{\\text{W}}{\\text{A}}\\ \\equiv\\ \\frac{\\text{watt}}{\\text{amp}}$"^^qudt:LatexString ;
+  qudt:omUnit <http://www.ontology-of-units-of-measure.org/resource/om-2/volt> ;
+  qudt:siExactMatch si-unit:volt ;
+  qudt:siUnitsExpression "W/A" ;
+  qudt:symbol "V" ;
+  qudt:ucumCode "V"^^qudt:UCUMcs ;
+  qudt:udunitsCode "V" ;
+  qudt:uneceCommonCode "VLT" ;
+  qudt:wikidataMatch <http://www.wikidata.org/entity/Q25250> ;
+  rdfs:isDefinedBy <http://qudt.org/3.2.1/vocab/unit> ;
+  rdfs:label "Volt" ;
+  rdfs:label "Volt"@cs ;
+  rdfs:label "Volt"@de ;
+  rdfs:label "Volt"@en ;
+  rdfs:label "Volt"@fr ;
+  rdfs:label "Volt"@hu ;
+  rdfs:label "Volt"@it ;
+  rdfs:label "Volt"@ms ;
+  rdfs:label "Volt"@pt ;
+  rdfs:label "Volt"@ro ;
+  rdfs:label "Volt"@sl ;
+  rdfs:label "Volt"@tr ;
+  rdfs:label "Voltio"@es ;
+  rdfs:label "Voltium"@la ;
+  rdfs:label "Wolt"@pl ;
+  rdfs:label "Βολτ"@el ;
+  rdfs:label "Волт"@bg ;
+  rdfs:label "Вольт"@ru ;
+  rdfs:label "וולט"@he ;
+  rdfs:label "فولت"@ar ;
+  rdfs:label "ولت"@fa ;
+  rdfs:label "वोल्ट"@hi ;
+  rdfs:label "ボルト"@ja ;
+  rdfs:label "伏特"@zh .
