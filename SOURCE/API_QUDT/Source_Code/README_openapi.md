@@ -97,7 +97,7 @@ pip install fastapi uvicorn requests
 Die API wird mit Uvicorn gestartet:
 
 ```bash
-uvicorn qudt_api:app --reload
+uvicorn api_qudt:app --reload
 ```
 
 
@@ -135,11 +135,6 @@ http://127.0.0.1:8000/docs
 GET http://127.0.0.1:8000/map?search=Volt&lang=en&types=unit
 ```
 
-### Suche nach CURIE
-
-```http
-GET http://127.0.0.1:8000/map?search=unit:V&lang=en&types=unit
-```
 
 ### Suche nach vollständiger QUDT-URI
 
@@ -217,7 +212,7 @@ Vereinfachte Beispielantwort:
         }
       }
     ],
-    "additionalProperties": {}
+    
   }
 }
 ```

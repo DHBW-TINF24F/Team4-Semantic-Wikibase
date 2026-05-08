@@ -4,7 +4,7 @@ info:
   title: QUDT to IEC61360 Mapping API
   version: 1.0.0
   description: >
-    Diese API sucht semantische Begriffe, QUDT-URIs oder CURIEs in QUDT
+    Diese API sucht semantische Begriffe oder QUDT-URIs in QUDT
     und mappt die gefundenen RDF-Daten auf eine IEC61360-nahe
     ConceptDescription-Struktur. Die API kann über Swagger UI getestet werden.
 
