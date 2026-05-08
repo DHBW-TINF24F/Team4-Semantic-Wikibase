@@ -4,7 +4,7 @@ info:
   title: QUDT to IEC61360 Mapping API
   version: 1.0.0
   description: >
-    Diese API sucht semantische Begriffe oder QUDT-URIs in QUDT
+    Diese API sucht semantische Begriffe, QUDT-URIs in QUDT
     und mappt die gefundenen RDF-Daten auf eine IEC61360-nahe
     ConceptDescription-Struktur. Die API kann über Swagger UI getestet werden.
 
@@ -175,7 +175,7 @@ paths:
                             levelType:
                               property: P48
                               value: null
-                      additionalProperties: {}
+                      
                 notFound:
                   summary: Kein Ergebnis gefunden
                   value:
@@ -300,16 +300,12 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/EmbeddedDataSpecification"
-        additionalProperties:
-          type: object
-          description: Nicht direkt gemappte RDF-Properties.
-          additionalProperties: true
+
       required:
         - modelType
         - id
         - idShort
         - embeddedDataSpecifications
-        - additionalProperties
 
     EmbeddedDataSpecification:
       type: object

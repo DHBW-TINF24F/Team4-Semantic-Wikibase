@@ -33,12 +33,12 @@ Empfohlene Struktur:
 ```text
 projektordner/
 │
-├── qudt_api.py
+├── api_qudt.py
 ├── openapi.yaml
 └── README.md
 ```
 
-- `qudt_api.py` enthält den FastAPI-Code.
+- `api_qudt.py` enthält den FastAPI-Code.
 - `openapi.yaml` enthält die manuell dokumentierte OpenAPI-Spezifikation.
 - `README.md` erklärt Installation, Start und Test der API.
 
