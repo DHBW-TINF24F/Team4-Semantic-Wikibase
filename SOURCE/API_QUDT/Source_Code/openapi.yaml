@@ -6,7 +6,8 @@ info:
   description: >
     Diese API sucht semantische Begriffe, QUDT-URIs in QUDT
     und mappt die gefundenen RDF-Daten auf eine IEC61360-nahe
-    ConceptDescription-Struktur. Die API kann über Swagger UI getestet werden.
+    ConceptDescription-Struktur. Die API deckt allerdings nur die GET-Anfragen zur Suche nach semantischerIDs oder einzelnen Begriffen. Keine POST-Anfragen.
+    Die API kann über Swagger UI getestet werden.
 
 servers:
   - url: http://127.0.0.1:8000

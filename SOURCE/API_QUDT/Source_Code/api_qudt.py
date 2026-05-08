@@ -213,11 +213,21 @@ def empty_concept_description(uri: str) -> Dict[str, Any]:
                     "modelType": "DataSpecificationIec61360",
                     "semanticId": create_iec_field("P1", uri),
                     "preferredName": create_iec_field("P35", []),
-                    "Definition": create_iec_field("P44", [])
+                    "shortName": create_iec_field("P36", None),
+                    "unit": create_iec_field("P37", None),
+                    "sourceOfDefinition": create_iec_field("P40", []),
+                    "Symbol": create_iec_field("P41", None),
+                    "dataType": create_iec_field("P42", None),
+                    "unitId": create_iec_field("P43", None),
+                    "Definition": create_iec_field("P44", []),
+                    "valueFormat": create_iec_field("P45", None),
+                    "valueList": create_iec_field("P46", None),
+                    "value": create_iec_field("P47", None),
+                    "levelType": create_iec_field("P48", None)
                 }
             }
         ],
-        "additionalProperties": {}
+        #"additionalProperties": {}
     }
 
 
@@ -258,39 +268,66 @@ def is_mapped_predicate(predicate_uri: str) -> bool:
 
 
 # Baut die SPARQL-Abfrage zur Suche eines passenden Kandidaten
-def build_candidate_query(
-    search: str,
-    mode: str,
-    lang: str,
-    selected_types: List[str]
-) -> str:
-
+def build_candidate_query(search: str, mode: str, lang: str, selected_types: List[str]) -> str:
     safe_search = search.replace('"', '\\"')
-
-    type_values = " ".join(
-        f"<{TYPE_CONFIG[t]['classUri']}>"
-        for t in selected_types
+    type_values = " ".join(f"<{TYPE_CONFIG[t]['classUri']}>" for t in selected_types)
+    prefix_filters = " || ".join(
+        f'STRSTARTS(STR(?entity), "{TYPE_CONFIG[t]["vocabPrefix"]}")' for t in selected_types
     )
+
+    expanded = expand_curie(search)
+    safe_expanded = expanded.replace('"', '\\"')
+
+    if mode == "id":
+        filter_block = f'''
+      FILTER(STR(?entity) = "{safe_expanded}")
+      BIND(0 AS ?rank)
+'''
+        ranking_block = ""
+    else:
+        filter_block = f'''
+      FILTER(
+        (BOUND(?label) && LCASE(STR(?label)) = LCASE("{safe_search}")) ||
+        LCASE(REPLACE(STR(?entity), "^.+[/#]", "")) = LCASE("{safe_search}") ||
+        (BOUND(?symbol) && LCASE(STR(?symbol)) = LCASE("{safe_search}")) ||
+        (BOUND(?label) && CONTAINS(LCASE(STR(?label)), LCASE("{safe_search}")))
+      )
+'''
+        ranking_block = f'''
+      BIND(
+        IF(BOUND(?label) && LCASE(STR(?label)) = LCASE("{safe_search}"), 0,
+          IF(LCASE(REPLACE(STR(?entity), "^.+[/#]", "")) = LCASE("{safe_search}"), 1,
+            IF(BOUND(?symbol) && LCASE(STR(?symbol)) = LCASE("{safe_search}"), 2, 3)
+          )
+        ) AS ?rank
+      )
+'''
 
     return f"""
 PREFIX qudt: <http://qudt.org/schema/qudt/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT DISTINCT ?entity ?label
+SELECT DISTINCT ?entity ?entityType ?label ?symbol ?rank
 WHERE {{
   VALUES ?entityType {{ {type_values} }}
 
   ?entity a ?entityType .
+  FILTER({prefix_filters})
 
   OPTIONAL {{
     ?entity rdfs:label ?label .
-    FILTER(LANG(?label) = "{lang}" || LANG(?label) = "en")
+    FILTER(LANG(?label) = "{lang}" || LANG(?label) = "" || LANG(?label) = "en")
   }}
 
-  FILTER(CONTAINS(LCASE(STR(?label)), LCASE("{safe_search}")))
+  OPTIONAL {{ ?entity qudt:symbol ?symbol . }}
+
+  {filter_block}
+  {ranking_block}
 }}
+ORDER BY ?rank STRLEN(STR(?label)) ?entity
 LIMIT 1
 """
+
 
 
 # Baut die SPARQL-Abfrage für alle Properties eines Objekts
@@ -333,24 +370,19 @@ def run_sparql(query: str) -> Dict[str, Any]:
 
 
 # Mappt RDF-Properties auf IEC61360 Felder
-def map_rows_to_semantichub(
-    entity_uri: str,
-    rows: List[Dict[str, Any]]
-) -> Dict[str, Any]:
 
+def map_rows_to_semantichub(entity_uri: str, rows: List[Dict[str, Any]], selected_lang: str) -> Dict[str, Any]:
     result = empty_concept_description(entity_uri)
-
     iec = result["embeddedDataSpecifications"][0]["dataSpecificationContent"]
 
     for row in rows:
-
         predicate_uri = row.get("p", {}).get("value")
-
         obj = row.get("o")
 
         if not predicate_uri or not obj:
             continue
 
+        field_name = predicate_field_name(predicate_uri)
         compact_value = object_to_compact_value(
             obj_type=obj.get("type", ""),
             value=obj.get("value", ""),
@@ -358,21 +390,73 @@ def map_rows_to_semantichub(
             datatype=row.get("datatype", {}).get("value", "")
         )
 
+        # Nur nicht bereits gemappte Properties zusätzlich aufnehmen
+        #if not is_mapped_predicate(predicate_uri):
+            #ensure_additional_property(result, field_name, compact_value)
+
+        # Mapping auf IEC61360-Felder
         if predicate_uri == "http://www.w3.org/2000/01/rdf-schema#label":
-            push_unique(iec["preferredName"]["value"], compact_value)
+            label_lang = row.get("lang", {}).get("value", "")
+
+            # Nur gewählte Sprache oder Englisch als Fallback speichern
+            if label_lang == selected_lang:
+                iec["preferredName"]["value"] = [compact_value]
+
+            elif label_lang == "en" and not iec["preferredName"]["value"]:
+                iec["preferredName"]["value"] = [compact_value]
+
+            # unit nur setzen, wenn Label zur gewählten Sprache passt
+            if iec["unit"]["value"] is None and label_lang in [selected_lang, "en"]:
+                if isinstance(compact_value, str):
+                    iec["unit"]["value"] = compact_value
+                elif isinstance(compact_value, dict) and "value" in compact_value:
+                    iec["unit"]["value"] = compact_value["value"]
+
+        elif predicate_uri in {
+            "http://www.w3.org/2000/01/rdf-schema#isDefinedBy",
+            "http://qudt.org/schema/qudt/informativeReference"
+        }:
+            push_unique(iec["sourceOfDefinition"]["value"], compact_value)
+
+        elif predicate_uri == "http://qudt.org/schema/qudt/symbol":
+            if iec["Symbol"]["value"] is None:
+                iec["Symbol"]["value"] = compact_value
+
+        elif predicate_uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type":
+            if iec["dataType"]["value"] is None:
+                iec["dataType"]["value"] = compact_value
+
+        elif predicate_uri == "http://qudt.org/schema/qudt/iec61360Code":
+            if iec["unitId"]["value"] is None:
+                iec["unitId"]["value"] = compact_value
 
         elif predicate_uri == "http://purl.org/dc/terms/description":
-            push_unique(iec["Definition"]["value"], compact_value)
+            push_unique(iec["Definition"]["value"], {
+                "type": "description",
+                "value": obj.get("value")
+            })
 
-        else:
-            ensure_additional_property(
-                result,
-                predicate_field_name(predicate_uri),
-                compact_value
-            )
+        elif predicate_uri == "http://qudt.org/schema/qudt/latexDefinition":
+            push_unique(iec["Definition"]["value"], {
+                "type": "latexDefinition",
+                "value": obj.get("value")
+            })
 
-    finalize_additional_properties(result)
+        elif predicate_uri == "http://qudt.org/schema/qudt/siUnitsExpression":
+            if iec["valueFormat"]["value"] is None:
+                iec["valueFormat"]["value"] = compact_value
 
+    # Falls preferredName leer, dann null
+    if not iec["preferredName"]["value"]:
+        iec["preferredName"]["value"] = None
+
+    if not iec["sourceOfDefinition"]["value"]:
+        iec["sourceOfDefinition"]["value"] = None
+
+    if not iec["Definition"]["value"]:
+        iec["Definition"]["value"] = None
+
+    #finalize_additional_properties(result)
     return result
 
 
@@ -424,7 +508,7 @@ def map_qudt_to_iec61360(
 
     detail_rows = detail_data.get("results", {}).get("bindings", [])
 
-    mapped = map_rows_to_semantichub(entity_uri, detail_rows)
+    mapped = map_rows_to_semantichub(entity_uri, detail_rows, lang)
 
     return {
         "query": {
