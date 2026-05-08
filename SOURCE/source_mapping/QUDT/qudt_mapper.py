@@ -143,7 +143,7 @@ def empty_concept_description(uri: str) -> Dict[str, Any]:
                     "valueList": None,
                     "value": None,
                     "levelType": None,
-                    "x-qudt": {}
+                    #"x-qudt": {}
                 }
             }
         ]
@@ -191,19 +191,19 @@ def map_qudt_resource(graph: Graph, subject: URIRef, default_lang: str, prefer_s
             iec["dataType"] = "STRING"
 
     # x-qudt Felder
-    x_qudt = {}
-    x_fields = {
-        "quantityKinds": QUDT.hasQuantityKind,
-        "ucumCode": QUDT.ucumCode,
-        "conversionMultiplier": QUDT.conversionMultiplier,
-        "iec61360Code": QUDT.iec61360Code,
-    }
-    for name, pred in x_fields.items():
-        values = [str(o) for o in graph.objects(subject, pred) if isinstance(o, (URIRef, Literal))]
-        if values:
-            x_qudt[name] = values[0] if len(values) == 1 else values
+    # x_qudt = {}
+    # x_fields = {
+    #     "quantityKinds": QUDT.hasQuantityKind,
+    #     "ucumCode": QUDT.ucumCode,
+    #     "conversionMultiplier": QUDT.conversionMultiplier,
+    #     "iec61360Code": QUDT.iec61360Code,
+    # }
+    # for name, pred in x_fields.items():
+    #     values = [str(o) for o in graph.objects(subject, pred) if isinstance(o, (URIRef, Literal))]
+    #     if values:
+    #         x_qudt[name] = values[0] if len(values) == 1 else values
 
-    iec["x-qudt"] = x_qudt
+    # iec["x-qudt"] = x_qudt
     return result
 
 
