@@ -1,0 +1,294 @@
+openapi: 3.0.3
+
+info:
+  title: VEC to IEC61360 Mapping API
+  description: >
+    Diese API sucht Begriffe oder vollständige Semantic-IDs in der VEC-Ontologie
+    und mappt die gefundenen RDF/TTL-Daten auf eine IEC61360-nahe
+    ConceptDescription-Struktur. Die API deckt GET-Anfragen zur Suche nach
+    einzelnen Begriffen oder Semantic-IDs ab. Keine POST-Anfragen.
+    Die API kann über Swagger UI getestet werden.
+  version: 1.0.0
+
+servers:
+  - url: http://127.0.0.1:8000
+    description: Lokaler Entwicklungsserver
+
+paths:
+  /:
+    get:
+      summary: Root-Endpunkt
+      description: Gibt eine kurze API-Information und den Swagger-Pfad zurück.
+      responses:
+        "200":
+          description: Erfolgreiche Antwort mit Basisinformationen
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: VEC to IEC61360 Mapping API
+                  swagger:
+                    type: string
+                    example: /docs
+
+  /map:
+    get:
+      summary: VEC-Begriff auf IEC61360 mappen
+      description: >
+        Sucht einen Begriff oder eine vollständige Semantic-ID in der VEC-TTL-Datei
+        und gibt das Ergebnis als IEC61360-nahe ConceptDescription zurück.
+      parameters:
+        - name: search
+          in: query
+          required: true
+          description: Suchbegriff oder vollständige VEC-URI.
+          schema:
+            type: string
+          examples:
+            term:
+              summary: Suche nach Begriff
+              value: WireElement
+            semanticId:
+              summary: Suche nach vollständiger Semantic-ID
+              value: http://www.prostep.org/ontologies/ecad/2024/03/vec#WireElement
+
+        - name: lang
+          in: query
+          required: false
+          description: Gewünschte Sprache für Labels und Kommentare. Falls nicht vorhanden, wird Englisch verwendet.
+          schema:
+            type: string
+            enum:
+              - en
+              - de
+            default: en
+          example: en
+
+      responses:
+        "200":
+          description: Erfolgreiches Mapping oder kein Treffer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MapResponse"
+              examples:
+                found:
+                  summary: Beispielantwort für WireElement
+                  value:
+                    query:
+                      search: WireElement
+                      mode: term
+                      lang: en
+                      source: https://ecad-wiki.prostep.org/specifications/vec/v220/vec-2.2.0-ontology.ttl
+                    total: 1
+                    result:
+                      modelType: ConceptDescription
+                      id: http://www.prostep.org/ontologies/ecad/2024/03/vec#WireElement
+                      idShort: WireElement
+                      embeddedDataSpecifications:
+                        - dataSpecification:
+                            type: ExternalReference
+                            keys:
+                              - type: GlobalReference
+                                value: http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0
+                          dataSpecificationContent:
+                            modelType: DataSpecificationIec61360
+                            semanticId:
+                              property: P1
+                              value: http://www.prostep.org/ontologies/ecad/2024/03/vec#WireElement
+                            preferredName:
+                              property: P35
+                              value:
+                                - value: WireElement
+                                  lang: en
+                            shortName:
+                              property: P36
+                              value: WireElement
+                            unit:
+                              property: P37
+                              value: null
+                            sourceOfDefinition:
+                              property: P40
+                              value:
+                                - type: ontologySource
+                                  value: https://ecad-wiki.prostep.org/specifications/vec/v220/vec-2.2.0-ontology.ttl
+                            Symbol:
+                              property: P41
+                              value: null
+                            dataType:
+                              property: P42
+                              value: Class
+                            unitId:
+                              property: P43
+                              value: null
+                            Definition:
+                              property: P44
+                              value:
+                                - type: comment
+                                  value: A WireElement specifies a WireElementSpecification in the context of a WireSpecification.
+                            valueFormat:
+                              property: P45
+                              value: null
+                            valueList:
+                              property: P46
+                              value: null
+                            value:
+                              property: P47
+                              value: null
+                            levelType:
+                              property: P48
+                              value: null
+                      additionalProperties:
+                        rdfs:subClassOf: http://www.prostep.org/ontologies/ecad/2024/03/vec#ExtendableElement
+                notFound:
+                  summary: Kein Treffer
+                  value:
+                    query:
+                      search: NotExisting
+                      mode: term
+                      lang: en
+                      source: https://ecad-wiki.prostep.org/specifications/vec/v220/vec-2.2.0-ontology.ttl
+                    total: 0
+                    result: null
+
+        "422":
+          description: Validierungsfehler bei Query-Parametern
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationError"
+
+        "500":
+          description: Fehler beim Laden oder Parsen der VEC-TTL-Datei
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    MapResponse:
+      type: object
+      properties:
+        query:
+          $ref: "#/components/schemas/QueryInfo"
+        total:
+          type: integer
+          example: 1
+        result:
+          nullable: true
+          oneOf:
+            - $ref: "#/components/schemas/ConceptDescription"
+            - type: "null"
+
+    QueryInfo:
+      type: object
+      properties:
+        search:
+          type: string
+          example: WireElement
+        mode:
+          type: string
+          enum:
+            - term
+            - id
+          example: term
+        lang:
+          type: string
+          enum:
+            - en
+            - de
+          example: en
+        source:
+          type: string
+          example: https://ecad-wiki.prostep.org/specifications/vec/v220/vec-2.2.0-ontology.ttl
+
+    ConceptDescription:
+      type: object
+      properties:
+        modelType:
+          type: string
+          example: ConceptDescription
+        id:
+          type: string
+          format: uri
+          example: http://www.prostep.org/ontologies/ecad/2024/03/vec#WireElement
+        idShort:
+          type: string
+          example: WireElement
+        embeddedDataSpecifications:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmbeddedDataSpecification"
+        additionalProperties:
+          type: object
+          additionalProperties: true
+
+    EmbeddedDataSpecification:
+      type: object
+      properties:
+        dataSpecification:
+          type: object
+        dataSpecificationContent:
+          $ref: "#/components/schemas/DataSpecificationIec61360"
+
+    DataSpecificationIec61360:
+      type: object
+      properties:
+        modelType:
+          type: string
+          example: DataSpecificationIec61360
+        semanticId:
+          $ref: "#/components/schemas/IecField"
+        preferredName:
+          $ref: "#/components/schemas/IecField"
+        shortName:
+          $ref: "#/components/schemas/IecField"
+        unit:
+          $ref: "#/components/schemas/IecField"
+        sourceOfDefinition:
+          $ref: "#/components/schemas/IecField"
+        Symbol:
+          $ref: "#/components/schemas/IecField"
+        dataType:
+          $ref: "#/components/schemas/IecField"
+        unitId:
+          $ref: "#/components/schemas/IecField"
+        Definition:
+          $ref: "#/components/schemas/IecField"
+        valueFormat:
+          $ref: "#/components/schemas/IecField"
+        valueList:
+          $ref: "#/components/schemas/IecField"
+        value:
+          $ref: "#/components/schemas/IecField"
+        levelType:
+          $ref: "#/components/schemas/IecField"
+
+    IecField:
+      type: object
+      properties:
+        property:
+          type: string
+          example: P35
+        value:
+          nullable: true
+          description: Wert des IEC61360-Feldes. Kann String, Objekt, Array oder null sein.
+
+    ErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+          example: VEC TTL konnte nicht geladen werden.
+
+    ValidationError:
+      type: object
+      properties:
+        detail:
+          type: array
+          items:
+            type: object
