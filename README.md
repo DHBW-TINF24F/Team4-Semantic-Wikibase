@@ -11,6 +11,8 @@ Dieses Repository enthält die Ergebnisse des DHBW-Projekts Semantic Wikibase de
 
 Detaillierte Informationen zur Projektbeschreibung finden sich in der [offiziellen Projektdokumentation](https://github.com/DHBW-TINF24F/.github/blob/main/project4_semantic_wikibase.md).
 
+This repo contains the results of project: https://github.com/DHBW-TINF24F/.github/blob/main/project4_semantic_wikibase.md
+
 ### Verwendete Technologien
 
 ![Python](https://img.shields.io/badge/Python-3776ab?style=for-the-badge&logo=python&logoColor=white)
