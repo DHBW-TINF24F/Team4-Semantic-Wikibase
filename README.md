@@ -61,6 +61,9 @@ Das Projekt „Semantic Wikibase" beschäftigt sich damit, wie Begriffe aus der 
 
 ---
 
-## Repository-Aufbau und Ordnerstruktur
+## Quellen und Links
 
-Dieses Repository folgt einer klaren Organisationsstruktur, um die Wartbarkeit und Skalierbarkeit des Projekts zu gewährleisten. Im Folgenden wird die Struktur und der Zweck jedes Ordners beschrieben.
+- [Wikibase](https://de.wikipedia.org/wiki/Wikibase)
+- [AAS Concept Description](https://industrialdigitaltwin.io/aas-specifications/IDTA-01001/v3.2/spec-metamodel/concept-description.html)
+- [Beispiel im Wiki](https://semanticid.aas-connect.com/w/index.php?title=Item:Q21&oldid=207)
+- [ECLASS Webservice API](https://app.swaggerhub.com/apis/ECLASS_Standard/ECLASS_Download_JSON/2.0.3#/)
