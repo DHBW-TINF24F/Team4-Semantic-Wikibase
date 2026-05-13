@@ -26,7 +26,7 @@ This repo contains the results of project: https://github.com/DHBW-TINF24F/.gith
 
 ## Projektübersicht
 
-- **Zielgruppe**: DHBW-Studierenden und Entwickler im Semantic-Web-Bereich
+- **Zielgruppe**: Entwickler im Semantic-Web-Bereich
 - **Technologie-Stack**: Python (80.8%), JavaScript (18.1%), HTML (1.1%)
 - **Verwendete Technologien**: 
   - Backend: Python
