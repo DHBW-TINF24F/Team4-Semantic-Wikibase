@@ -39,14 +39,7 @@ Das Projekt „Semantic Wikibase" beschäftigt sich damit, wie Begriffe aus der 
 
 **Ziel ist es, eine Plattform zu bauen, auf der jeder solche Begriffe anlegen, beschreiben und wiederverwenden kann** - ähnlich wie bei Wikipedia, aber speziell für industrielle Begriffe und semantische Daten.
 
----
-
-## Versionskontrolle
-
-| Version | Datum | Autor | Kommentar |
-|---------|-------|-------|-----------|
-| 1.0 | 15.10.2025 | Zuteil KI generiert & Kristanna Pfeil | Erster Überblick |
-| 2.0 | 11.05.2026 | Zuteil KI generiert & Kristanna Pfeil | Überarbeitung |
+![Semantic Wikibase](/PROJECT/images/semanticwikibase.png)
 
 ---
 
@@ -69,3 +62,15 @@ Das Projekt „Semantic Wikibase" beschäftigt sich damit, wie Begriffe aus der 
 - [AAS Concept Description](https://industrialdigitaltwin.io/aas-specifications/IDTA-01001/v3.2/spec-metamodel/concept-description.html)
 - [Beispiel im Wiki](https://semanticid.aas-connect.com/w/index.php?title=Item:Q21&oldid=207)
 - [ECLASS Webservice API](https://app.swaggerhub.com/apis/ECLASS_Standard/ECLASS_Download_JSON/2.0.3#/)
+- [ARENA 2036](https://arena2036.de/files/downloads/veranstaltungen/aas-expertenworkshop-oktober-202/impuls_4_aas_netzwerktreffen_ren.pdf)
+- [semantic-hub.io - COMMUNITY](https://semantic-hub-community.coapp.io/)
+
+
+---
+
+## Versionskontrolle
+
+| Version | Datum | Autor | Kommentar |
+|---------|-------|-------|-----------|
+| 1.0 | 15.10.2025 | Zuteil KI generiert & Kristanna Pfeil | Erster Überblick |
+| 2.0 | 11.05.2026 | Zuteil KI generiert & Kristanna Pfeil | Überarbeitung |
