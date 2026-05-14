@@ -260,6 +260,26 @@ Dabei werden unter anderem folgende Eigenschaften übernommen:
 - SI-Ausdruck
 - QuantityKind
 
+Nicht alle IEC61360-Properties können direkt aus QUDT befüllt werden, weshalb einige Felder standardmäßig auf null gesetzt werden. Das dient zunächst dazu, eine einheitliche und vollständig IEC61360-konforme Datenstruktur bereitzustellen, sodass alle erzeugten ConceptDescriptions denselben Aufbau besitzen. Zusätzlich existieren für manche IEC61360-Felder keine direkten semantischen Entsprechungen im QUDT-Datenmodell, beispielsweise für levelType, valueList oder value. Andere Felder könnten zwar theoretisch abgeleitet werden, sind im aktuellen Stand jedoch noch nicht implementiert. Durch das explizite Setzen auf null wird außerdem eindeutig gekennzeichnet, dass für diese Properties momentan kein Wert vorhanden ist.
+
+| QUDT / RDF Property | Quelle im Code | IEC61360 Feld | SemanticHub Property-Nr. | Mapping-Logik | Warum ggf. `null` |
+|---|---|---|---|---|---|
+| Entity URI | `entity_uri` | `semanticId` | `P1` | Die gefundene QUDT-URI wird direkt als Semantic ID übernommen. | Niemals `null`, da immer aus dem Treffer erzeugt. |
+| URI-Ende | `local_name(uri)` | `idShort` | — | Der letzte Teil der URI wird als `idShort` verwendet. | Nur `null`, wenn URI ungültig wäre. |
+| `rdfs:label` | `http://www.w3.org/2000/01/rdf-schema#label` | `preferredName` | `P35` | Label in gewählter Sprache, sonst Englisch als Fallback. | Falls kein passendes Label existiert, wird am Ende explizit `null` gesetzt. |
+| Kein direktes Mapping | — | `shortName` | `P36` | Im aktuellen Code nicht gemappt. | Standardmäßig `null`, da QUDT keine eindeutige Kurzbezeichnung liefert oder das Mapping noch nicht implementiert wurde. |
+| `rdfs:label` | `http://www.w3.org/2000/01/rdf-schema#label` | `unit` | `P37` | Das Label wird zusätzlich als Unit gesetzt, wenn noch keine Unit vorhanden ist. | Bleibt `null`, wenn kein passendes Label gefunden wird. |
+| `rdfs:isDefinedBy` | `http://www.w3.org/2000/01/rdf-schema#isDefinedBy` | `sourceOfDefinition` | `P40` | Wird als Quelle der Definition gespeichert. | Falls keine Definitionsquelle existiert, wird am Ende `null` gesetzt. |
+| `qudt:informativeReference` | `http://qudt.org/schema/qudt/informativeReference` | `sourceOfDefinition` | `P40` | Wird ebenfalls als Definitionsquelle gespeichert. | Falls keine Referenzen vorhanden sind. |
+| `qudt:symbol` | `http://qudt.org/schema/qudt/symbol` | `Symbol` | `P41` | Symbol wird übernommen, z. B. `V` bei Volt. | Bleibt `null`, wenn kein Symbol existiert. |
+| `rdf:type` | `http://www.w3.org/1999/02/22-rdf-syntax-ns#type` | `dataType` | `P42` | Der QUDT-Typ wird als Datentyp gespeichert. | Bleibt `null`, wenn kein Typ gefunden wird. |
+| `qudt:iec61360Code` | `http://qudt.org/schema/qudt/iec61360Code` | `unitId` | `P43` | IEC61360-Code wird als Unit-ID übernommen. | Bleibt `null`, wenn QUDT keinen IEC61360-Code enthält. |
+| `dcterms:description` | `http://purl.org/dc/terms/description` | `Definition` | `P44` | Beschreibung wird als Definition mit Typ `description` gespeichert. | Falls keine Beschreibung existiert, wird am Ende `null` gesetzt. |
+| `qudt:latexDefinition` | `http://qudt.org/schema/qudt/latexDefinition` | `Definition` | `P44` | LaTeX-Definition wird zusätzlich als Definition gespeichert. | Falls keine LaTeX-Definition existiert. |
+| `qudt:siUnitsExpression` | `http://qudt.org/schema/qudt/siUnitsExpression` | `valueFormat` | `P45` | SI-Einheiten-Ausdruck wird als Value Format gespeichert. | Bleibt `null`, wenn keine SI-Expression vorhanden ist. |
+| Kein Mapping im Code | — | `valueList` | `P46` | Im aktuellen Code nicht implementiert. | Standardmäßig `null`, da QUDT hierfür meist keine passenden Enumerationen liefert. |
+| Kein Mapping im Code | — | `value` | `P47` | Im aktuellen Code nicht implementiert. | Standardmäßig `null`, da keine konkreten Instanzwerte aus QUDT übernommen werden. |
+| Kein Mapping im Code | — | `levelType` | `P48` | Im aktuellen Code nicht implementiert. | Standardmäßig `null`, da QUDT keine direkte Entsprechung für IEC61360 `levelType` besitzt. |
 ---
 
 ### 4.2 VEC
