@@ -50,9 +50,9 @@ Das Projekt „Semantic Wikibase" beschäftigt sich damit, wie Begriffe aus der 
 | Yvonne Wagner | Projektleiter & Entwickler | [@Y1v0Nne](https://github.com/Y1v0Nne) |
 | Kristanna Pfeil | Produktmanager & Entwickler | [@KsanaWolf](https://github.com/KsanaWolf) |
 | Marvin Igrec | Testmanager & Entwickler | [@Maffin23](https://github.com/Maffin23) |
-| Colin Dietschman | Systemarchitekt & Entwickler | [@Codi0517](https://github.com/Codi0517) |
+| Colin Dietschmann | Systemarchitekt & Entwickler | [@Codi0517](https://github.com/Codi0517) |
 | Lucrezia Trabalza | Technischer Redakteur & Entwickler | [@Lucrezia Trabalza](https://github.com/lucree2308) |
-| Marina Hidalgo Burova | Technischer Redakteur & Entwickler | [@Marina Hidalgo Buravo](https://github.com/marinaaa0209) |
+| Marina Hidalgo Burova | Technischer Redakteur & Entwickler | [@Marina Hidalgo Burova](https://github.com/marinaaa0209) |
 
 ---
 
