@@ -5,7 +5,7 @@
 #
 # This script automatically installs Composer dependencies for all MediaWiki
 # extensions that require them. It runs as an init container before the 
-# Wikibase service starts.
+# Wikibase sersvice starts.
 #
 # The script is idempotent - it only installs dependencies if they don't 
 # already exist, making it safe to run multiple times.
