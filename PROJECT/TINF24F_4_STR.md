@@ -8,6 +8,7 @@
 |-|-|-|-|
 | 0.1 | 14.05.2026 | Marvin Igrec | Erstellung der STR-Ausfüllvorlage auf Basis des STP |
 | 0.2 | 15.05.2026 | Marvin Igrec | Anpassung an überarbeitete STP, aktuelle SRS-Anforderungen und vorbereitende Ausfüllstruktur |
+| 0.3 | 15.05.2026 | Marvin Igrec | Dokumentation der durchgeführten Systemtests, Aktualisierung der Testergebnisse und Ergänzung der Nachweise |
 
 <br>
 
@@ -122,14 +123,14 @@ Die Tests werden in einer lokalen Entwicklungs- und Testumgebung durchgeführt.
 |-|-|
 | Betriebssystem | Windows 11 |
 | Entwicklungsumgebung | Visual Studio Code |
-| Browser | Google Chrome / Microsoft Edge, genaue Version nach Testdurchführung ergänzen |
+| Browser | Google Chrome / Microsoft Edge |
 | API-Testwerkzeug | Browser, curl und ggf. Postman |
 | Programmiersprache | Python |
 | API-Framework | FastAPI / Flask, abhängig vom getesteten API-Modul |
 | Lokale API-URL | `http://localhost:8000`, falls die lokale API auf diesem Port gestartet wird |
 | Wikibase-/Semantic-Hub-URL | `https://wikibase.localhost/wiki/Main_Page` |
 | Datenquellen | QUDT, VEC, KBL |
-| Repository / Branch | `DHBW-TINF24F/Team4-Semantic-Wikibase`, Branch `main`, Commit-ID nach Testdurchführung ergänzen |
+| Repository / Branch | `DHBW-TINF24F/Team4-Semantic-Wikibase`, Branch `main` |
 | Testdatum | 15.05.2026 |
 | Tester | Marvin Igrec |
 
@@ -931,7 +932,7 @@ Von zehn geplanten Systemtestfällen wurden alle zehn betrachtet. Fünf Testfäl
 
 | Bereich | Bewertung |
 |-|-|
-| Startseite / UI | Teilweise erfüllt |
+| Startseite / UI | Erfüllt |
 | Suchfunktion | Teilweise erfüllt |
 | REST-API | Teilweise erfüllt |
 | Query-Parameter | Blockiert |
