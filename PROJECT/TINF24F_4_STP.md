@@ -269,7 +269,7 @@ Die genaue Testumgebung wird im späteren STR mit konkreten Versionen, URLs, Por
 |-|-|
 | Testfall-ID | ST-01 |
 | Testobjekt | Startseite / Benutzeroberfläche |
-| Zugehörige Anforderung | FA.010, NFA.001, NFA.004 |
+| Zugehörige Anforderung | FA.010, NFA.001, NFA.004, FA.001 |
 | Ziel | Prüfen, ob die Startseite des Semantic Hub korrekt erreichbar ist. |
 | Vorbedingung | Lokale Wikibase-/Semantic-Hub-Instanz ist gestartet. |
 | Testdaten | URL der lokalen Instanz. |
@@ -405,7 +405,7 @@ Die genaue Testumgebung wird im späteren STR mit konkreten Versionen, URLs, Por
 |-|-|
 | Testfall-ID | ST-09 |
 | Testobjekt | QUDT-Mapper / API-Ausgabe |
-| Zugehörige Anforderung | FA.003, FA.006, FA.011 |
+| Zugehörige Anforderung | FA.003, FA.006, FA.011, FA.009 |
 | Ziel | Prüfen, ob QUDT-Daten korrekt in das AAS-Concept-Description-Format übertragen werden. |
 | Vorbedingung | QUDT-Daten wurden geladen und gemappt. |
 | Testdaten | Beispiel: QUDT Unit Volt, `http://qudt.org/vocab/unit/V`. |
