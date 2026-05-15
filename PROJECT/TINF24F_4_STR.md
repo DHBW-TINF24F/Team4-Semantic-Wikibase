@@ -74,6 +74,8 @@ Die Testdurchführung basiert auf folgenden Dokumenten und Projektartefakten:
 - SAS / Software Architecture Specification Semantic Wikibase,
 - SAS_AAS_Wikibase – AAS Concept Description API & Sucherweiterung,
 - MOD – Moduldokumentation zur OpenAPI-Spezifikation und Mapping-Zusammenführung,
+- BC – Business Case Semantic Wikibase,
+- PM – Projektplan Semantic Wikibase,
 - Projektbeschreibung „Semantic Wikibase“,
 - GitHub-Issue #25 zur verbesserten Suchfunktion,
 - GitHub-Issue #26 zur neuen Startseitenstruktur,
@@ -370,7 +372,7 @@ curl -i http://localhost:8000/semanticIds/nichtVorhanden123
 |-|-|
 | Testfall-ID | ST-09 |
 | Testobjekt | QUDT-Mapper / API-Ausgabe |
-| Zugehörige Anforderung | FA.003, FA.006, FA.011 |
+| Zugehörige Anforderung | FA.003, FA.006, FA.011, FA.009 |
 | Ziel | Prüfen, ob QUDT-Daten korrekt in das AAS-Concept-Description-Format übertragen werden. |
 | Vorbedingung | QUDT-Daten wurden geladen und gemappt. |
 | Testdaten | Beispiel: QUDT Unit Volt, `http://qudt.org/vocab/unit/V`. |
