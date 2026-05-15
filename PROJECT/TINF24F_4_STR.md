@@ -804,31 +804,44 @@ Kbl:
 
 ## 8. Fehler, Auffälligkeiten und Abweichungen
 
-### 8.1 Übersicht erkannter Fehler
+### 8.1 Übersicht erkannter Fehler und Abweichungen
 
-Zum Zeitpunkt der Erstellung dieser STR-Vorlage wurden noch keine Systemtests durchgeführt. Daher sind noch keine Fehler oder Auffälligkeiten dokumentiert.
+Während der Testdurchführung wurden keine kritischen Systemfehler festgestellt. Es wurden jedoch mehrere Abweichungen zwischen geplanter API-Spezifikation und aktuellem Implementierungsstand dokumentiert. Diese betreffen insbesondere nicht verfügbare `/semanticIds`-Endpunkte sowie die noch nicht vollständige API-Anbindung der UI-Suche.
 
 | Fehler-ID | Zugehöriger Testfall | Beschreibung | Schweregrad | Status | Verantwortlich |
 |-|-|-|-|-|-|
-| - | - | Noch keine Fehler dokumentiert | - | - | - |
+| ERR-001 | ST-05, ST-07, ST-10 | Geplante `/semanticIds`-Endpunkte für Listenabruf, Sortierung/Filterung und Export sind nicht verfügbar und liefern `{"detail": "Not Found"}`. | mittel | offen | Entwicklung |
+| ERR-002 | ST-03, ST-04 | UI-Suche ist vorhanden, aber nicht mit der Mapping-/SemanticId-API verbunden. | mittel | offen | Entwicklung / UI |
 
 ### 8.2 Detailbeschreibung der Fehler
 
-Die Detailbeschreibung wird ergänzt, sobald bei der Testdurchführung ein Fehler festgestellt wurde.
-
-#### ERR-001: [Titel nach Testdurchführung einfügen]
+#### ERR-001: `/semanticIds`-Endpunkte nicht verfügbar
 
 | Feld | Beschreibung |
 |-|-|
 | Fehler-ID | ERR-001 |
-| Gefunden in Testfall | [einfügen] |
-| Beschreibung | [einfügen] |
-| Schritte zur Reproduktion | [einfügen] |
-| Erwartetes Verhalten | [einfügen] |
-| Tatsächliches Verhalten | [einfügen] |
-| Schweregrad | [kritisch / hoch / mittel / niedrig] |
-| Status | [offen / behoben / akzeptiert] |
-| Nachweis | [Screenshot / Log / API-Antwort einfügen] |
+| Gefunden in Testfall | ST-05, ST-07, ST-10 |
+| Beschreibung | Die geplanten Endpunkte `GET /semanticIds`, `GET /semanticIds?sortbyDate=...`, `GET /semanticIds?filterbyURI=...` und `GET /semanticIds/export` sind im aktuellen Projektstand nicht verfügbar. |
+| Schritte zur Reproduktion | Die jeweiligen Endpunkte über Browser oder `curl.exe` aufrufen. |
+| Erwartetes Verhalten | Die API liefert strukturierte JSON-Antworten mit semanticIds bzw. Exportdaten. |
+| Tatsächliches Verhalten | Die API liefert `{"detail": "Not Found"}`. |
+| Schweregrad | mittel |
+| Status | offen |
+| Nachweis | Screenshots zu ST-05, ST-07 und ST-10 |
+
+#### ERR-002: UI-Suche nicht mit Mapping-API verbunden
+
+| Feld | Beschreibung |
+|-|-|
+| Fehler-ID | ERR-002 |
+| Gefunden in Testfall | ST-03, ST-04 |
+| Beschreibung | Die UI-Suche ist sichtbar und ausführbar, liefert jedoch keine QUDT-/SemanticId-Ergebnisse aus der entwickelten Mapping-API. |
+| Schritte zur Reproduktion | Auf `https://wikibase.localhost/wiki/Main_Page` nach `Volt` oder `http://qudt.org/vocab/unit/V` suchen. |
+| Erwartetes Verhalten | Der passende semantische Eintrag wird gefunden. |
+| Tatsächliches Verhalten | Die Wikibase-Suche zeigt keine fachlichen Treffer aus der Mapping-API. |
+| Schweregrad | mittel |
+| Status | offen |
+| Nachweis | Screenshots zu ST-03 und ST-04 |
 
 ---
 
@@ -902,8 +915,6 @@ Abbildung 1 zeigt die JSON-Antwort des Endpunkts `GET /semanticIds` während der
 
 ## 12. Gesamteinschätzung
 
-## 12. Gesamteinschätzung
-
 Die Systemtests wurden im Rahmen des aktuellen prototypischen Projektstands durchgeführt. Insgesamt wurden zehn geplante Systemtestfälle betrachtet. Vier Testfälle wurden bestanden, vier Testfälle wurden teilweise bestanden und zwei Testfälle waren aufgrund fehlender Implementierung blockiert.
 
 Positiv bewertet werden können insbesondere die lokale Erreichbarkeit der Wikibase-Startseite, die grundlegende UI-Suche, die funktionierende API über den Gateway-Endpunkt `/map`, die Sprachparameterverarbeitung, die Fehlerbehandlung bei nicht vorhandenen Suchbegriffen sowie das Mapping von QUDT-, VEC- und KBL-Daten in eine IEC61360-nahe Concept-Description-Struktur.
@@ -914,7 +925,7 @@ Insgesamt zeigt der Teststand, dass zentrale technische Teilfunktionen des Proto
 
 ### 12.1 Zusammenfassung
 
-[nach Testdurchführung ergänzen]
+Von zehn geplanten Systemtestfällen wurden alle zehn betrachtet. Vier Testfälle wurden bestanden, vier teilweise bestanden und zwei aufgrund fehlender Implementierung blockiert. Die wichtigsten funktionsfähigen Bereiche sind die lokale Wikibase-Erreichbarkeit, der Gateway-Endpunkt `/map`, die Sprachparameterverarbeitung, die Fehlerbehandlung sowie das Mapping von QUDT-, VEC- und KBL-Daten. Einschränkungen bestehen bei der UI-API-Integration und bei den geplanten `/semanticIds`-Endpunkten.
 
 ### 12.2 Testfazit
 
@@ -939,17 +950,6 @@ Insgesamt zeigt der Teststand, dass zentrale technische Teilfunktionen des Proto
 | OP-03 | Sortierung und Filterung über `/semanticIds` konnte nicht getestet werden. | Query-Parameter `sortbyDate` und `filterbyURI` implementieren oder über den Gateway-Endpunkt bereitstellen. | mittel |
 | OP-04 | Import und Export sind nicht vollständig umgesetzt. | Import-/Exportfunktionen ergänzen und mit QUDT-, VEC- und KBL-Beispieldaten erneut testen. | hoch |
 | OP-05 | Startseite ist aktuell noch Standard-Wikibase und nicht final angepasst. | Finales Startseitenlayout mit hervorgehobener SemanticId-Suche integrieren und ST-01 bis ST-04 erneut testen. | mittel |
-
-Mögliche offene Punkte nach der Testdurchführung können sein:
-
-- Suchfunktion findet nicht alle semanticIds zuverlässig,
-- Suchfeld ist auf der Startseite noch nicht deutlich genug sichtbar,
-- API-Endpunkte weichen von der geplanten Spezifikation ab,
-- Sprachparameter liefern noch keine unterschiedlichen Ausgaben,
-- Fehlerantworten sind technisch korrekt, aber für Nutzer nicht verständlich genug,
-- Mapping-Felder aus QUDT, VEC oder KBL sind noch unvollständig,
-- Import- und Exportfunktionen sind nur teilweise implementiert,
-- Rechteverwaltung für Schreibzugriffe ist noch nicht umgesetzt.
 
 ---
 
@@ -999,7 +999,7 @@ curl.exe "http://localhost:8000/semanticIds/export"
 | KBL | Beispielhafter KBL-Begriff aus Mapping-Datei | Prüfung des KBL-Mappings. |
 | Testdaten | `xyzTestEintragNichtVorhanden123` | Negativtest ohne Treffer. |
 | API | `nichtVorhanden123` | Negativtest für ungültigen Identifier. |
-| API | `/api/v3/search?search=Volt&lang=de&types=unit` | Test des dokumentierten Such-Endpunkts aus MOD/SAS_AAS. |
+| API | `/map?search=Volt&source=qudt&lang=de&types=unit&only_found=true` | Test des tatsächlich verwendeten Gateway-Endpunkts. |
 
 ### 14.4 Statusdefinitionen
 
