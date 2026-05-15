@@ -9,7 +9,7 @@ SET page_title = 'Main_Page'
 WHERE page_id = 1;
 
 -- HTML payload for homepage (kept in SQL for reproducible DB bootstrap)
-SET @homepage_html = '<div class="semanticid-homepage" style="max-width:980px;margin:2rem auto;padding:1.5rem;font-family:Arial,Helvetica,sans-serif;line-height:1.6;"><h1 style="margin-top:0;">Willkommen im Semantic Wikibase</h1><p>Diese Wikibase-Instanz dient als zentrale Wissensbasis für semantische Begriffe, Eigenschaften und Referenzen.</p><h2>Schnellstart</h2><ol><li>Lege eine Property für die Semantic ID an (standardmäßig <strong>P1</strong>).</li><li>Erstelle ein Item und ergänze die Semantic ID als Statement.</li><li>Öffne das Item direkt über den Semantic-ID-Pfad.</li></ol><h2>Hinweise</h2><ul><li>Die Suche wird beim Initialisieren automatisch neu indexiert.</li><li>Die Startseite wird bei der Entwicklungsinitialisierung automatisch gesetzt.</li></ul></div>';
+SET @homepage_html = '<p>Dieses Wiki wurde erfolgreich eingerichtet und verfügt über eine vollständig integrierte Semantic-ID-Logik sowie eine ElasticSearch-basierte CirrusSearch Funktion.</p>';
 
 SET @target_page_id = 1;
 SET @old_rev_id = (SELECT page_latest FROM page WHERE page_id = @target_page_id);
