@@ -256,19 +256,23 @@ Die Tests werden in einer lokalen Entwicklungs- und Testumgebung durchgeführt.
 | Testdaten | `GET /semanticIds` |
 | Testschritte | 1. API-Anfrage mit Browser, curl oder Postman ausführen.<br>2. HTTP-Status prüfen.<br>3. Antwortinhalt prüfen.<br>4. JSON-Struktur der Antwort kontrollieren. |
 | Erwartetes Ergebnis | Die API liefert HTTP-Status 200 und eine strukturierte JSON-Antwort mit verfügbaren semanticIds. |
-| Tatsächliches Ergebnis | [einfügen] |
-| Status | Noch nicht durchgeführt |
-| Nachweis | [Screenshot oder Konsolenausgabe einfügen] |
-| Bemerkung | [einfügen] |
+| Tatsächliches Ergebnis | Der geplante Endpunkt `GET /semanticIds` wurde über `http://localhost:8000/semanticIds` getestet. Die API war grundsätzlich erreichbar, der Endpunkt selbst lieferte jedoch die Antwort `{"detail": "Not Found"}`. Damit ist der Listen-Endpunkt im aktuellen Projektstand nicht implementiert bzw. nicht verfügbar. |
+| Status | Blockiert |
+| Nachweis | `images/str-st05-api-semanticids-not-found.png` |
+| Bemerkung | Der ursprünglich geplante Endpunkt `/semanticIds` wurde im aktuellen Projektstand nicht separat umgesetzt. Die API-Funktionalität ist stattdessen über den implementierten Gateway-Endpunkt `/map` verfügbar. Der Test kann nach Umsetzung des Listen-Endpunkts erneut durchgeführt werden. |
 
 Beispiel für den Nachweis:
 
 ```bash
-curl http://localhost:8000/semanticIds
+curl.exe "http://localhost:8000/semanticIds"
+
+Die API antwortete mit `{"detail": "Not Found"}`. Der Endpunkt ist im aktuellen Projektstand nicht verfügbar.
 ```
 
 ```json
-[Antwort hier einfügen]
+{
+  "detail": "Not Found"
+}
 ```
 
 ---
@@ -311,21 +315,25 @@ curl.exe "http://localhost:8000/map?search=Volt&source=qudt&lang=en&types=unit&o
 | Testdaten | `GET /semanticIds?sortbyDate=asc`, `GET /semanticIds?sortbyDate=desc`, `GET /semanticIds?filterbyURI=qudt.org` |
 | Testschritte | 1. API-Anfrage mit aufsteigender Sortierung ausführen.<br>2. API-Anfrage mit absteigender Sortierung ausführen.<br>3. API-Anfrage mit URI-Domain-Filter ausführen.<br>4. Ergebnislisten vergleichen. |
 | Erwartetes Ergebnis | Die API gibt semanticIds in der angeforderten Sortierreihenfolge zurück. Beim Domain-Filter werden nur passende Einträge angezeigt. Ungültige oder nicht passende Parameter werden verständlich behandelt. |
-| Tatsächliches Ergebnis | [einfügen] |
-| Status | Noch nicht durchgeführt |
-| Nachweis | [Screenshot oder Konsolenausgabe einfügen] |
-| Bemerkung | [einfügen] |
+| Tatsächliches Ergebnis | Die Sortierung und Filterung der semanticIds wurde über die geplanten Endpunkte `GET /semanticIds?sortbyDate=asc`, `GET /semanticIds?sortbyDate=desc` und `GET /semanticIds?filterbyURI=qudt.org` geprüft. Die API war grundsätzlich erreichbar, die angefragten Endpunkte lieferten jedoch jeweils die Antwort `{"detail": "Not Found"}`. Damit konnten Sortierung und Filterung im aktuellen Projektstand nicht durchgeführt werden. |
+| Status | Blockiert |
+| Nachweis | Sortierung: `images/str-st07-api-sort-not-found.png`<br>Filterung: `images/str-st07-api-filter-not-found.png` |
+| Bemerkung | Der geplante `/semanticIds`-Endpunkt sowie die zugehörigen Query-Parameter für Sortierung und Filterung sind im aktuellen Projektstand nicht separat implementiert. Die API-Funktionalität ist stattdessen über den Gateway-Endpunkt `/map` verfügbar. Der Test kann nach Umsetzung der geplanten Listen- und Filter-Endpunkte erneut durchgeführt werden. |
 
 Beispiel für den Nachweis:
 
 ```bash
-curl "http://localhost:8000/semanticIds?sortbyDate=asc"
-curl "http://localhost:8000/semanticIds?sortbyDate=desc"
-curl "http://localhost:8000/semanticIds?filterbyURI=qudt.org"
+curl.exe "http://localhost:8000/semanticIds?sortbyDate=asc"
+curl.exe "http://localhost:8000/semanticIds?sortbyDate=desc"
+curl.exe "http://localhost:8000/semanticIds?filterbyURI=qudt.org"
+
+Die API antwortete bei den getesteten `/semanticIds`-Query-Requests jeweils mit `{"detail": "Not Found"}`. Die Query-Parameter konnten daher im aktuellen Projektstand nicht geprüft werden.
 ```
 
 ```json
-[Antworten hier einfügen]
+{
+  "detail": "Not Found"
+}
 ```
 
 ---
