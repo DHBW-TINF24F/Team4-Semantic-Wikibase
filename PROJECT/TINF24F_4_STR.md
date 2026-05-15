@@ -869,7 +869,7 @@ Die Traceability Matrix zeigt, welche Testfälle welche Anforderungen abdecken u
 | Testfall-ID | Abgedeckte Anforderungen | Ergebnis |
 |-|-|-|
 | ST-01 | FA.001, FA.010, NFA.001, NFA.004 | Bestanden |
-| ST-02 | FA.010, NFA.004 | Teilweise bestanden |
+| ST-02 | FA.010, NFA.004 | Bestanden |
 | ST-03 | FA.001, FA.010, NFA.004 | Teilweise bestanden |
 | ST-04 | FA.010, NFA.001, NFA.004 | Teilweise bestanden |
 | ST-05 | FA.002, NFA.001, NFA.002 | Blockiert |
@@ -949,7 +949,7 @@ Von zehn geplanten Systemtestfällen wurden alle zehn betrachtet. Fünf Testfäl
 | OP-02 | Geplante `/semanticIds`-Endpunkte sind nicht verfügbar. | Endpunkte `GET /semanticIds`, `GET /semanticIds/{identifier}`, `POST /semanticIds` und `GET /semanticIds/export` gemäß Spezifikation umsetzen oder STP/Spezifikation an `/map` anpassen. | hoch |
 | OP-03 | Sortierung und Filterung über `/semanticIds` konnte nicht getestet werden. | Query-Parameter `sortbyDate` und `filterbyURI` implementieren oder über den Gateway-Endpunkt bereitstellen. | mittel |
 | OP-04 | Import und Export sind nicht vollständig umgesetzt. | Import-/Exportfunktionen ergänzen und mit QUDT-, VEC- und KBL-Beispieldaten erneut testen. | hoch |
-| OP-05 | Startseite ist aktuell noch Standard-Wikibase und nicht final angepasst. | Finales Startseitenlayout mit hervorgehobener SemanticId-Suche integrieren und ST-01 bis ST-04 erneut testen. | mittel |
+| OP-05 | Startseite wurde im aktuellen Teststand manuell angepasst. | Startseitenlayout dauerhaft im Projekt bzw. Deployment hinterlegen, damit die Änderungen reproduzierbar sind. | mittel |
 
 ---
 
