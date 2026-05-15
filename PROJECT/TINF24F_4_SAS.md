@@ -19,7 +19,7 @@
 |---------|------------|------------------------------------|--------------------------|
 | 1.0     | 08.05.2026 | Colin Dietschmann mithilfe von GitHub Copilot | Erstversion auf Basis der Repository-Analyse |
 | 1.1     | 15.05.2026 | Team 4 | Überarbeitung der API-Architektur, Kürzung doppelter Mapper-Beschreibungen und Verweis auf die Moduldokumentation |
-
+|1.2      |15.05.2026  |Design verbesserungen und hinzufügen der Modultabelle|
 ---
 
 ## Inhaltsverzeichnis
