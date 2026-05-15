@@ -11,7 +11,16 @@ API v3 bietet eine RESTful-Schnittstelle für die Suche nach QUDT-Entitäten wie
 - `api_v3_blueprint.py`: Flask Blueprint mit den API-Routen.
 - `qudt_service.py`: Hauptservice für QUDT-Suchen und SPARQL-Abfragen.
 - `helper.py`: Hilfsfunktionen (derzeit leer, nach Vorbild der Semantic-Hub).
-- `local-test-api.html`: Einfache HTML-Testseite für manuelle Tests der API.
+- `local-test-api.html`: Einfache HTML-Testseite für manuelle Tests der API _ohne Wikibase_.
+- `wikibase-api-einbindung.js`: Ist für die Einbindung in der Semantic-Hub-Wikibase
+  - Oberflächenadminrechte notwendig
+  - Flask Server notwendig
+  - Internetzugang notwendig
+  - Kopieren in die Common.js: https://semantic-hub.io/w/index.php?title=MediaWiki:Common.js&action=edit
+
+## Output
+
+![Wikibase Item Structure](../../../PROJECT/images/API-PROTOTYP-Nachweis.jpeg)
 
 ## Endpunkte
 
