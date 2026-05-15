@@ -30,17 +30,12 @@ liefert eine JSON-Antwort mit einer `ConceptDescription`.
 
 Empfohlene Struktur:
 
-```text
-projektordner/
-│
-├── api_qudt.py
-├── openapi.yaml
-└── README.md
-```
+
 
 - `api_qudt.py` enthält den FastAPI-Code.
 - `openapi.yaml` enthält die manuell dokumentierte OpenAPI-Spezifikation.
 - `README.md` erklärt Installation, Start und Test der API.
+- `API-Internet-hosten` erklärt wie man die API im Internet hosten kann.
 
 ---
 
