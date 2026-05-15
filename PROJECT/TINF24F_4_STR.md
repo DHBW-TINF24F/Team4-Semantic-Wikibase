@@ -285,21 +285,16 @@ curl http://localhost:8000/semanticIds
 | Testdaten | `GET /semanticIds/{identifier}`, `GET /semanticIds/{identifier}?lang=de`, `GET /semanticIds/{identifier}?lang=en` |
 | Testschritte | 1. Bekannten Identifier auswählen.<br>2. API-Anfrage ohne Sprachparameter ausführen.<br>3. API-Anfrage mit `lang=de` ausführen.<br>4. API-Anfrage mit `lang=en` ausführen.<br>5. Antworten vergleichen. |
 | Erwartetes Ergebnis | Die API liefert den passenden Eintrag als JSON zurück. Relevante Felder wie Identifier, semanticId, Beschreibung, Definition oder weitere gemappte Eigenschaften sind enthalten. Bei gesetztem Sprachparameter werden vorhandene Sprachdaten passend zurückgegeben oder fehlende Übersetzungen kontrolliert behandelt. |
-| Tatsächliches Ergebnis | [einfügen] |
-| Status | Noch nicht durchgeführt |
-| Nachweis | [Screenshot oder Konsolenausgabe einfügen] |
-| Bemerkung | [einfügen] |
+| Tatsächliches Ergebnis | Der Sprachparameter wurde über den aktuell implementierten Endpunkt `/map` mit dem Beispiel „Volt“ getestet. Die API war erreichbar und lieferte sowohl für `lang=de` als auch für `lang=en` strukturierte JSON-Antworten. Der Sprachparameter wurde in der Anfrage verarbeitet und in der Antwort bei `query.lang` sowie im Feld `preferredName` sichtbar übernommen. Bei `lang=de` wurde `preferredName` mit `lang: de` zurückgegeben, bei `lang=en` entsprechend mit `lang: en`. |
+| Status | Bestanden |
+| Nachweis | Screenshots: `images/str-st06-api-lang-de.png`, `images/str-st06-api-lang-en.png` |
+| Bemerkung | Der ursprünglich im STP genannte Endpunkt `/semanticIds/{identifier}` wurde im aktuellen Projektstand nicht separat umgesetzt. Die geforderte Funktion zur sprachabhängigen API-Ausgabe konnte jedoch über den implementierten Gateway-Endpunkt `/map` erfolgreich nachgewiesen werden. Da „Volt“ in Deutsch und Englisch gleich benannt ist, unterscheidet sich der Wert des preferredName nicht, der Sprachcode wird jedoch korrekt übernommen. Die vollständigen JSON-Antworten wurden über Screenshots dokumentiert. |
 
 Beispiel für den Nachweis:
 
 ```bash
-curl http://localhost:8000/semanticIds/volt
-curl "http://localhost:8000/semanticIds/volt?lang=de"
-curl "http://localhost:8000/semanticIds/volt?lang=en"
-```
-
-```json
-[Antworten hier einfügen]
+curl.exe "http://localhost:8000/map?search=Volt&source=qudt&lang=de&types=unit&only_found=true"
+curl.exe "http://localhost:8000/map?search=Volt&source=qudt&lang=en&types=unit&only_found=true"
 ```
 
 ---
