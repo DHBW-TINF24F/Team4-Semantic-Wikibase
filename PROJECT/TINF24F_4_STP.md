@@ -7,11 +7,11 @@
 
 | Version | Datum | Autor | Kommentar |
 |-|-|-|-|
-| 0.1 | 12.05.2026 | Team Semantic Wikibase | Erstellung & erster Entwurf |
-| 0.2 | 12.05.2026 | Team Semantic Wikibase | Anpassung an CRS-, SRS- und SAS-Struktur |
-| 0.3 | 12.05.2026 | Team Semantic Wikibase | Reduktion auf ca. 10 Systemtestfälle, Ergänzung der Testbasis und Traceability |
-| 0.4 | 12.05.2026 | Team Semantic Wikibase | Ergänzung weiterer Projektartefakte als Referenzen |
-| 0.5 | 15.05.2026 | Team Semantic Wikibase | Abgleich mit aktueller SRS-Anforderungsnummerierung, Ergänzung FA.011 und API-v3-Request |
+| 0.1 | 12.05.2026 | Marvin Igrec | Erstellung & erster Entwurf |
+| 0.2 | 12.05.2026 | Marvin Igrec | Anpassung an CRS-, SRS- und SAS-Struktur |
+| 0.3 | 12.05.2026 | Marvin Igrec | Reduktion auf ca. 10 Systemtestfälle, Ergänzung der Testbasis und Traceability |
+| 0.4 | 12.05.2026 | Marvin Igrec | Ergänzung weiterer Projektartefakte als Referenzen |
+| 0.5 | 15.05.2026 | Marvin Igrec | Abgleich mit aktueller SRS-Anforderungsnummerierung, Ergänzung FA.011 und API-v3-Request |
 
 <br>
 
