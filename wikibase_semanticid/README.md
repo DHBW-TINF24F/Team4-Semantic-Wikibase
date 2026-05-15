@@ -105,7 +105,24 @@ When ready, the `wbs-deploy-wikibase-1` container will show as `healthy`.
 
 🎉 Access your instance at `https://wikibase.example` (adjust domain accordingly).
 
-### 4. Configure Semantic ID Property
+### 4. Optional: Automated Local Initialization (Windows PowerShell)
+
+For local onboarding, you can run:
+
+```powershell
+./init_dev_env.ps1
+```
+
+This script will:
+- start the stack (`docker compose up -d`)
+- wait for `wbs-deploy-wikibase-1` to become `healthy`
+- set the `Main Page` from `setup/homepage.html`
+- run CirrusSearch maintenance (`UpdateSearchIndexConfig` and `ForceSearchIndex`)
+
+Additionally, `docker-compose.yml` includes a temporary service `wikibase-config-seed`
+that applies the same seed flow automatically after Wikibase and MariaDB are healthy.
+
+### 5. Configure Semantic ID Property
 
 After your Wikibase is running, you need to create the semantic ID property:
 
@@ -130,7 +147,7 @@ After your Wikibase is running, you need to create the semantic ID property:
      docker compose restart wikibase
      ```
 
-### 5. Test Semantic ID Routing
+### 6. Test Semantic ID Routing
 
 1. **Create a test item** with a semantic ID:
    - Create a new item (e.g., "Albert Einstein")

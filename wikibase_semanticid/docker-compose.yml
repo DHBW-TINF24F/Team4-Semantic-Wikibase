@@ -31,6 +31,7 @@ services:
       - ./config:/config:z
       - ./config/extensions:/var/www/html/extensions/extensions:z
       - ./config/Extensions.php:/var/www/html/LocalSettings.d/90_UserDefinedExtensions.php:z
+      - ./setup:/setup:z
       - wikibase-image-data:/var/www/html/images
       - quickstatements-data:/quickstatements/data
     environment:
@@ -55,6 +56,41 @@ services:
       test: curl --silent --fail localhost/wiki/Main_Page
       interval: 10s
       start_period: 5m
+
+  wikibase-config-seed:
+    image: wikibase/wikibase:5
+    depends_on:
+      mysql:
+        condition: service_healthy
+      wikibase:
+        condition: service_healthy
+    restart: "no"
+    volumes:
+      - ./setup:/setup:z
+    volumes_from:
+      - wikibase
+    entrypoint: ["/bin/sh", "-ec"]
+    command: >
+      echo "Waiting for Wikibase maintenance scripts..." &&
+      until [ -f /var/www/html/maintenance/edit.php ]; do sleep 5; done &&
+      echo "Seeding Main Page from /setup/homepage.html..." &&
+      cd /var/www/html &&
+      php maintenance/edit.php "Main Page" < /setup/homepage.html &&
+      echo "Applying optional SQL seed file..." &&
+      php maintenance/run.php sql.php --file /setup/init_wiki.sql || true &&
+      echo "Running CirrusSearch index config update..." &&
+      if [ -f /var/www/html/extensions/CirrusSearch/maintenance/UpdateSearchIndexConfig.php ]; then
+        php /var/www/html/extensions/CirrusSearch/maintenance/UpdateSearchIndexConfig.php;
+      else
+        php /var/www/html/maintenance/run.php CirrusSearch:UpdateSearchIndexConfig;
+      fi &&
+      echo "Running CirrusSearch force reindex..." &&
+      if [ -f /var/www/html/extensions/CirrusSearch/maintenance/ForceSearchIndex.php ]; then
+        php /var/www/html/extensions/CirrusSearch/maintenance/ForceSearchIndex.php --skipLinks --indexOnSkip;
+      else
+        php /var/www/html/maintenance/run.php CirrusSearch:ForceSearchIndex -- --skipLinks --indexOnSkip;
+      fi &&
+      echo "wikibase-config-seed done."
 
   wikibase-jobrunner:
     image: wikibase/wikibase:5
