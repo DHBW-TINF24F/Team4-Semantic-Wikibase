@@ -544,25 +544,264 @@ Beispielhafte Feldprüfung:
 | Testdaten | Beispielhafte VEC-/KBL-Begriffe, `POST /semanticIds`, `GET /semanticIds/export` |
 | Testschritte | 1. VEC- und KBL-Testdaten vorbereiten.<br>2. Mapping ausführen oder vorhandene Mapping-Ergebnisse verwenden.<br>3. Mehrere semanticIds über `POST /semanticIds` importieren.<br>4. Export über `GET /semanticIds/export` ausführen.<br>5. Prüfen, ob die importierten und exportierten Daten nachvollziehbar dem Zielmodell entsprechen. |
 | Erwartetes Ergebnis | VEC- und KBL-Daten werden in eine einheitliche Struktur übertragen. Fehlende oder abweichende Felder werden kontrolliert behandelt. Import und Export liefern strukturierte Daten, die mit dem semantischen Zielmodell kompatibel sind. |
-| Tatsächliches Ergebnis | [einfügen] |
-| Status | Noch nicht durchgeführt |
-| Nachweis | [Screenshot oder JSON-Ausgabe einfügen] |
-| Bemerkung | [einfügen] |
+| Tatsächliches Ergebnis | Das VEC- und KBL-Mapping konnte über den implementierten Gateway-Endpunkt `/map` geprüft werden. Für VEC wurde der Begriff „Volt“ über `/map?search=Volt&source=vec&lang=de&only_found=true` getestet. Die API lieferte eine strukturierte Concept-Description-Ausgabe mit `source: vec`, `sourceName: VEC`, `modelType: ConceptDescription` und dem Ergebnis `NominalVoltage`. Für KBL wurde der Begriff „Wire“ über `/map?search=Wire&source=kbl&lang=de&only_found=true` getestet. Auch hier konnte eine strukturierte Mapping-Ausgabe erzeugt werden. Die geplanten Import- und Exportfunktionen über `/semanticIds` konnten im aktuellen Projektstand jedoch nicht vollständig getestet werden. |
+| Tatsächliches Ergebnis | Das VEC- und KBL-Mapping konnte über den implementierten Gateway-Endpunkt `/map` geprüft werden. Für VEC wurde der Begriff „Volt“ über `/map?search=Volt&source=vec&lang=de&only_found=true` getestet. Die API lieferte eine strukturierte Concept-Description-Ausgabe mit `source: vec`, `sourceName: VEC`, `modelType: ConceptDescription` und dem Ergebnis `NominalVoltage`. Für KBL wurde der Begriff „Wire“ über `/map?search=Wire&source=kbl&lang=de&only_found=true` getestet. Auch hier konnte eine strukturierte Mapping-Ausgabe erzeugt werden. Der geplante Export-Endpunkt `/semanticIds/export` wurde ebenfalls geprüft, lieferte jedoch `{"detail": "Not Found"}`. Die Import- und Exportfunktionen über `/semanticIds` konnten daher im aktuellen Projektstand nicht vollständig getestet werden. |
+| Status | Teilweise bestanden |
+| Nachweis | VEC: `images/str-st10-vec-mapping.png`<br>KBL: `images/str-st10-kbl-mapping.png`<br>Export: `images/str-st10-export-not-found.png` |
+| Bemerkung | Die quellenspezifischen Mapper für VEC und KBL sind über den Gateway-Endpunkt `/map` grundsätzlich funktionsfähig. Die geplanten Endpunkte `POST /semanticIds` und `GET /semanticIds/export` sind im aktuellen Projektstand nicht separat umgesetzt bzw. nicht verfügbar. |
 
 Beispiel für den Nachweis:
 
 ```bash
-curl -X POST http://localhost:8000/semanticIds \
-  -H "Content-Type: application/json" \
-  -d '[Testdaten hier einfügen]'
+curl.exe "http://localhost:8000/map?search=Volt&source=vec&lang=de&only_found=true"
+curl.exe "http://localhost:8000/map?search=Wire&source=kbl&lang=de&only_found=true"
+curl.exe "http://localhost:8000/semanticIds/export"
 
-curl http://localhost:8000/semanticIds/export
+Die VEC- und KBL-Mapping-Ausgaben wurden über Screenshots dokumentiert. Der Export-Endpunkt lieferte im aktuellen Projektstand `{"detail": "Not Found"}`.
 ```
-
+Vec:
 ```json
-[Import-/Export-Antwort hier einfügen]
+{
+  "query": {
+    "search": "Volt",
+    "source": "vec",
+    "lang": "de",
+    "types": null,
+    "onlyFound": true
+  },
+  "total": 1,
+  "results": [
+    {
+      "source": "vec",
+      "sourceName": "VEC",
+      "success": true,
+      "response": {
+        "query": {
+          "search": "Volt",
+          "mode": "term",
+          "lang": "de",
+          "source": "https://ecad-wiki.prostep.org/specifications/vec/v220/vec-2.2.0-ontology.ttl"
+        },
+        "total": 1,
+        "result": {
+          "modelType": "ConceptDescription",
+          "id": "http://www.prostep.org/ontologies/ecad/2024/03/vec#NominalVoltage",
+          "idShort": "NominalVoltage",
+          "embeddedDataSpecifications": [
+            {
+              "dataSpecification": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0"
+                  }
+                ]
+              },
+              "dataSpecificationContent": {
+                "modelType": "DataSpecificationIec61360",
+                "semanticId": {
+                  "property": "P1",
+                  "value": "http://www.prostep.org/ontologies/ecad/2024/03/vec#NominalVoltage"
+                },
+                "preferredName": {
+                  "property": "P35",
+                  "value": [
+                    {
+                      "value": "NominalVoltage",
+                      "lang": "en"
+                    }
+                  ]
+                },
+                "shortName": {
+                  "property": "P36",
+                  "value": "NominalVoltage"
+                },
+                "unit": {
+                  "property": "P37",
+                  "value": null
+                },
+                "sourceOfDefinition": {
+                  "property": "P40",
+                  "value": [
+                    {
+                      "type": "ontologySource",
+                      "value": "https://ecad-wiki.prostep.org/specifications/vec/v220/vec-2.2.0-ontology.ttl"
+                    }
+                  ]
+                },
+                "Symbol": {
+                  "property": "P41",
+                  "value": null
+                },
+                "dataType": {
+                  "property": "P42",
+                  "value": "Class"
+                },
+                "unitId": {
+                  "property": "P43",
+                  "value": null
+                },
+                "Definition": {
+                  "property": "P44",
+                  "value": [
+                    {
+                      "type": "comment",
+                      "value": " OpenEnumeration defines the nominal voltage levels currently known and used in vehicles.\n"
+                    }
+                  ]
+                },
+                "valueFormat": {
+                  "property": "P45",
+                  "value": null
+                },
+                "valueList": {
+                  "property": "P46",
+                  "value": null
+                },
+                "value": {
+                  "property": "P47",
+                  "value": null
+                },
+                "levelType": {
+                  "property": "P48",
+                  "value": null
+                }
+              }
+            }
+          ],
+          "additionalProperties": {
+            "rdfs:subClassOf": "http://www.prostep.org/ontologies/ecad/2024/03/vec#OpenEnumeration"
+          }
+        }
+      }
+    }
+  ]
+}
 ```
-
+Kbl:
+```json
+{
+  "query": {
+    "search": "Wire",
+    "source": "kbl",
+    "lang": "de",
+    "types": null,
+    "onlyFound": true
+  },
+  "total": 1,
+  "results": [
+    {
+      "source": "kbl",
+      "sourceName": "KBL",
+      "success": true,
+      "response": {
+        "query": {
+          "search": "Wire",
+          "mode": "xsd-term",
+          "lang": "de",
+          "source": "https://ecad-wiki.prostep.org/specifications/kbl/v25-sr1/kbl2.5-sr1.xsd"
+        },
+        "total": 1,
+        "result": {
+          "modelType": "ConceptDescription",
+          "id": "https://ecad-wiki.prostep.org/specifications/kbl/v25-sr1/kbl2.5-sr1.xsd#Wire",
+          "idShort": "Wire",
+          "embeddedDataSpecifications": [
+            {
+              "dataSpecification": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0"
+                  }
+                ]
+              },
+              "dataSpecificationContent": {
+                "modelType": "DataSpecificationIec61360",
+                "semanticId": {
+                  "property": "P1",
+                  "value": "https://ecad-wiki.prostep.org/specifications/kbl/v25-sr1/kbl2.5-sr1.xsd#Wire"
+                },
+                "preferredName": {
+                  "property": "P35",
+                  "value": [
+                    {
+                      "value": "Wire",
+                      "lang": "de"
+                    }
+                  ]
+                },
+                "shortName": {
+                  "property": "P36",
+                  "value": "Wire"
+                },
+                "unit": {
+                  "property": "P37",
+                  "value": null
+                },
+                "sourceOfDefinition": {
+                  "property": "P40",
+                  "value": [
+                    {
+                      "type": "xsdSource",
+                      "value": "https://ecad-wiki.prostep.org/specifications/kbl/v25-sr1/kbl2.5-sr1.xsd"
+                    }
+                  ]
+                },
+                "Symbol": {
+                  "property": "P41",
+                  "value": null
+                },
+                "dataType": {
+                  "property": "P42",
+                  "value": "XSDElement"
+                },
+                "unitId": {
+                  "property": "P43",
+                  "value": null
+                },
+                "Definition": {
+                  "property": "P44",
+                  "value": [
+                    {
+                      "type": "documentation",
+                      "value": "ref to Core_occurrence, Wire_occurrence"
+                    }
+                  ]
+                },
+                "valueFormat": {
+                  "property": "P45",
+                  "value": null
+                },
+                "valueList": {
+                  "property": "P46",
+                  "value": null
+                },
+                "value": {
+                  "property": "P47",
+                  "value": null
+                },
+                "levelType": {
+                  "property": "P48",
+                  "value": null
+                }
+              }
+            }
+          ],
+          "additionalProperties": {
+            "xsdType": "XSDElement",
+            "extensionBase": null,
+            "children": [],
+            "attributes": []
+          }
+        }
+      }
+    }
+  ]
+}
+```
 ---
 
 ## 8. Fehler, Auffälligkeiten und Abweichungen
