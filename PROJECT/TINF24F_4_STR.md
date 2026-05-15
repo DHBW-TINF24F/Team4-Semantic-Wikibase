@@ -180,10 +180,10 @@ Die Tests werden in einer lokalen Entwicklungs- und Testumgebung durchgeführt.
 | Testdaten | URL der lokalen Instanz. |
 | Testschritte | 1. Browser öffnen.<br>2. URL der lokalen Instanz aufrufen.<br>3. Prüfen, ob die Startseite geladen wird. |
 | Erwartetes Ergebnis | Die Startseite wird ohne Fehlermeldung geladen. Wichtige Einstiegspunkte wie Suche oder Navigation sind sichtbar. |
-| Tatsächliches Ergebnis | [einfügen] |
-| Status | Noch nicht durchgeführt |
-| Nachweis | [Screenshot-Datei einfügen, z. B. `images/str-st01-startseite.png`] |
-| Bemerkung | [einfügen] |
+| Tatsächliches Ergebnis | Die Startseite der lokalen Wikibase-Instanz konnte über `https://wikibase.localhost/wiki/Main_Page` geöffnet werden. Die Seite wurde über die Docker-basierte Wikibase-Umgebung geladen und zeigte die MediaWiki-/Wikibase-Main-Page ohne sichtbare Server-Fehlermeldung. Die grundlegende Benutzeroberfläche mit Navigation, Suchfeld und Seiteninhalt war sichtbar. |
+| Status | Bestanden |
+| Nachweis | `images/str-st01-startseite.png` |
+| Bemerkung | Der Test bestätigt die Erreichbarkeit der lokalen Wikibase-Startseite. Die API-Anbindung der Suche ist nicht Bestandteil dieses Testfalls und wird separat bewertet. |
 
 ---
 
@@ -199,10 +199,10 @@ Die Tests werden in einer lokalen Entwicklungs- und Testumgebung durchgeführt.
 | Testdaten | Keine besonderen Testdaten. |
 | Testschritte | 1. Startseite öffnen.<br>2. Prüfen, ob ein Suchfeld oder ein Link zur Suche sichtbar ist.<br>3. Prüfen, ob die Suche ohne Umwege erreichbar ist. |
 | Erwartetes Ergebnis | Das Suchfeld oder der Suchzugang ist klar sichtbar und direkt verwendbar. |
-| Tatsächliches Ergebnis | [einfügen] |
-| Status | Noch nicht durchgeführt |
-| Nachweis | [Screenshot-Datei einfügen] |
-| Bemerkung | [einfügen] |
+| Tatsächliches Ergebnis | Auf der lokalen Wikibase-Startseite ist im oberen Seitenbereich ein Suchfeld sichtbar. Nutzer können die Suchfunktion grundsätzlich direkt über die Oberfläche erreichen. Eine speziell integrierte SemanticId-Suche bzw. eine vollständige API-Anbindung der Suche ist im aktuellen Stand der UI jedoch noch nicht erkennbar bzw. nicht Bestandteil dieses Testfalls. |
+| Status | Teilweise bestanden |
+| Nachweis | `images/str-st02-suchfeld.png` |
+| Bemerkung | Die allgemeine Suchmöglichkeit ist auf UI-Ebene auffindbar. Die vollständige Umsetzung der verbesserten SemanticId-Suche gemäß Projektanforderung bleibt offen und wird in ST-03/ST-04 weiter bewertet. |
 
 ---
 
@@ -218,11 +218,10 @@ Die Tests werden in einer lokalen Entwicklungs- und Testumgebung durchgeführt.
 | Testdaten | Beispiel: `http://qudt.org/vocab/unit/V` oder eine bekannte semanticId aus dem Projekt. |
 | Testschritte | 1. Suchfunktion öffnen.<br>2. Bekannte semanticId eingeben.<br>3. Suche ausführen.<br>4. Ergebnisliste prüfen.<br>5. Gefundenen Eintrag öffnen. |
 | Erwartetes Ergebnis | Der passende Eintrag wird gefunden und angezeigt. Der Nutzer kann den Eintrag öffnen und die Detailansicht wird geladen. |
-| Tatsächliches Ergebnis | [einfügen] |
-| Status | Noch nicht durchgeführt |
-| Nachweis | [Screenshot-Datei einfügen] |
-| Bemerkung | [einfügen] |
-
+| Tatsächliches Ergebnis | Die Suche nach dem bekannten Begriff „Volt“ konnte über die Benutzeroberfläche ausgeführt werden. Die Wikibase-Suche leitete auf die Suchergebnisseite weiter, lieferte jedoch keine Treffer für „Volt“. Damit ist die allgemeine UI-Suche erreichbar, aber im aktuellen Stand nicht mit den QUDT-/Mapping-Daten bzw. der entwickelten API verbunden. Fachlich konnte die Suche ersatzweise über den vorhandenen Gateway-Endpunkt `/map` geprüft werden. Dort wurde für „Volt“ ein passender QUDT-Eintrag mit der ID `http://qudt.org/vocab/unit/V` zurückgegeben. |
+| Status | Teilweise bestanden |
+| Nachweis | UI: `images/str-st03-semanticid-suche-ui.png`<br>API: `images/str-st03-semanticid-suche-api.png` |
+| Bemerkung | Die allgemeine Wikibase-Suche ist vorhanden und ausführbar. Die spezifische SemanticId- bzw. API-gestützte Suche ist im aktuellen UI-Stand jedoch noch nicht integriert. |
 ---
 
 ### Testfall ST-04: Suche mit Teilbegriff, Sonderzeichen und ohne Treffer
@@ -237,10 +236,10 @@ Die Tests werden in einer lokalen Entwicklungs- und Testumgebung durchgeführt.
 | Testdaten | `Volt`, `V`, `Unit`, `http://qudt.org/vocab/unit/V`, `xyzTestEintragNichtVorhanden123` |
 | Testschritte | 1. Suchfunktion öffnen.<br>2. Teilbegriff oder Label eingeben und Ergebnis prüfen.<br>3. URI mit Sonderzeichen eingeben und Ergebnis prüfen.<br>4. Nicht vorhandenen Suchbegriff eingeben und Meldung prüfen. |
 | Erwartetes Ergebnis | Passende Einträge werden bei gültigen Teilbegriffen oder URIs angezeigt. Bei nicht vorhandenen Begriffen zeigt das System eine verständliche Meldung wie „Keine Ergebnisse gefunden“. Es treten keine Darstellungsfehler oder Systemabbrüche auf. |
-| Tatsächliches Ergebnis | [einfügen] |
-| Status | Noch nicht durchgeführt |
-| Nachweis | [Screenshot-Dateien einfügen] |
-| Bemerkung | [einfügen] |
+| Tatsächliches Ergebnis | Die Suchvarianten konnten über die Benutzeroberfläche nur eingeschränkt geprüft werden. Die allgemeine Wikibase-Suche verarbeitet Eingaben wie `V`, `Unit`, eine vollständige URI sowie einen nicht vorhandenen Suchbegriff und leitet jeweils auf eine Suchergebnisseite weiter. Für die getesteten Begriffe wurden in der UI jedoch keine fachlichen QUDT-/SemanticId-Ergebnisse angezeigt, da die Benutzeroberfläche im aktuellen Stand noch nicht mit der entwickelten Mapping-API verbunden ist. Die technische Suchlogik wurde ersatzweise über den Gateway-Endpunkt `/map` geprüft. Dort wurden gültige Begriffe wie „Volt“ verarbeitet; ein nicht vorhandener Begriff führte kontrolliert zu `total: 0` und `results: []`. |
+| Status | Teilweise bestanden |
+| Nachweis | UI: `images/str-st04-suchvarianten-ui.png`<br>API: `images/str-st04-suchvarianten-api.png` |
+| Bemerkung | Die UI-Suche ist grundsätzlich nutzbar und bricht bei verschiedenen Eingaben nicht ab. Die vollständige SemanticId-/API-gestützte Suche ist im aktuellen UI-Stand jedoch noch nicht integriert. | |
 
 ---
 
