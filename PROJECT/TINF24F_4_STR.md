@@ -152,16 +152,16 @@ Die Tests werden in einer lokalen Entwicklungs- und Testumgebung durchgeführt.
 
 | Testfall-ID | Kurzbeschreibung | Status | Nachweis |
 |-|-|-|-|
-| ST-01 | Aufruf der Startseite und Prüfung der Erreichbarkeit | Bestanden | `images/str-st01-startseite.png` |
-| ST-02 | Suchfeld auf der Startseite auffindbar | Bestanden | `images/str-st02-suchfeld.png` |
-| ST-03 | Suche nach bekannter semanticId | Teilweise bestanden | `images/str-st03-semanticid-suche-ui.png`, `images/str-st03-semanticid-suche-api.png` |
-| ST-04 | Suche mit Teilbegriff, Sonderzeichen und ohne Treffer | Teilweise bestanden | `images/str-st04-suchvarianten-ui.png`, `images/str-st04-suchvarianten-api.png` |
-| ST-05 | Liste aller semanticIds abrufen | Blockiert | `images/str-st05-api-semanticids-not-found.png` |
-| ST-06 | Einzelne semanticId abrufen und Sprachparameter prüfen | Bestanden | `images/str-st06-api-lang-de.png`, `images/str-st06-api-lang-en.png` |
-| ST-07 | Sortierung und Filterung der semanticIds prüfen | Blockiert | `images/str-st07-api-sort-not-found.png`, `images/str-st07-api-filter-not-found.png` |
-| ST-08 | Ungültigen Identifier abrufen | Bestanden | `images/str-st08-api-error.png`, `images/str-st08-api-after-error.png` |
-| ST-09 | QUDT-Daten in AAS-Concept-Description-Struktur prüfen | Bestanden | `images/str-st09-qudt-mapping.png` |
-| ST-10 | VEC-/KBL-Mapping sowie Import und Export prüfen | Teilweise bestanden | `images/str-st10-vec-mapping.png`, `images/str-st10-kbl-mapping.png`, `images/str-st10-export-not-found.png` |
+| ST-01 | Aufruf der Startseite und Prüfung der Erreichbarkeit | Bestanden | [str-st01-startseite.png](images/str-st01-startseite.png) |
+| ST-02 | Suchfeld auf der Startseite auffindbar | Bestanden | [str-st02-suchfeld.png](images/str-st02-suchfeld.png) |
+| ST-03 | Suche nach bekannter semanticId | Teilweise bestanden | [UI](images/str-st03-semanticid-suche-ui.png), [API](images/str-st03-semanticid-suche-api.png) |
+| ST-04 | Suche mit Teilbegriff, Sonderzeichen und ohne Treffer | Teilweise bestanden | [UI](images/str-st04-suchvarianten-ui.png), [API](images/str-st04-suchvarianten-api.png) |
+| ST-05 | Liste aller semanticIds abrufen | Blockiert | [str-st05-api-semanticids-not-found.png](images/str-st05-api-semanticids-not-found.png) |
+| ST-06 | Einzelne semanticId abrufen und Sprachparameter prüfen | Bestanden | [Deutsch](images/str-st06-api-lang-de.png), [Englisch](images/str-st06-api-lang-en.png) |
+| ST-07 | Sortierung und Filterung der semanticIds prüfen | Blockiert | [Sortierung](images/str-st07-api-sort-not-found.png), [Filterung](images/str-st07-api-filter-not-found.png) |
+| ST-08 | Ungültigen Identifier abrufen | Bestanden | [Fehlerfall](images/str-st08-api-error.png), [Kontrollanfrage](images/str-st08-api-after-error.png) |
+| ST-09 | QUDT-Daten in AAS-Concept-Description-Struktur prüfen | Bestanden | [str-st09-qudt-mapping.png](images/str-st09-qudt-mapping.png) |
+| ST-10 | VEC-/KBL-Mapping sowie Import und Export prüfen | Teilweise bestanden | [VEC](images/str-st10-vec-mapping.png), [KBL](images/str-st10-kbl-mapping.png), [Export](images/str-st10-export-not-found.png) |
 
 **Statuswerte:** Bestanden, Teilweise bestanden, Fehlgeschlagen, Blockiert, Noch nicht durchgeführt.
 
@@ -886,23 +886,23 @@ Zur Nachvollziehbarkeit der Testdurchführung werden Screenshots, API-Antworten 
 
 | Nachweis-ID | Zugehöriger Testfall | Beschreibung | Datei / Pfad |
 |-|-|-|-|
-| N-01 | ST-01 | Startseite erreichbar | `images/str-st01-startseite.png` |
-| N-02 | ST-02 | Suchfeld sichtbar | `images/str-st02-suchfeld.png` |
-| N-03 | ST-03 | UI-Suche nach bekanntem Begriff | `images/str-st03-semanticid-suche-ui.png` |
-| N-04 | ST-03 | API-Suche nach bekanntem Begriff | `images/str-st03-semanticid-suche-api.png` |
-| N-05 | ST-04 | UI-Suche mit Suchvarianten | `images/str-st04-suchvarianten-ui.png` |
-| N-06 | ST-04 | API-Gegenprüfung der Suchvarianten | `images/str-st04-suchvarianten-api.png` |
-| N-07 | ST-05 | API-Antwort `GET /semanticIds` nicht verfügbar | `images/str-st05-api-semanticids-not-found.png` |
-| N-08 | ST-06 | API-Antwort mit Sprachparameter Deutsch | `images/str-st06-api-lang-de.png` |
-| N-09 | ST-06 | API-Antwort mit Sprachparameter Englisch | `images/str-st06-api-lang-en.png` |
-| N-10 | ST-07 | Sortierung nicht verfügbar | `images/str-st07-api-sort-not-found.png` |
-| N-11 | ST-07 | Filterung nicht verfügbar | `images/str-st07-api-filter-not-found.png` |
-| N-12 | ST-08 | Fehlerantwort bei ungültigem Suchbegriff | `images/str-st08-api-error.png` |
-| N-13 | ST-08 | Kontrollanfrage nach Fehlerfall | `images/str-st08-api-after-error.png` |
-| N-14 | ST-09 | QUDT-Mapping-Ausgabe | `images/str-st09-qudt-mapping.png` |
-| N-15 | ST-10 | VEC-Mapping-Ausgabe | `images/str-st10-vec-mapping.png` |
-| N-16 | ST-10 | KBL-Mapping-Ausgabe | `images/str-st10-kbl-mapping.png` |
-| N-17 | ST-10 | Export-Endpunkt nicht verfügbar | `images/str-st10-export-not-found.png` |
+| N-01 | ST-01 | Startseite erreichbar | [str-st01-startseite.png](images/str-st01-startseite.png) |
+| N-02 | ST-02 | Suchfeld sichtbar | [str-st02-suchfeld.png](images/str-st02-suchfeld.png) |
+| N-03 | ST-03 | UI-Suche nach bekanntem Begriff | [str-st03-semanticid-suche-ui.png](images/str-st03-semanticid-suche-ui.png) |
+| N-04 | ST-03 | API-Suche nach bekanntem Begriff | [str-st03-semanticid-suche-api.png](images/str-st03-semanticid-suche-api.png) |
+| N-05 | ST-04 | UI-Suche mit Suchvarianten | [str-st04-suchvarianten-ui.png](images/str-st04-suchvarianten-ui.png) |
+| N-06 | ST-04 | API-Gegenprüfung der Suchvarianten | [str-st04-suchvarianten-api.png](images/str-st04-suchvarianten-api.png) |
+| N-07 | ST-05 | API-Antwort `GET /semanticIds` nicht verfügbar | [str-st05-api-semanticids-not-found.png](images/str-st05-api-semanticids-not-found.png) |
+| N-08 | ST-06 | API-Antwort mit Sprachparameter Deutsch | [str-st06-api-lang-de.png](images/str-st06-api-lang-de.png) |
+| N-09 | ST-06 | API-Antwort mit Sprachparameter Englisch | [str-st06-api-lang-en.png](images/str-st06-api-lang-en.png) |
+| N-10 | ST-07 | Sortierung nicht verfügbar | [str-st07-api-sort-not-found.png](images/str-st07-api-sort-not-found.png) |
+| N-11 | ST-07 | Filterung nicht verfügbar | [str-st07-api-filter-not-found.png](images/str-st07-api-filter-not-found.png) |
+| N-12 | ST-08 | Fehlerantwort bei ungültigem Suchbegriff | [str-st08-api-error.png](images/str-st08-api-error.png) |
+| N-13 | ST-08 | Kontrollanfrage nach Fehlerfall | [str-st08-api-after-error.png](images/str-st08-api-after-error.png) |
+| N-14 | ST-09 | QUDT-Mapping-Ausgabe | [str-st09-qudt-mapping.png](images/str-st09-qudt-mapping.png) |
+| N-15 | ST-10 | VEC-Mapping-Ausgabe | [str-st10-vec-mapping.png](images/str-st10-vec-mapping.png) |
+| N-16 | ST-10 | KBL-Mapping-Ausgabe | [str-st10-kbl-mapping.png](images/str-st10-kbl-mapping.png) |
+| N-17 | ST-10 | Export-Endpunkt nicht verfügbar | [str-st10-export-not-found.png](images/str-st10-export-not-found.png) |
 
 Beispiel für die Einbindung eines Screenshots:
 
