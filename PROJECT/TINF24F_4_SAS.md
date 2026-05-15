@@ -7,7 +7,7 @@
 |---------------|---------------------------------------------------|
 | Version       | 1.1                                               |
 | Datum         | 08.05.2026                                        |
-| Autor         | GitHub Copilot Agent (Senior Software Architekt)  |
+| Autor         | Colin Dietschmann  |
 | Basis         | IEEE 1471-2000 / ISO/IEC/IEEE 42010               |
 | Repository    | DHBW-TINF24F/Team4-Semantic-Wikibase              |
 
@@ -17,7 +17,7 @@
 
 | Version | Datum      | Autor                              | Kommentar                |
 |---------|------------|------------------------------------|--------------------------|
-| 1.0     | 08.05.2026 | GitHub Copilot (Architekturanalyse) | Erstversion auf Basis der Repository-Analyse |
+| 1.0     | 08.05.2026 | Colin Dietschmann mithilfe von GitHub Copilot | Erstversion auf Basis der Repository-Analyse |
 | 1.1     | 15.05.2026 | Team 4 | Überarbeitung der API-Architektur, Kürzung doppelter Mapper-Beschreibungen und Verweis auf die Moduldokumentation |
 
 ---
