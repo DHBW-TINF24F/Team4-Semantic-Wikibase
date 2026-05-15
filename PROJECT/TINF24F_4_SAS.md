@@ -612,7 +612,7 @@ Die aktuelle API-Implementierung ist für Entwicklungs- und Demo-Zwecke ausgeleg
 | **CORS** | Einschränken auf bekannte Origins | `CORSMiddleware` mit `allow_origins=["https://..."]` |
 | **Input-Validierung** | Parameter-Sanitierung | FastAPI Pydantic-Validierung bereits integriert |
 | **Rate Limiting** | Anfragen pro IP begrenzen | Nginx `limit_req_zone` oder API-Gateway |
-| **SPARQL-Injection** | Suchbegriff escapen | `safe_search = search.replace('"', '\\"')` ✅ bereits implementiert |
+| **SPARQL-Injection** | Suchbegriff escapen | `safe_search = search.replace('"', '\\"')` bereits implementiert |
 | **Secrets Management** | Keine Credentials im Code | Environment Variables, `.env`-Dateien |
 
 #### 6.2.3 SPARQL-Injection-Schutz
