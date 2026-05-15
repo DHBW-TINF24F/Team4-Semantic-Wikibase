@@ -43,8 +43,6 @@ Während der STP beschreibt, welche Tests geplant sind, hält der STR fest, welc
 
 Der Schwerpunkt dieses STR liegt auf den im STP definierten **Black-Box-Systemtests**. Dabei wird das System aus Sicht eines Nutzers oder API-Clients betrachtet. Interne Implementierungsdetails des Quellcodes stehen nicht im Vordergrund. Entscheidend ist, ob das System bei definierten Eingaben die erwarteten Reaktionen und Ausgaben liefert.
 
-> **Hinweis:** Dieses Dokument ist als Ausfüllvorlage vorbereitet. Da die Tests zum Zeitpunkt der Erstellung noch nicht vollständig durchgeführt wurden, sind die Felder „Tatsächliches Ergebnis“, „Status“, „Nachweis“ und „Bemerkung“ nach der Testdurchführung zu ergänzen.
-
 ---
 
 ## 2. Testgegenstand
