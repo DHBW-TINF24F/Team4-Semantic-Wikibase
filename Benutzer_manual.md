@@ -901,19 +901,19 @@ Im Benutzer Manual werden verschiedene fachliche Begriffe verwendet, die im sepa
 
 Das Glossar dient dazu, zentrale Begriffe aus dem Projekt einheitlich zu beschreiben und Missverständnisse zu vermeiden.
 
-Siehe: [Glossar](./Glossar.md)
+Siehe: [Glossar](PROJECT/Glossar.md)
 
 Wichtige Begriffe aus diesem Manual sind:
 
 | Begriff | Bedeutung im Kontext des Projekts | Verweis |
 |--------|-----------------------------------|---------|
-| AAS | Digitale Verwaltungsschale eines Assets | [Glossar](./Glossar.md) |
-| Asset | Physisches oder digitales Objekt mit Wert für das System | [Glossar](./Glossar.md) |
-| Submodell | Strukturierter Teilbereich einer AAS | [Glossar](./Glossar.md) |
-| Submodel Element | Einzelnes Informations- oder Funktionsbaustein innerhalb eines Submodells | [Glossar](./Glossar.md) |
-| Concept Description | Semantische Beschreibung eines Begriffs oder einer Eigenschaft | [Glossar](./Glossar.md) |
-| IEC 61360 | Standard zur Beschreibung technischer Merkmale und Eigenschaften | [Glossar](./Glossar.md) |
-| URI | Eindeutiger Bezeichner für eine Ressource oder semantische Definition | [Glossar](./Glossar.md) |
+| AAS | Digitale Verwaltungsschale eines Assets | [Zum Begriff](PROJECT/Glossar.md#aas) |
+| Asset | Physisches oder digitales Objekt mit Wert für das System | [Zum Begriff](PROJECT/Glossar.md#asset) |
+| Submodell | Strukturierter Teilbereich einer AAS | [Zum Begriff](PROJECT/Glossar.md#submodell) |
+| Submodel Element | Einzelner Informations- oder Funktionsbaustein innerhalb eines Submodells | [Zum Begriff](PROJECT/Glossar.md#submodel-elements) |
+| Concept Description | Semantische Beschreibung eines Begriffs oder einer Eigenschaft | [Zum Begriff](PROJECT/Glossar.md#concept-description-cd) |
+| IEC 61360 | Standard zur Beschreibung technischer Merkmale und Eigenschaften | [Zum Begriff](PROJECT/Glossar.md#iec-61360--data-specification) |
+| URI | Eindeutiger Bezeichner für eine Ressource oder semantische Definition | [Zum Begriff](PROJECT/Glossar.md#uri) |
 
 Begriffe werden im Manual nur kurz im jeweiligen Nutzungskontext verwendet. Für ausführlichere Erklärungen soll das Glossar genutzt werden.
 
