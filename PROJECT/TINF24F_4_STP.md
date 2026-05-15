@@ -7,11 +7,11 @@
 
 | Version | Datum | Autor | Kommentar |
 |-|-|-|-|
-| 0.1 | 12.05.2026 | Team Semantic Wikibase | Erstellung & erster Entwurf |
-| 0.2 | 12.05.2026 | Team Semantic Wikibase | Anpassung an CRS-, SRS- und SAS-Struktur |
-| 0.3 | 12.05.2026 | Team Semantic Wikibase | Reduktion auf ca. 10 Systemtestfälle, Ergänzung der Testbasis und Traceability |
-| 0.4 | 12.05.2026 | Team Semantic Wikibase | Ergänzung weiterer Projektartefakte als Referenzen |
-| 0.5 | 15.05.2026 | Team Semantic Wikibase | Abgleich mit aktueller SRS-Anforderungsnummerierung, Ergänzung FA.011 und API-v3-Request |
+| 0.1 | 12.05.2026 | Marvin Igrec | Erstellung & erster Entwurf |
+| 0.2 | 12.05.2026 | Marvin Igrec | Anpassung an CRS-, SRS- und SAS-Struktur |
+| 0.3 | 12.05.2026 | Marvin Igrec | Reduktion auf ca. 10 Systemtestfälle, Ergänzung der Testbasis und Traceability |
+| 0.4 | 12.05.2026 | Marvin Igrec | Ergänzung weiterer Projektartefakte als Referenzen |
+| 0.5 | 15.05.2026 | Marvin Igrec | Abgleich mit aktueller SRS-Anforderungsnummerierung, Ergänzung FA.011 und API-v3-Request |
 
 <br>
 
@@ -269,7 +269,7 @@ Die genaue Testumgebung wird im späteren STR mit konkreten Versionen, URLs, Por
 |-|-|
 | Testfall-ID | ST-01 |
 | Testobjekt | Startseite / Benutzeroberfläche |
-| Zugehörige Anforderung | FA.010, NFA.001, NFA.004 |
+| Zugehörige Anforderung | FA.010, NFA.001, NFA.004, FA.001 |
 | Ziel | Prüfen, ob die Startseite des Semantic Hub korrekt erreichbar ist. |
 | Vorbedingung | Lokale Wikibase-/Semantic-Hub-Instanz ist gestartet. |
 | Testdaten | URL der lokalen Instanz. |
@@ -405,7 +405,7 @@ Die genaue Testumgebung wird im späteren STR mit konkreten Versionen, URLs, Por
 |-|-|
 | Testfall-ID | ST-09 |
 | Testobjekt | QUDT-Mapper / API-Ausgabe |
-| Zugehörige Anforderung | FA.003, FA.006, FA.011 |
+| Zugehörige Anforderung | FA.003, FA.006, FA.011, FA.009 |
 | Ziel | Prüfen, ob QUDT-Daten korrekt in das AAS-Concept-Description-Format übertragen werden. |
 | Vorbedingung | QUDT-Daten wurden geladen und gemappt. |
 | Testdaten | Beispiel: QUDT Unit Volt, `http://qudt.org/vocab/unit/V`. |

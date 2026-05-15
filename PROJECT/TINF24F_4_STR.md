@@ -1,13 +1,13 @@
 # Software Test Report (STR)
 
-*Dokumentverantwortliche: Testmanagement / Qualitätssicherung, Team Semantic Wikibase*
+*Dokumentverantwortliche: Testmanager, Marvin Igrec und Technische Redakteure, Lucrezia Trabalza und Marina Hidalgo Burova*
 
 ## Versionskontrolle
 
 | Version | Datum | Autor | Kommentar |
 |-|-|-|-|
-| 0.1 | 14.05.2026 | Team Semantic Wikibase | Erstellung der STR-Ausfüllvorlage auf Basis des STP |
-| 0.2 | 15.05.2026 | Team Semantic Wikibase | Anpassung an aktualisierten STP, SRS-Anforderungsnummerierung und Traceability Matrix |
+| 0.1 | 14.05.2026 | Marvin Igrec | Erstellung der STR-Ausfüllvorlage auf Basis des STP |
+| 0.2 | 15.05.2026 | Marvin Igrec | Anpassung an überarbeitete STP, aktuelle SRS-Anforderungen und vorbereitende Ausfüllstruktur |
 
 <br>
 
@@ -24,23 +24,14 @@
     - [4.2 Nicht durchgeführte Tests](#42-nicht-durchgeführte-tests)
   - [5. Testumgebung](#5-testumgebung)
   - [6. Zusammenfassung der Testergebnisse](#6-zusammenfassung-der-testergebnisse)
-    - [6.1 Ergebnisübersicht pro Testfall](#61-ergebnisübersicht-pro-testfall)
   - [7. Detaillierte Testergebnisse](#7-detaillierte-testergebnisse)
   - [8. Fehler, Auffälligkeiten und Abweichungen](#8-fehler-auffälligkeiten-und-abweichungen)
-    - [8.1 Übersicht erkannter Fehler](#81-übersicht-erkannter-fehler)
-    - [8.2 Detailbeschreibung der Fehler](#82-detailbeschreibung-der-fehler)
   - [9. Bewertung der Anforderungen](#9-bewertung-der-anforderungen)
   - [10. Traceability Matrix](#10-traceability-matrix)
   - [11. Screenshots und Nachweise](#11-screenshots-und-nachweise)
   - [12. Gesamteinschätzung](#12-gesamteinschätzung)
-    - [12.1 Zusammenfassung](#121-zusammenfassung)
-    - [12.2 Testfazit](#122-testfazit)
   - [13. Offene Punkte und Empfehlungen](#13-offene-punkte-und-empfehlungen)
   - [14. Referenzen und Anhang](#14-referenzen-und-anhang)
-    - [14.1 Referenzen](#141-referenzen)
-    - [14.2 Beispielhafte API-Requests](#142-beispielhafte-api-requests)
-    - [14.3 Beispielhafte Testdaten](#143-beispielhafte-testdaten)
-    - [14.4 Statusdefinitionen](#144-statusdefinitionen)
 
 ---
 
@@ -51,8 +42,6 @@ Der Software Test Report (STR) dokumentiert die Durchführung und Ergebnisse der
 Während der STP beschreibt, welche Tests geplant sind, hält der STR fest, welche Tests tatsächlich durchgeführt wurden, welche Ergebnisse dabei entstanden sind und welche Fehler, Auffälligkeiten oder offenen Punkte festgestellt wurden.
 
 Der Schwerpunkt dieses STR liegt auf den im STP definierten **Black-Box-Systemtests**. Dabei wird das System aus Sicht eines Nutzers oder API-Clients betrachtet. Interne Implementierungsdetails des Quellcodes stehen nicht im Vordergrund. Entscheidend ist, ob das System bei definierten Eingaben die erwarteten Reaktionen und Ausgaben liefert.
-
-> **Hinweis:** Dieses Dokument ist als Ausfüllvorlage vorbereitet. Da die Tests zum Zeitpunkt der Erstellung noch nicht vollständig durchgeführt wurden, sind die Felder „Tatsächliches Ergebnis“, „Status“, „Nachweis“ und „Bemerkung“ nach der Testdurchführung zu ergänzen.
 
 ---
 
@@ -71,49 +60,30 @@ Der Testgegenstand umfasst insbesondere:
 - Mapping-Ergebnisse aus QUDT, VEC und KBL,
 - Import- und Exportfunktionen der API.
 
-Nicht im Fokus stehen interne Unit-Tests einzelner Funktionen, vollständige Penetrationstests oder vollständige Lasttests unter Produktivbedingungen. Diese Bereiche werden nur betrachtet, sofern sie im Rahmen der Systemtests von außen sichtbar werden.
-
 ---
 
 ## 3. Testbasis
 
 Die Testdurchführung basiert auf folgenden Dokumenten und Projektartefakten:
 
-- STP – Software Test Plan Semantic Wikibase,
-- CRS – Lastenheft Semantic Wikibase,
-- SRS – Pflichtenheft Semantic Wikibase,
-- SAS – Software Architecture Specification Semantic Wikibase,
+- Software Test Plan (STP) Semantic Wikibase,
+- CRS / Lastenheft Semantic Wikibase,
+- SRS / Pflichtenheft Semantic Wikibase,
+- SAS / Software Architecture Specification Semantic Wikibase,
 - SAS_AAS_Wikibase – AAS Concept Description API & Sucherweiterung,
 - MOD – Moduldokumentation zur OpenAPI-Spezifikation und Mapping-Zusammenführung,
 - BC – Business Case Semantic Wikibase,
 - PM – Projektplan Semantic Wikibase,
-- Projektbeschreibung **Semantic Wikibase**,
+- Projektbeschreibung „Semantic Wikibase“,
 - GitHub-Issue #25 zur verbesserten Suchfunktion,
 - GitHub-Issue #26 zur neuen Startseitenstruktur,
 - GitHub-Issue #27 zur API gemäß AAS Concept Description Specification,
-- Vorlesung **Von der Anforderung zum Testfall**,
-- Vorlesung **Analytische Qualitätssicherung**,
-- Vorlesung **Requirements Engineering**,
-- Vorlesung **Digitaler Zwilling, Verwaltungsschale und AAS**.
+- Vorlesung „Von der Anforderung zum Testfall“,
+- Vorlesung „Analytische Qualitätssicherung“,
+- Vorlesung „Requirements Engineering“,
+- Vorlesung „Digitaler Zwilling, Verwaltungsschale und AAS“.
 
 Die Testfälle wurden im STP anforderungsbasiert definiert. Die Ergebnisse werden in diesem STR den jeweiligen Anforderungen zugeordnet, um die Nachvollziehbarkeit zwischen Anforderungen, Testfällen und Testergebnissen sicherzustellen.
-
-Besonders relevant sind die aktualisierten Anforderungen aus dem SRS:
-
-| Anforderung | Bedeutung für diesen STR |
-|-|-|
-| FA.001 | Auflösbare URIs und Detailseiten werden durch UI- und API-Tests geprüft. |
-| FA.002 | Die REST-API wird anhand von Abruf-, Filter-, Fehler- und Import-/Exportfällen geprüft. |
-| FA.003 | Das IEC61360-orientierte Zielmodell wird anhand der JSON-Ausgaben geprüft. |
-| FA.004 | Die sprachabhängige API-Ausgabe wird über `lang=de` und `lang=en` geprüft. |
-| FA.006 | Quellenverweise werden insbesondere in Detailansicht, API-Ausgabe und Mapping geprüft. |
-| FA.009 | Automatisierter Import externer Concept Descriptions per URI wird im Rahmen von Import-/Mapping-Tests betrachtet. |
-| FA.010 | Die überarbeitete Startseite und verbesserte Suchfunktion werden durch UI- und Suchtests geprüft. |
-| FA.011 | Quellenspezifische Mapper für QUDT, VEC und KBL werden anhand ihrer Zielmodell-Ausgaben geprüft. |
-| NFA.001 | Stabilität und Erreichbarkeit werden während der Tests beobachtet. |
-| NFA.002 | Antwortzeiten werden zumindest qualitativ betrachtet, sofern kein vollständiger Performancetest durchgeführt wird. |
-| NFA.003 | Sicherheit und kontrollierter Schreibzugriff werden im Rahmen der Import-/Schreibfunktionen bewertet, sofern implementiert. |
-| NFA.004 | Benutzerfreundlichkeit wird anhand Startseite, Suche und Ergebnisdarstellung geprüft. |
 
 ---
 
@@ -123,12 +93,12 @@ Besonders relevant sind die aktualisierten Anforderungen aus dem SRS:
 
 | Testart | Beschreibung | Durchführung |
 |-|-|-|
-| Funktionale Tests | Prüfung sichtbarer Funktionen wie Suche, API-Abruf, Import und Export | [einfügen: durchgeführt / teilweise / nicht durchgeführt] |
-| Systemtests | Prüfung des Gesamtsystems aus Nutzer- und API-Client-Sicht | [einfügen] |
-| API-Tests | Prüfung von Endpunkten, HTTP-Statuscodes, Query-Parametern und JSON-Strukturen | [einfügen] |
-| Mapping-Tests | Prüfung der sichtbaren Mapping-Ergebnisse aus QUDT, VEC und KBL | [einfügen] |
-| Fehlertests | Prüfung von ungültigen Suchbegriffen, ungültigen Identifiern und nicht vorhandenen Daten | [einfügen] |
-| Usability-orientierte Tests | Prüfung der Auffindbarkeit und Bedienbarkeit der Suchfunktion | [einfügen] |
+| Funktionale Tests | Prüfung sichtbarer Funktionen wie Suche, API-Abruf, Import und Export | Geplant |
+| Systemtests | Prüfung des Gesamtsystems aus Nutzer- und API-Client-Sicht | Geplant |
+| API-Tests | Prüfung von Endpunkten, HTTP-Statuscodes, Query-Parametern und JSON-Strukturen | Geplant |
+| Mapping-Tests | Prüfung der sichtbaren Mapping-Ergebnisse aus QUDT, VEC und KBL | Geplant |
+| Fehlertests | Prüfung von ungültigen Suchbegriffen, ungültigen Identifiern und nicht vorhandenen Daten | Geplant |
+| Usability-orientierte Tests | Prüfung der Auffindbarkeit und Bedienbarkeit der Suchfunktion | Geplant |
 
 ### 4.2 Nicht durchgeführte Tests
 
@@ -150,16 +120,16 @@ Die Tests werden in einer lokalen Entwicklungs- und Testumgebung durchgeführt.
 
 | Komponente | Wert / Beschreibung |
 |-|-|
-| Betriebssystem | [einfügen, z. B. Windows 11] |
-| Entwicklungsumgebung | [einfügen, z. B. Visual Studio Code] |
-| Browser | [einfügen, z. B. Chrome / Edge / Firefox + Version] |
-| API-Testwerkzeug | [einfügen, z. B. curl / Postman / Browser] |
+| Betriebssystem | Windows 11 |
+| Entwicklungsumgebung | Visual Studio Code |
+| Browser | Google Chrome / Microsoft Edge, genaue Version nach Testdurchführung ergänzen |
+| API-Testwerkzeug | Browser, curl und ggf. Postman |
 | Programmiersprache | Python |
-| API-Framework | [einfügen, z. B. FastAPI / Flask] |
-| Lokale API-URL | [einfügen, z. B. `http://localhost:8000`] |
+| API-Framework | FastAPI / Flask, abhängig vom getesteten API-Modul |
+| Lokale API-URL | `http://localhost:8000`, falls die lokale API auf diesem Port gestartet wird |
 | Wikibase-/Semantic-Hub-URL | [einfügen] |
 | Datenquellen | QUDT, VEC, KBL |
-| Repository / Branch | [einfügen, z. B. GitHub-Repo + Branch + Commit-ID] |
+| Repository / Branch | `DHBW-TINF24F/Team4-Semantic-Wikibase`, Branch `main`, Commit-ID nach Testdurchführung ergänzen |
 | Testdatum | [einfügen] |
 | Tester | [einfügen] |
 
@@ -170,12 +140,12 @@ Die Tests werden in einer lokalen Entwicklungs- und Testumgebung durchgeführt.
 | Kennzahl | Anzahl |
 |-|-:|
 | Geplante Testfälle | 10 |
-| Durchgeführte Testfälle | [einfügen] |
-| Bestanden | [einfügen] |
-| Teilweise bestanden | [einfügen] |
-| Fehlgeschlagen | [einfügen] |
-| Blockiert / nicht durchführbar | [einfügen] |
-| Offen / noch nicht getestet | [einfügen] |
+| Durchgeführte Testfälle | 0 |
+| Bestanden | 0 |
+| Teilweise bestanden | 0 |
+| Fehlgeschlagen | 0 |
+| Blockiert / nicht durchführbar | 0 |
+| Offen / noch nicht getestet | 10 |
 
 ### 6.1 Ergebnisübersicht pro Testfall
 
@@ -400,7 +370,7 @@ curl -i http://localhost:8000/semanticIds/nichtVorhanden123
 |-|-|
 | Testfall-ID | ST-09 |
 | Testobjekt | QUDT-Mapper / API-Ausgabe |
-| Zugehörige Anforderung | FA.003, FA.006, FA.009, FA.011 |
+| Zugehörige Anforderung | FA.003, FA.006, FA.011, FA.009 |
 | Ziel | Prüfen, ob QUDT-Daten korrekt in das AAS-Concept-Description-Format übertragen werden. |
 | Vorbedingung | QUDT-Daten wurden geladen und gemappt. |
 | Testdaten | Beispiel: QUDT Unit Volt, `http://qudt.org/vocab/unit/V`. |
@@ -410,6 +380,16 @@ curl -i http://localhost:8000/semanticIds/nichtVorhanden123
 | Status | Noch nicht durchgeführt |
 | Nachweis | [Screenshot oder JSON-Ausgabe einfügen] |
 | Bemerkung | [einfügen] |
+
+Beispiel für den Nachweis:
+
+```bash
+curl "http://localhost:8000/api/v3/search?search=Volt&lang=de&types=unit"
+```
+
+```json
+[Antwort hier einfügen]
+```
 
 Beispielhafte Feldprüfung:
 
@@ -433,8 +413,8 @@ Beispielhafte Feldprüfung:
 | Ziel | Prüfen, ob VEC- und KBL-Daten nachvollziehbar in das gemeinsame semantische Modell übertragen und über Import-/Export-Funktionen verarbeitet werden können. |
 | Vorbedingung | VEC- und KBL-Beispieldaten oder Mapping-Dateien sind vorhanden. Die API unterstützt Import und Export. |
 | Testdaten | Beispielhafte VEC-/KBL-Begriffe, `POST /semanticIds`, `GET /semanticIds/export` |
-| Testschritte | 1. VEC- und KBL-Testdaten vorbereiten.<br>2. Mapping ausführen oder vorhandene Mapping-Ergebnisse verwenden.<br>3. Mehrere semanticIds über `POST /semanticIds` importieren.<br>4. Export über `GET /semanticIds/export` ausführen.<br>5. Prüfen, ob die importierten und exportierten Daten nachvollziehbar dem Zielmodell entsprechen.<br>6. Falls Schreibzugriffe geschützt sind, prüfen, ob unautorisierte Schreibzugriffe abgewiesen werden. |
-| Erwartetes Ergebnis | VEC- und KBL-Daten werden in eine einheitliche Struktur übertragen. Fehlende oder abweichende Felder werden kontrolliert behandelt. Import und Export liefern strukturierte Daten, die mit dem semantischen Zielmodell kompatibel sind. Schreibzugriffe werden entsprechend dem aktuellen Projektstand kontrolliert oder als offene Einschränkung dokumentiert. |
+| Testschritte | 1. VEC- und KBL-Testdaten vorbereiten.<br>2. Mapping ausführen oder vorhandene Mapping-Ergebnisse verwenden.<br>3. Mehrere semanticIds über `POST /semanticIds` importieren.<br>4. Export über `GET /semanticIds/export` ausführen.<br>5. Prüfen, ob die importierten und exportierten Daten nachvollziehbar dem Zielmodell entsprechen. |
+| Erwartetes Ergebnis | VEC- und KBL-Daten werden in eine einheitliche Struktur übertragen. Fehlende oder abweichende Felder werden kontrolliert behandelt. Import und Export liefern strukturierte Daten, die mit dem semantischen Zielmodell kompatibel sind. |
 | Tatsächliches Ergebnis | [einfügen] |
 | Status | Noch nicht durchgeführt |
 | Nachweis | [Screenshot oder JSON-Ausgabe einfügen] |
@@ -460,15 +440,17 @@ curl http://localhost:8000/semanticIds/export
 
 ### 8.1 Übersicht erkannter Fehler
 
+Zum Zeitpunkt der Erstellung dieser STR-Vorlage wurden noch keine Systemtests durchgeführt. Daher sind noch keine Fehler oder Auffälligkeiten dokumentiert.
+
 | Fehler-ID | Zugehöriger Testfall | Beschreibung | Schweregrad | Status | Verantwortlich |
 |-|-|-|-|-|-|
-| ERR-001 | [einfügen] | [einfügen] | [kritisch / hoch / mittel / niedrig] | [offen / behoben / akzeptiert] | [einfügen] |
-| ERR-002 | [einfügen] | [einfügen] | [einfügen] | [einfügen] | [einfügen] |
-| ERR-003 | [einfügen] | [einfügen] | [einfügen] | [einfügen] | [einfügen] |
+| - | - | Noch keine Fehler dokumentiert | - | - | - |
 
 ### 8.2 Detailbeschreibung der Fehler
 
-#### ERR-001: [Titel einfügen]
+Die Detailbeschreibung wird ergänzt, sobald bei der Testdurchführung ein Fehler festgestellt wurde.
+
+#### ERR-001: [Titel nach Testdurchführung einfügen]
 
 | Feld | Beschreibung |
 |-|-|
@@ -486,22 +468,22 @@ curl http://localhost:8000/semanticIds/export
 
 ## 9. Bewertung der Anforderungen
 
+Die folgende Tabelle dient zur späteren Bewertung der Anforderungen nach der Testdurchführung. Da die Tests noch nicht ausgeführt wurden, stehen alle Anforderungen zunächst auf **Offen**.
+
 | Anforderung | Beschreibung | Zugeordnete Testfälle | Bewertung nach Testdurchführung |
 |-|-|-|-|
-| FA.001 | Auflösbare URIs / Detailseiten | ST-01, ST-03, ST-06 | [erfüllt / teilweise erfüllt / nicht erfüllt / offen] |
-| FA.002 | REST-API zum Abrufen von Concept Descriptions | ST-05, ST-06, ST-07, ST-08, ST-10 | [einfügen] |
-| FA.003 | Mapping auf IEC-61360-Datentemplate | ST-06, ST-09, ST-10 | [einfügen] |
-| FA.004 | Sprachabhängige API-Ausgabe | ST-06 | [einfügen] |
-| FA.006 | Verlinkung externer Quellen | ST-07, ST-09 | [einfügen] |
-| FA.009 | Automatisierter Import externer Concept Descriptions per URI | ST-09, ST-10 | [einfügen] |
-| FA.010 | Überarbeitete Startseite und verbesserte Suchfunktion | ST-01, ST-02, ST-03, ST-04 | [einfügen] |
-| FA.011 | Quellenspezifische Mapper für QUDT, VEC und KBL auf IEC61360 | ST-09, ST-10 | [einfügen] |
-| NFA.001 | Verfügbarkeit / Stabilität | ST-01, ST-04, ST-05, ST-08 | [einfügen] |
-| NFA.002 | Performance / Antwortzeit | ST-05, ST-06, ST-07 | [einfügen] |
-| NFA.003 | Sicherheit / kontrollierter Schreibzugriff | ST-10 | [einfügen] |
-| NFA.004 | Benutzerfreundlichkeit | ST-01, ST-02, ST-03, ST-04 | [einfügen] |
-
----
+| FA.001 | Auflösbare URIs / Detailseiten | ST-01, ST-03, ST-06 | Offen |
+| FA.002 | REST-API zum Abrufen von Concept Descriptions | ST-05, ST-06, ST-07, ST-08, ST-10 | Offen |
+| FA.003 | Mapping auf IEC-61360-Datentemplate | ST-06, ST-09, ST-10 | Offen |
+| FA.004 | Sprachabhängige API-Ausgabe | ST-06 | Offen |
+| FA.006 | Verlinkung externer Quellen | ST-07, ST-09 | Offen |
+| FA.009 | Automatisierter Import externer Concept Descriptions per URI | ST-09, ST-10 | Offen |
+| FA.010 | Überarbeitete Startseite und verbesserte Suchfunktion | ST-01, ST-02, ST-03, ST-04 | Offen |
+| FA.011 | Quellenspezifische Mapper für QUDT, VEC und KBL auf IEC61360 | ST-09, ST-10 | Offen |
+| NFA.001 | Verfügbarkeit / Stabilität | ST-01, ST-04, ST-05, ST-08 | Offen |
+| NFA.002 | Performance / Antwortzeit | ST-05, ST-06, ST-07 | Offen |
+| NFA.003 | Sicherheit / kontrollierter Schreibzugriff | ST-10 | Offen |
+| NFA.004 | Benutzerfreundlichkeit | ST-01, ST-02, ST-03, ST-04 | Offen |
 
 ## 10. Traceability Matrix
 
@@ -520,8 +502,6 @@ Die Traceability Matrix zeigt, welche Testfälle welche Anforderungen abdecken u
 | ST-09 | FA.003, FA.006, FA.009, FA.011 | Noch nicht durchgeführt |
 | ST-10 | FA.002, FA.003, FA.009, FA.011, NFA.003 | Noch nicht durchgeführt |
 
----
-
 ## 11. Screenshots und Nachweise
 
 Zur Nachvollziehbarkeit der Testdurchführung werden Screenshots, API-Antworten und Konsolenausgaben gesammelt.
@@ -538,7 +518,6 @@ Zur Nachvollziehbarkeit der Testdurchführung werden Screenshots, API-Antworten 
 | N-08 | ST-08 | Fehlerantwort bei ungültigem Identifier | `images/str-st08-api-error.png` |
 | N-09 | ST-09 | QUDT-Mapping-Ausgabe | `images/str-st09-qudt-mapping.png` |
 | N-10 | ST-10 | VEC-/KBL-Mapping, Import und Export | `images/str-st10-import-export.png` |
-| N-11 | ST-05 / ST-06 / ST-09 | API-v3-Suchantwort `GET /api/v3/search?search=Volt&lang=de&types=unit` | `images/str-api-v3-search.png` |
 
 Beispiel für die Einbindung eines Screenshots:
 
@@ -552,36 +531,35 @@ Abbildung 1 zeigt die JSON-Antwort des Endpunkts `GET /semanticIds` während der
 
 ## 12. Gesamteinschätzung
 
-Nach Durchführung der Tests ist zu bewerten, ob die Semantic Wikibase die im STP definierten Systemtestziele erfüllt.
+Da die Systemtests zum Zeitpunkt der Erstellung dieser STR-Vorlage noch nicht durchgeführt wurden, kann noch keine abschließende Bewertung der Systemqualität erfolgen.
+
+Die Gesamteinschätzung wird nach Durchführung der Testfälle ST-01 bis ST-10 ergänzt. Bewertet werden insbesondere:
+
+- Erreichbarkeit der Startseite und grundlegende Stabilität,
+- Auffindbarkeit und Nutzbarkeit der Suchfunktion,
+- REST-API und Query-Parameter,
+- Fehlerbehandlung bei ungültigen Eingaben,
+- QUDT-, VEC- und KBL-Mapping,
+- Import- und Exportfunktionen,
+- erkennbare Abweichungen zwischen Planung und tatsächlichem Systemverhalten.
 
 ### 12.1 Zusammenfassung
 
-[Hier nach der Testdurchführung eine kurze Zusammenfassung einfügen.]
-
-Beispieltext, falls die meisten Tests erfolgreich waren:
-
-> Die durchgeführten Systemtests zeigen, dass die grundlegenden Funktionen der Semantic Wikibase im getesteten Umfang funktionsfähig sind. Die Startseite ist erreichbar, die Suchfunktion ist nutzbar und die API liefert strukturierte JSON-Antworten. Die Mapping-Ergebnisse aus QUDT, VEC und KBL sind grundsätzlich nachvollziehbar. Einzelne Funktionen befinden sich weiterhin im prototypischen Zustand und müssen im weiteren Projektverlauf stabilisiert oder erweitert werden.
-
-Beispieltext, falls viele Funktionen noch offen sind:
-
-> Die durchgeführten Systemtests zeigen, dass Teile der geplanten Funktionalität bereits vorbereitet oder prototypisch vorhanden sind. Mehrere Testfälle konnten jedoch noch nicht vollständig durchgeführt werden, da einzelne API-Endpunkte, Mapping-Funktionen oder UI-Elemente noch nicht final implementiert sind. Die offenen Punkte werden im weiteren Projektverlauf priorisiert und im Rahmen weiterer Tests erneut überprüft.
+[nach Testdurchführung ergänzen]
 
 ### 12.2 Testfazit
 
 | Bereich | Bewertung |
 |-|-|
-| Startseite / UI | [einfügen] |
-| Suchfunktion | [einfügen] |
-| REST-API | [einfügen] |
-| Query-Parameter | [einfügen] |
-| Fehlerbehandlung | [einfügen] |
-| QUDT-Mapping | [einfügen] |
-| VEC-/KBL-Mapping | [einfügen] |
-| Import / Export | [einfügen] |
-| Sicherheit / Schreibzugriff | [einfügen] |
-| Gesamtbewertung | [einfügen] |
-
----
+| Startseite / UI | Offen |
+| Suchfunktion | Offen |
+| REST-API | Offen |
+| Query-Parameter | Offen |
+| Fehlerbehandlung | Offen |
+| QUDT-Mapping | Offen |
+| VEC-/KBL-Mapping | Offen |
+| Import / Export | Offen |
+| Gesamtbewertung | Offen |
 
 ## 13. Offene Punkte und Empfehlungen
 
@@ -600,8 +578,7 @@ Mögliche offene Punkte nach der Testdurchführung können sein:
 - Fehlerantworten sind technisch korrekt, aber für Nutzer nicht verständlich genug,
 - Mapping-Felder aus QUDT, VEC oder KBL sind noch unvollständig,
 - Import- und Exportfunktionen sind nur teilweise implementiert,
-- Rechteverwaltung für Schreibzugriffe ist noch nicht umgesetzt,
-- API-v3-Suche und `/semanticIds`-Endpunkte müssen ggf. im STR voneinander abgegrenzt werden.
+- Rechteverwaltung für Schreibzugriffe ist noch nicht umgesetzt.
 
 ---
 
@@ -617,19 +594,20 @@ Mögliche offene Punkte nach der Testdurchführung können sein:
 - MOD – Moduldokumentation zur OpenAPI-Spezifikation und Mapping-Zusammenführung
 - BC – Business Case Semantic Wikibase
 - PM – Projektplan Semantic Wikibase
-- Projektbeschreibung **Semantic Wikibase**
-- Vorlesung Software Engineering I: **Von der Anforderung zum Testfall**
-- Vorlesung Software Engineering I: **Analytische Qualitätssicherung**
-- Vorlesung Software Engineering I: **Requirements Engineering**
-- Vorlesung Software Engineering I: **Digitaler Zwilling, Verwaltungsschale und AAS**
-- GitHub-Issue #25: **Implementierung verbesserter Suchfunktion**
-- GitHub-Issue #26: **Neue Startseitenstruktur mit den vorgegebenen Inhalten**
-- GitHub-Issue #27: **API gemäß AAS Concept Description Specification**
+- Projektbeschreibung „Semantic Wikibase“
+- Vorlesung Software Engineering I: „Von der Anforderung zum Testfall“
+- Vorlesung Software Engineering I: „Analytische Qualitätssicherung“
+- Vorlesung Software Engineering I: „Requirements Engineering“
+- Vorlesung Software Engineering I: „Digitaler Zwilling, Verwaltungsschale und AAS“
+- GitHub-Issue #25: Implementierung verbesserter Suchfunktion
+- GitHub-Issue #26: Neue Startseitenstruktur mit den vorgegebenen Inhalten
+- GitHub-Issue #27: API gemäß AAS Concept Description Specification
 
 ### 14.2 Beispielhafte API-Requests
 
 ```bash
 curl http://localhost:8000/semanticIds
+curl "http://localhost:8000/api/v3/search?search=Volt&lang=de&types=unit"
 curl http://localhost:8000/semanticIds/volt
 curl "http://localhost:8000/semanticIds/volt?lang=de"
 curl "http://localhost:8000/semanticIds/volt?lang=en"
@@ -638,7 +616,6 @@ curl "http://localhost:8000/semanticIds?sortbyDate=asc"
 curl "http://localhost:8000/semanticIds?sortbyDate=desc"
 curl -i http://localhost:8000/semanticIds/nichtVorhanden123
 curl http://localhost:8000/semanticIds/export
-curl "http://localhost:8000/api/v3/search?search=Volt&lang=de&types=unit"
 ```
 
 ### 14.3 Beispielhafte Testdaten
@@ -648,11 +625,11 @@ curl "http://localhost:8000/api/v3/search?search=Volt&lang=de&types=unit"
 | QUDT | `http://qudt.org/vocab/unit/V` | Test einer bekannten Einheit. |
 | QUDT | `Volt` | Suche nach Label oder Begriff. |
 | QUDT | `V` | Suche nach Symbol / Kurzbegriff. |
-| API v3 | `GET /api/v3/search?search=Volt&lang=de&types=unit` | Prüfung des dokumentierten Such-Endpunkts aus MOD/SAS_AAS. |
 | VEC | Beispielhafter VEC-Begriff aus Mapping-Datei | Prüfung des VEC-Mappings. |
 | KBL | Beispielhafter KBL-Begriff aus Mapping-Datei | Prüfung des KBL-Mappings. |
 | Testdaten | `xyzTestEintragNichtVorhanden123` | Negativtest ohne Treffer. |
 | API | `nichtVorhanden123` | Negativtest für ungültigen Identifier. |
+| API | `/api/v3/search?search=Volt&lang=de&types=unit` | Test des dokumentierten Such-Endpunkts aus MOD/SAS_AAS. |
 
 ### 14.4 Statusdefinitionen
 
@@ -663,3 +640,4 @@ curl "http://localhost:8000/api/v3/search?search=Volt&lang=de&types=unit"
 | Fehlgeschlagen | Erwartetes Ergebnis wurde nicht erreicht. |
 | Blockiert | Test konnte wegen fehlender Voraussetzung nicht durchgeführt werden. |
 | Noch nicht durchgeführt | Test wurde zum Zeitpunkt der STR-Erstellung noch nicht ausgeführt. |
+

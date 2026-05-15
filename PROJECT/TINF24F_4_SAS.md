@@ -1,340 +1,768 @@
-### Software Architecture Specification (SAS) 
+# Software Architecture Specification (SAS)
+## Semantic Wikibase – AAS Concept Description API & Sucherweiterung
 
-## Projekt 4: Semantic Wikibase
+---
 
-Based on IEEE 1471-2000 – Recommended Practice for Architectural Description of Software-Intensive
-Systems
+| Dokument-ID   | SAS_AAS_Wikibase                                  |
+|---------------|---------------------------------------------------|
+| Version       | 1.1                                               |
+| Datum         | 08.05.2026                                        |
+| Autor         | Colin Dietschmann  |
+| Basis         | IEEE 1471-2000 / ISO/IEC/IEEE 42010               |
+| Repository    | DHBW-TINF24F/Team4-Semantic-Wikibase              |
 
-Author: Colin Dietschmann
-Institution: DHBW Stuttgart
+---
 
-| Version | DATE       | AUTHOR            | KOMMENT |
-|-|-|-|-|
-| 0.1     | 29.10.2025 | Colin Dietschmann | First draft |
-|1.0|08.011.2025|Colin Dietschmann|First Version|
-|1.1|13.11.2025| Coln Dietschmann| adjustments of 1.0|
-### 1. Overview
+## Versionskontrolle
 
-# 1.1 Scope:
-This Software Archtecture Specification (SAS) describes the architecture of the Semantic Wikibase platform integrated with the existing AAS Cinnect Backend Service.
-The combined sysem offers:
-- A production/development AAS repository (AAS Connect Backend Service) that exposes REST (OpenAPI) and GraphQL endpoints and also stores AAS artifacts in Neo4j.
-- A Semantic Wikibase instance which works as the registry of Concept Descriptions (CDs) using the IEC 61360 inspired data model.
-- Integration layers that link AAS submodel elements with resolvable semantic URIs from semantic Wikibase. Mapping and synchronization between Neo4j based AAS data an Wikibase RDF entites.
-- Web and programmatic interfaces for AAS clients to retrive language aware IEC61360 JSON representations via a REST facade.
+| Version | Datum      | Autor                              | Kommentar                |
+|---------|------------|------------------------------------|--------------------------|
+| 1.0     | 08.05.2026 | Colin Dietschmann mithilfe von GitHub Copilot | Erstversion auf Basis der Repository-Analyse |
+| 1.1     | 15.05.2026 | Team 4 | Überarbeitung der API-Architektur, Kürzung doppelter Mapper-Beschreibungen und Verweis auf die Moduldokumentation |
 
+---
 
-#1.2 Purpose:
-The purpose is to define the architectural structure, rationale and components of the semantic Wikibase
-pplatform, ensuring reusability and interoperability across AAS systems.
+## Inhaltsverzeichnis
 
-The purpose is to provide a concrete architectural blueprint showing how to adapt the existing AAS Connect repository to:
-- Using the Wikibase as the caninical semantix registry for Concept Descriptions (CDs).
-- Provide a REST API that returns IEC61360 responses 
-- Keep the AAS repository functionality intact and extend it with the semantic referencing and solution.
-- Support operational deployment using the provided docker-compose.yml as a baseline.
+1. [Einleitung & Vision](#1-einleitung--vision)
+2. [Systemübersicht](#2-systemübersicht)
+3. [API-Architektur und Gateway-Konzept](#3-api-architektur-und-gateway-konzept)
+   - 3.1 [Rolle der API-Architektur](#31-rolle-der-api-architektur)
+   - 3.2 [API-Gateway und Einzel-APIs](#32-api-gateway-und-einzel-apis)
+   - 3.3 [Datenfluss der API](#33-datenfluss-der-api)
+   - 3.4 [Abgrenzung zur Moduldokumentation](#34-abgrenzung-zur-moduldokumentation)
+   - 3.5 [Zugriffskontrolle und Sicherheit auf API-Ebene](#35-zugriffskontrolle-und-sicherheit-auf-api-ebene)
+4. [Such-Architektur](#4-such-architektur)
+   - 4.1 [CirrusSearch vs. FacettedSearch](#41-cirrussearch-vs-facettedsearch)
+   - 4.2 [Begründung der Wahl](#42-begründung-der-wahl)
+   - 4.3 [UX-Optimierungen auf der Startseite](#43-ux-optimierungen-auf-der-startseite)
+5. [Datenmodell](#5-datenmodell)
+   - 5.1 [Interner Speicher in Wikibase](#51-interner-speicher-in-wikibase)
+   - 5.2 [Externe Repräsentation als AAS Concept Description](#52-externe-repräsentation-als-aas-concept-description)
+   - 5.3 [Datenquellen und Source-Mapping](#53-datenquellen-und-source-mapping)
+6. [Nicht-funktionale Anforderungen](#6-nicht-funktionale-anforderungen)
+   - 6.1 [Skalierbarkeit der Suche](#61-skalierbarkeit-der-suche)
+   - 6.2 [Sicherheit der API](#62-sicherheit-der-api)
+7. [Zusammenfassung und Ausblick](#7-zusammenfassung-und-ausblick)
 
+---
 
+## 1. Einleitung & Vision
 
+### 1.1 Hintergrund und Problemstellung
 
-# 1.3 Intended Users
-This specification is intended for:
-- **System archtiects** working on the semantic infrastructures and deploying Dockerized services.
-- **Developers implementing** working on the AAS Connect Backendand Semantic Wikibase integration.
-- **Community contributors** defining or maintianing concept definitons.
+Im Kontext der Industrie 4.0 und des Industrial Internet of Things (IIoT) werden physische Assets zunehmend durch digitale Zwillinge beschrieben. Die **Asset Administration Shell (AAS)** ist das standardisierte digitale Äquivalent eines Industrie-Assets gemäß der IDTA-Spezifikation. In jedem AAS-Submodell werden Eigenschaften (Submodel Elements) durch **Concept Descriptions (CDs)** semantisch beschrieben. Eine CD verweist dabei auf eine externe Semantikquelle – typischerweise eine URI, die auf einen Eintrag in Registern wie IEC CDD, ECLASS oder QUDT zeigt.
 
-# 1.4 Conformance 
-This SAS conforms to the IEEE-1471 by providing: AD identification, stakeholders and concerns, selected viewpoints, one or more views per viewpointm rationale and known inconsistencies.
+Die aktuell verfügbaren Systeme für Concept Descriptions leiden unter erheblichen Einschränkungen:
 
-### 2. References
-- foprs/aas-connect-repository — GitHub repository (README, docker-compose, Neo4j config).
-- IEEE Std 1471-2000.
-- IEC 61360 Data Specification (CDD / IEC Common Data Dictionary).
-- AAS OpenAPI Specification (IDTA).
-- Semantic MediaWiki / Wikibase documentation (Pretty URIs, SPARQL).
-- Wikidata / Wikibase REST API docs.
-- Catena-X Semantic Hub user guide (for optional federation).
+- **IEC CDD** und **ECLASS** sind geschlossene, kostenpflichtige Systeme mit komplexen Lizenzmodellen
+- Concept Descriptions sind oft lokal in AAS-Repositories gespeichert und damit nicht universell auflösbar
+- Bestehende Plattformen bieten keine nutzerfreundliche Oberfläche für die Pflege von Einträgen
+- REST-APIs für die maschinenlesbare Abfrage von IEC 61360-konformen Daten fehlen oder sind unzureichend standardisiert
 
+### 1.2 Vision des Projekts
 
-# 3 Definitons
+Das Projekt **Semantic Wikibase** verfolgt die Vision, eine offene, kollaborative Wissensdatenbank für industrielle Semantic IDs und Concept Descriptions zu schaffen. Angelehnt an das Wikidata/Wikibase-Ökosystem entsteht eine Plattform, die:
 
-|Term|Definition|
-|-   |-         | 
-|AAS (Asset Administration Shell)|A standardized digital representation of an asset.|
-|Concept Description (CD)|A semantic definiton for submodel elements in a AAS.|
-|Wikibase|A MediaWiki-based semantic knowledge base with linked data and versioned entities|
-|Semantic Identifier(SID)|A globally resolvable URI that uniquely identifies a concept.|
-|REST API|A web interface enabling HTTP-based interaction with system resources.|
-|View/Viewpoint|Conceptual representations of system aspects according to IEEE 1471.|
-|SemanticHub|Catena-X platform providing a federated semantic reference registry.|
+- **Auflösbare, persistente URIs** für jede Concept Description bereitstellt (z. B. `https://semanticid.aas-connect.com/id/Q21`)
+- Eine **REST-API** anbietet, die semantische Definitionen in IEC 61360-konformer JSON-Struktur zurückgibt
+- **Mehrsprachigkeit** nativ unterstützt (deutsch, englisch und weitere Sprachen)
+- **Offen und kollaborativ** ist – jeder kann Einträge erstellen, prüfen und verbessern
+- Als **Brücke zu externen Ontologien** dient, insbesondere zu QUDT (Quantities, Units, Dimensions and Types), VEC (Vehicle Electric Container) und KBL (Kabelbaumleitung)
+- Eine **AAS-konforme Schnittstelle** bietet, sodass AAS-Tools wie der AASX-Explorer Concept Descriptions direkt auflösen können
 
-References: IEEE Std 1471-2000 (Basis for this AD); AAS Specification Part 3a: Data Specification – IEC 61360; Wikibase Documentation; OpenAPI Specification.
+### 1.3 Zweck dieses Dokuments
 
+Diese Software Architecture Specification (SAS) beschreibt auf Basis von IEEE 1471-2000 die übergeordnete Softwarearchitektur der Semantic Wikibase Plattform. Der Fokus liegt dabei auf dem Zusammenspiel der zentralen Systemkomponenten, der API-Gateway-Struktur, der Wikibase-Integration sowie den nicht-funktionalen Anforderungen.
 
-# 4 onceptual Framework
-### 4.1 System Contex
-The system consists two subsystems:
-1. AAS Repository Subsystem
-- Unchanged AAS Connect Backend Service (Nei4j, REST/GraphQL BaSyx UI, Docker compose/Podman)
-- Stores AAS artifacts only, no semantic data is persisted here.
+Die detaillierte Beschreibung einzelner APIs, Mapper und Mapping-Regeln wird bewusst nicht vollständig im SAS wiederholt, sondern in der Moduldokumentation (MOD) beschrieben. Dadurch bleibt das SAS auf die Gesamtarchitektur fokussiert, während das MOD die konkrete Modul- und Implementierungsebene dokumentiert.
 
-2. Semantic Registry Subsystem (Wikibase)
-- Stand-alone Wikibase instance (MediaWiki and Wikibase extension)
-- Acts as the single source of truth for all Concept Descriptions
-- Provides REST and SPARQL APIs for import/export of CD data.
-- No duplication of data from AAS repository. The AAS backend queries this service when resolving semantic references.
+Dieses Dokument beschreibt insbesondere:
 
-Integration Layer: 
-Semantic API Gateway (Facade) in front of Wikibase:
-- Implements AAS-conform endpoints (for example GET /semantic /{id]lang=de)
-- Translates between Wikibase RDF model and IEC 61360 JSON used by AAS
-- Allows optional POST/PUT for importing or exporting CDs between AAS clients an Wikibase
-- No presistant storage, only transforming and routing
+1. Die Gesamtarchitektur der Semantic Wikibase
+2. Das Zusammenspiel zwischen API-Gateway, Einzel-APIs, Mappern und Wikibase
+3. Die Such-Architektur der Wikibase-Erweiterung
+4. Das interne und externe Datenmodell auf Architekturebene
+5. Nicht-funktionale Anforderungen bezüglich Sicherheit, Skalierbarkeit und Betrieb
 
-External Systems:
-- AASX Explorer
-- ECLASS/IEC registries
-- Catena-X Semantic Hub
+---
 
-### 4.2 Identification of Stakeholders and Concerns
+## 2. Systemübersicht
 
-|Stakeholder-Role| Specific Project Role| Core Interest|
-|-|-|-|
-|User / Acquier (Client) | AAS Tool Users| Needs stable URIs and a compact, machine-readable API response (resolving JSON pain points) for Submodel Elements.|
-|User(Operator)| Domain Experts| Requires correct, multilingual definitions and units to ensure data quality and semantic integrity.|
-|Developer/User| System Integrators|Requires correct, multilingual definitions and units to ensure data quality and semantic integrity. |
-|Acquier/Oversight| Lecturers|Expects a running demo system, conformance to academic standards (Documentation/SAS), and successful project execution. |
-|Developer| Student Team| Desires a feasible project with clear requirements and a practical, implementable technical approach using Wikibase.|
-|Oversight/Auditor|Data Protection/IT Security Officers| Demands strong access control, data security (especially for the custom REST-Gateway), and compliance with data governance rules.|
-| Community/Governance |Community/Open Data Enthusiasts| Wants low barriers to entry for data access and defined governance rules (licensing, contribution guidelines).|
+### 2.1 High-Level-Architektur
 
-### 4.3 Concerns
+Das System besteht aus vier logischen Schichten, die miteinander interagieren:
 
-- Global resolvability of semantic URIs (Pretty URIs, rewriting).
-- API conformance to IEC61360-shaped output and AAS OpenAPI compatibility.
-- Data consistency & provenance across Neo4j and Wikibase.
-- Low entry barrier: easy UI to publish CDs.
-- Scalable deployment using Docker compose and containerization.
-- Governance & moderation for community contributions.
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        EXTERNE CLIENTS                          │
+│   AASX-Explorer │ AAS-Backends │ Entwickler │ Browser-Nutzer   │
+└──────────┬──────────────┬──────────────┬──────────────┬────────┘
+           │ REST-API     │ OpenAPI      │ Wikibase UI  │ SPARQL
+           ▼              ▼              ▼              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                   API-GATEWAY / FACADE                          │
+│                                                                 │
+│  ┌──────────────────────┐   ┌──────────────────────────────┐   │
+│  │  FastAPI / Flask     │   │  Wikibase MediaWiki REST API │   │
+│  │  (api_qudt.py /      │   │  (Wikibase Extension)        │   │
+│  │   api_v3_blueprint)  │   │                              │   │
+│  └──────────┬───────────┘   └──────────────┬───────────────┘   │
+└─────────────┼──────────────────────────────┼────────────────────┘
+              │                              │
+              ▼                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                   TRANSFORMATIONSSCHICHT                         │
+│                                                                 │
+│  ┌───────────────┐  ┌──────────────┐  ┌────────────────────┐   │
+│  │ QUDT Service  │  │ KBL Mapper   │  │ VEC Mapper         │   │
+│  │ (qudt_service)│  │(kbl_xsd_     │  │(vec_var_API.py)    │   │
+│  │               │  │  mapper.py)  │  │                    │   │
+│  └───────┬───────┘  └──────┬───────┘  └────────┬───────────┘   │
+└──────────┼────────────────┼──────────────────┼─────────────────┘
+           │                │                  │
+           ▼                ▼                  ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                   EXTERNE DATENQUELLEN                           │
+│                                                                 │
+│  ┌─────────────────┐  ┌──────────────┐  ┌──────────────────┐   │
+│  │  QUDT Fuseki    │  │  KBL XSD     │  │  VEC Ontologie   │   │
+│  │  SPARQL Endpoint│  │  (prostep.io)│  │  (TTL/RDF/OWL)   │   │
+│  │  (qudt.org)     │  │              │  │                  │   │
+│  └─────────────────┘  └──────────────┘  └──────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
+           │
+           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    WIKIBASE (PERSISTENZ)                         │
+│                                                                 │
+│   MediaWiki + Wikibase Extension + Blazegraph/WDQS SPARQL      │
+│   Concept Description Items (QIDs), Properties, Statements      │
+│   Pretty URIs: https://semanticid.aas-connect.com/id/Q{n}       │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-### 4.4 Mission 
-The mission is to offer an open, community-driven, web-resolvable registriy of semantic Conceüt Descriptions that integrates with the existing AAS Connect repository and supports language-aware IEC61360 ouputs for AAS consumers.
+### 2.2 Komponentenbeschreibung
 
-# 5 Architectural Description Practices
-## 5.1 Architectural View
-### 5.1.1 Structural View (Comonents and Interfaces Componentes)
-- AAS Connect Backend (existing)
-    - Exposes: REST OpenAPI (/api/v1//*), GraphQL (/graphql/), Swagger UI (/docs/), BaSyx GUI (/gui)
-    - Presists to: Neo4j.
+Die folgende Tabelle beschreibt die zentralen Architekturkomponenten der Semantic Wikibase. Während das SAS die Rolle der Komponenten im Gesamtsystem beschreibt, werden die einzelnen Mapper, APIs und Mapping-Regeln in der Moduldokumentation detailliert erläutert.
 
-- Semantic Wikibase (new)
-    - MediaWiki + Wikibase extension
-    - Provides SPARQL endpoint and MediaWiki API
-    - Stores concept items with unique QIDs (or custom URIs)
+| Komponente | Technologie | Zweck | Detailbeschreibung |
+|---|---|---|---|
+| **API-Gateway / Facade** | Python, FastAPI / Flask | Zentrale Schnittstelle für externe Clients. Nimmt Anfragen entgegen und leitet diese an die passende Einzel-API bzw. den passenden Mapper weiter. | [MOD Kapitel 3.2](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#32-abgrenzung-zwischen-api-gateway-und-einzel-apis) |
+| **QUDT-API** | Python 3, FastAPI / Flask | Stellt REST-Endpunkte für QUDT-Abfragen bereit und ermöglicht das Mapping von QUDT-Daten auf das gemeinsame Zielmodell. | [MOD Kapitel 1](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#1-openapi-spezifikation), [MOD Kapitel 4.1](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#41-qudt) |
+| **QUDT-Mapper** | Python 3, `rdflib`, SPARQL | Verarbeitet QUDT-Daten aus RDF-, TTL- oder SPARQL-Quellen und überführt sie in das IEC61360-nahe Zielmodell. | [MOD Kapitel 4.1](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#41-qudt) |
+| **VEC-Mapper** | Python 3, `rdflib` | Verarbeitet die VEC-Ontologie auf Basis von RDF/OWL/TTL und erstellt daraus ConceptDescriptions. | [MOD Kapitel 4.2](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#42-vec) |
+| **KBL-Mapper** | Python 3, `requests`, XML/XSD | Analysiert KBL-XSD-Strukturen und bildet Elemente, Typen, Attribute und Enumerationen auf das Zielmodell ab. | [MOD Kapitel 4.3](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#43-kbl) |
+| **Gemeinsames Zielmodell** | JSON, IEC61360-nahes Datenmodell | Vereinheitlicht die Ausgaben aller angebundenen Datenquellen. | [MOD Kapitel 5](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#5-gemeinsames-mapping-über-alle-quellen), [MOD Kapitel 6](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#6-gemeinsames-zielmodell) |
+| **Wikibase** | MediaWiki, Wikibase Extension | Dient als zentrale Plattform zur Verwaltung und Bereitstellung semantischer Definitionen. | [MOD Kapitel 7](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#7-wikibase-datenstruktur-und-ablage-der-gemappten-informationen), [MOD Kapitel 9](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#9-wikibase-integration) |
+| **SPARQL Endpoint** | Blazegraph / WDQS | Ermöglicht RDF-Abfragen auf Wikibase-Daten und unterstützt semantische Such- und Integrationsszenarien. | [MOD Kapitel 9](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#9-wikibase-integration) |
+| **Reverse Proxy / Routing** | Nginx / Traefik | Zuständig für Pretty URIs, Routing und perspektivisch SSL-Terminierung. | [MOD Kapitel 9](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#9-wikibase-integration) |
 
-- SemanticFacade/API Gateway (new)
-    - REST endpoint "GET /semantic/{sid}?lang={lang}" -> returns IEC61360 JSON
-    - Translates between Wikibase RDF and IEC61360 JSON template
-    - Handles üretty URI rewriting (for example, "https://semantic.example.org/id/Q21"-> internal item).
+---
 
-- Mapping and Sync Service (new)
-    - Jobs to: import mappings from IEC/ECLASS where allowed, export AAS submodel references to Wikibase, create/update link entries.
+## 3. API-Architektur und Gateway-Konzept
 
-- Authentication/Authorization
-    - OAuth2/API tokens for programmatic clients, UI-based login for editors (BaSyx UI credentrials/MediaWiki accounts).
-- Presitent Starage
-    - Neo4j (AAS data) is existing
-    - RDF triple store / Blazegraph (optional) or Wikibase internal storage for semantic triples.
+### 3.1 Rolle der API-Architektur
 
-Interfaces:
+Die API-Architektur der Semantic Wikibase dient als Vermittlungsschicht zwischen externen Clients, den angebundenen Datenquellen und der Wikibase. Externe Systeme wie AAS-Clients, Entwicklerwerkzeuge oder Benutzeroberflächen sollen semantische Definitionen über REST-Endpunkte abrufen können, ohne die internen Datenquellen direkt ansprechen zu müssen.
 
-![interface](interface.jpg)
+Im aktuellen Projektstand stehen vor allem folgende Aufgaben im Fokus:
 
-### 5.1.2 Behavioral View
+- Entgegennahme von Suchanfragen über REST-Endpunkte
+- Weiterleitung an passende Einzel-APIs bzw. Mapper
+- Verarbeitung externer Datenquellen wie QUDT, VEC und KBL
+- Transformation der Quelldaten in ein gemeinsames IEC61360-nahes JSON-Zielmodell
+- Bereitstellung der Ergebnisse für API-Clients und perspektivisch für die Ablage in Wikibase
 
-1. Concept Resolution
-- AAS client requests a Submodel referencing a Semantic URI
-- AAS Backend calls GET /semantic/{sid}?lang=de on Semantic Facade
-- The Facade retrieves data directly from Wikibase (SPARQL/REST) and retrurns an IE0 61360 formated JSON
-- No data is stored or synchronized, the AAS Backend uses the response transiently.
+Die detaillierte Beschreibung der einzelnen APIs, Mapper und Mapping-Regeln befindet sich in der Moduldokumentation.
 
-2. Import/Export Concept Descriptions
-- AAS clients may push new Concept Descriptions vis POST /semantic
-- The Facade translates JSON to Wikibase API format an creates/update an item.
-- Wikibase remains the single authoritative store for semantic data.
+Siehe hierzu:
+- [MOD Kapitel 3: Architektur der API](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#3-architektur-der-api)
+- [MOD Kapitel 4: Datenquellen und Mappings](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#4-datenquellen-und-mappings)
+- [MOD Kapitel 5: Gemeinsames Mapping über alle Quellen](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#5-gemeinsames-mapping-über-alle-quellen)
 
-3. Deployment
-- The docker-compose stack adds only two new servies: wikibase and semantic-facade
-- The existing AAS Backend runs unchanged
-- No background synchronization containers are needed
+---
 
-2. Create/Edit Concept
-- User who uses Wikibase UI to create a item with properties aligned to IEC61360 fields 
-- Admin/curation workflow approves
-- Mapping Service optionally syncs approced items into AAS Connect systems as registry entries.
+### 3.2 API-Gateway und Einzel-APIs
 
-3. Deploy/Start
-- Start with docker compose up -d (existing repo), extend docker-compose.yml to include Wikibase, Blazegraph/triplestore and SemanticFacade service.
+Die Architektur unterscheidet zwischen einer zentralen Gateway-API und mehreren fachlichen Einzel-APIs bzw. Mappern.
 
+Das API-Gateway fungiert als zentrale Einstiegsschicht. Es nimmt Anfragen von externen Clients entgegen und entscheidet anhand der Anfrageparameter, welche Datenquelle bzw. welches Mapping-Modul verwendet werden soll. Dadurch müssen externe Systeme nicht wissen, ob die angefragten Informationen aus QUDT, VEC oder KBL stammen.
 
-### 5.1.3 Information View and Data Model (IEC61360)
-The information View defines the data sturctures and information flow for Concept Desciptions (CDs) within the system.
-This view focuses on how semantic information is modeled, stored and exchanged between the AAS Connect Backend and Semantic Wikibase through the API Facade.
+Die Einzel-APIs und Mapper übernehmen die konkrete Verarbeitung der jeweiligen Quelle:
 
+| Komponente | Aufgabe |
+|---|---|
+| API-Gateway | Zentrale Annahme und Weiterleitung von Anfragen |
+| QUDT-API / QUDT-Mapper | Verarbeitung von QUDT-Daten wie Einheiten, Symbolen und QuantityKinds |
+| VEC-API / VEC-Mapper | Verarbeitung der VEC-Ontologie auf Basis von RDF/OWL/TTL |
+| KBL-API / KBL-Mapper | Verarbeitung von KBL-XSD-Strukturen |
+| Gemeinsames Zielmodell | Vereinheitlichung der Ergebnisse im IEC61360-nahen JSON-Format |
+| Wikibase | Persistente Verwaltung und Bereitstellung semantischer Definitionen |
 
-Data Ownership and Storage
+Diese Trennung unterstützt eine modulare Erweiterung der Plattform. Neue Datenquellen können ergänzt werden, ohne die gesamte API-Struktur neu aufzubauen.
 
-- The Wikibase acts as the single source of truth for all semantic concept data.
-- The AAS Connect Backend (Neo4j database) does not store semantic metadata (e.g., names, definitions, units).
-It only stores semantic references (URIs) that point to Wikibase items.
-- The Semantic Facade is stateless and serves only as a translator between AAS and Wikibase representations.
+---
 
+### 3.3 Datenfluss der API
 
-Core Entity: ConceptDescription
+Der grundlegende Datenfluss sieht wie folgt aus:
 
-Each Concept Description (CD) in the system corresponds to one Wikibase item and follows the IEC 61360 data template.
-A CD defines the meaning of an AAS submodel element by describing its semantic attributes.
+```
+Externer Client
+      |
+      v
+API-Gateway
+      |
+      v
+Auswahl der passenden Einzel-API / des passenden Mappers
+      |
+      v
+Abruf und Analyse der externen Datenquelle
+      |
+      v
+Transformation in das gemeinsame IEC61360-nahe Zielmodell
+      |
+      v
+JSON-Antwort an Client / perspektivische Ablage in Wikibase
+```
 
-Attributes (based on IEC 61360):
+Beispielhaft kann eine Anfrage nach einer Einheit wie `Volt` über das Gateway verarbeitet und an die QUDT-API weitergeleitet werden. Der QUDT-Mapper extrahiert relevante RDF-Properties und erzeugt daraus eine ConceptDescription im gemeinsamen Zielmodell.
 
-| Field                       | Description                                                                             |
-| --------------------------- | --------------------------------------------------------------------------------------- |
-| **id (SID URI)**            | Globally unique identifier for the concept, e.g. `https://semantic.example.org/id/Q21`. |
-| **preferredName**           | Multilingual human-readable name (language-tagged literals).                            |
-| **definition**              | Multilingual description explaining the concept.                                        |
-| **unit**                    | Optional reference to a unit entity (another Wikibase item, e.g. “millimetre”).         |
-| **valueFormat**             | Data type or encoding used for values (e.g., `xsd:string`, `xsd:decimal`).              |
-| **sourceReference**         | Reference to external standard systems (e.g., IEC CDD, ECLASS IRDI).                    |
-| **version**                 | Internal version or revision number of the concept.                                     |
-| **createdBy / createdAt**   | Metadata about the concept’s creation.                                                  |
-| **modifiedBy / modifiedAt** | Metadata about the last modification.                                                   |
-| **externalIdentifiers**     | Optional list of identifiers in external registries (e.g., IEC, ECLASS).                |
+Für VEC und KBL erfolgt derselbe Ablauf, jedoch mit anderen Quellformaten. VEC basiert auf RDF/OWL/TTL, während KBL auf XML/XSD-Strukturen basiert.
 
+---
 
-Representation Formats
-The system supports two main representations for interoperability:
-1. IEC 61360 JSON
-- Returned by the Semantic Facade’s REST endpoint (GET /semantic/{sid}?lang={lang})
-- Structured to be directly consumable by AAS repositories and clients.
-- Example output:
+### 3.4 Abgrenzung zur Moduldokumentation
 
+Dieses SAS beschreibt die übergeordnete Architektur, die beteiligten Komponenten und deren Zusammenspiel. Die konkrete technische Umsetzung einzelner Mapper, die detaillierten Mapping-Tabellen und die Behandlung einzelner IEC61360-Felder werden nicht im SAS wiederholt, sondern in der Moduldokumentation beschrieben.
+
+Dadurch wird eine klare Trennung erreicht:
+
+| Dokument | Fokus |
+|---|---|
+| SAS | Gesamtarchitektur, Komponenten, Datenfluss, Schnittstellen, Qualitätsaspekte |
+| MOD | Einzelmodule, Mapper, Mapping-Regeln, Zielmodell, Modultests |
+
+Die detaillierten Modulbeschreibungen befinden sich in:
+
+- [MOD Kapitel 4.1 QUDT](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#41-qudt)
+- [MOD Kapitel 4.2 VEC](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#42-vec)
+- [MOD Kapitel 4.3 KBL](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#43-kbl)
+- [MOD Kapitel 12 Tests der Module](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#12-tests-der-module)
+
+---
+
+### 3.5 Zugriffskontrolle und Sicherheit auf API-Ebene
+
+Die aktuelle API-Implementierung ist primär für Entwicklungs- und Demonstrationszwecke vorgesehen. Für einen produktiven Betrieb ist ein rollenbasiertes Zugriffskonzept geplant.
+
+Grundsätzlich werden folgende Rollen betrachtet:
+
+| Rolle | Rechte | Beschreibung |
+|---|---|---|
+| Anonymer Nutzer | Lesen | Kann veröffentlichte ConceptDescriptions abrufen |
+| Angemeldeter Nutzer | Lesen und Erstellen | Kann neue Einträge anlegen |
+| Editor / Kurator | Lesen, Schreiben und Pflegen | Kann Einträge bearbeiten und kuratieren |
+| Administrator | Vollzugriff | Verwaltet System, Benutzer und Rechte |
+| API-Dienst | Maschineller Zugriff | Greift über Token oder API-Key auf REST-Endpunkte zu |
+
+Für die produktive Nutzung sind zusätzlich Authentifizierung, Autorisierung, Rate Limiting, CORS-Einschränkungen und TLS-Absicherung vorzusehen.
+
+---
+
+## 4. Such-Architektur
+
+### 4.1 CirrusSearch vs. FacettedSearch
+
+Die Wikibase-Erweiterung unterstützt mehrere Suchmechanismen, die sich in ihrer technischen Grundlage und ihren Anwendungsfällen unterscheiden.
+
+#### 4.1.1 CirrusSearch
+
+**CirrusSearch** ist die Standard-Suchmaschine von MediaWiki/Wikibase, basierend auf **Elasticsearch**. Sie ermöglicht Volltextsuche über alle Wiki-Seiten und Wikibase-Items.
+
+| Merkmal | Beschreibung |
+|---------|--------------|
+| **Technologie** | Elasticsearch (über MediaWiki-Extension) |
+| **Indexierung** | Automatische Volltext-Indizierung aller Item-Labels und Beschreibungen |
+| **Suche** | Fuzzy-Suche, Phrase-Suche, Wildcard-Suche |
+| **Sprachunterstützung** | Mehrsprachige Analyzer via Elasticsearch |
+| **Integration** | Native MediaWiki-Integration, wird von Wikibase-Suche verwendet |
+| **Skalierbarkeit** | Horizontal skalierbar über Elasticsearch-Cluster |
+| **Stärken** | Robuste Volltextsuche, bewährt in Wikidata-Produktion |
+| **Schwächen** | Konfigurationsaufwand, kein natives Facettenfiltering für Wikibase-Properties |
+
+**Konfigurationsbeispiel** (MediaWiki `LocalSettings.php`):
+```php
+wfLoadExtension( 'CirrusSearch' );
+wfLoadExtension( 'Elastica' );
+$wgSearchType = 'CirrusSearch';
+$wgCirrusSearchServers = [ 'elasticsearch' ];
+```
+
+#### 4.1.2 FacettedSearch
+
+**FacettedSearch** (auch als `Special:Search` mit Filtererweiterungen oder dedizierte MediaWiki-Erweiterungen wie `SemanticMediaWiki`) erlaubt die Suche mit strukturierten Filtern basierend auf Wikibase-Properties.
+
+| Merkmal | Beschreibung |
+|---------|--------------|
+| **Technologie** | MediaWiki-Extension oder SPARQL-basiertes Filtering |
+| **Filterung** | Nach Wikibase-Properties (z. B. `dataType = unit`, `sourceSystem = QUDT`) |
+| **Suche** | Strukturierte Suche über Property-Werte |
+| **Sprachunterstützung** | Über Property-Werte konfigurierbar |
+| **Integration** | Erfordert separate Extension-Konfiguration |
+| **Skalierbarkeit** | Abhängig von SPARQL-Endpunkt-Performance |
+| **Stärken** | Semantisches Filtering, für strukturierte Daten ideal |
+| **Schwächen** | Höhere Implementierungskomplexität, SPARQL-Kenntnisse notwendig |
+
+### 4.2 Begründung der Wahl
+
+Für das Semantic Wikibase-Projekt wird **CirrusSearch in Kombination mit einer spezifischen Wikibase-Property-Suche** empfohlen. Die Entscheidung basiert auf folgenden Kriterien:
+
+| Kriterium | CirrusSearch | FacettedSearch | Gewichtung |
+|-----------|:---:|:---:|:---:|
+| Volltext über Labels & Beschreibungen | Unterstützt | Eingeschränkt | Hoch |
+| Mehrsprachige Suche | Unterstützt | Unterstützt | Hoch |
+| Semantic ID (URI-Suche) | Eingeschränkt | Unterstützt | Sehr hoch |
+| Property-basiertes Filtern | Eingeschränkt | Unterstützt | Mittel |
+| Wikibase-native Integration | Unterstützt | Eingeschränkt | Hoch |
+| Deploymentaufwand | Gering | Mittel-Hoch | Mittel |
+| Community-Support | Sehr hoch | Mittel | Mittel |
+
+**Empfohlener Ansatz**: CirrusSearch für die primäre Volltext-Suche, ergänzt um die `Special:GoBySemanticId`-Suche für direkte URI-Auflösung. Für fortgeschrittene Property-Filter wird der SPARQL-Endpunkt von Wikibase direkt genutzt.
+
+#### 4.2.1 `Special:GoBySemanticId` Integration
+
+Eine geplante Spezialseite `Special:GoBySemanticId` ermöglicht die direkte Auflösung einer Semantic ID zur entsprechenden Wikibase-Item-Seite:
+
+```
+GET /wiki/Special:GoBySemanticId?id=http://qudt.org/vocab/unit/V
+→ Redirect zu: /wiki/Item:Q21
+```
+
+**Implementierungskonzept** (MediaWiki PHP-Extension):
+```php
+class SpecialGoBySemanticId extends SpecialPage {
+    public function execute( $subPage ) {
+        $semanticId = $this->getRequest()->getVal( 'id' );
+        // SPARQL-Abfrage gegen lokalen Wikibase SPARQL-Endpunkt
+        $item = $this->findItemBySemanticId( $semanticId );
+        if ( $item ) {
+            $this->getOutput()->redirect(
+                Title::makeTitle( NS_ITEM, $item )->getFullURL()
+            );
+        } else {
+            $this->getOutput()->addHTML( '<p>Keine Concept Description gefunden.</p>' );
+        }
+    }
+}
+```
+
+### 4.3 UX-Optimierungen auf der Startseite
+
+Die UX-Verbesserungen der Semantic Wikibase Hauptseite zielen darauf ab, die Einstiegshürde für Nutzer ohne technisches Wikibase-Wissen zu senken.
+
+#### 4.3.1 Geplante Suchfeld-Integration
+
+Die Hauptseite (`Main_Page`) soll ein prominentes Suchfeld erhalten, das direkt Concept Descriptions nach Begriff oder URI sucht:
+
+```html
+<!-- Geplantes Suchfeld auf Main_Page -->
+<div id="semantic-search-widget">
+  <h2>Semantic ID Suche</h2>
+  <form action="/wiki/Special:GoBySemanticId" method="get">
+    <input type="text"
+           name="id"
+           placeholder="Begriff eingeben, z. B. 'Volt' oder URI..."
+           class="semantic-search-input" />
+    <select name="lang">
+      <option value="en">Englisch</option>
+      <option value="de">Deutsch</option>
+    </select>
+    <button type="submit">Suchen</button>
+  </form>
+</div>
+```
+
+#### 4.3.2 Automatische Vervollständigung (Typeahead)
+
+Über die bestehende Wikibase Action API (`action=wbsearchentities`) wird eine Autocomplete-Funktion bereitgestellt:
+
+```
+GET /api.php?action=wbsearchentities&search=Volt&language=de&type=item&format=json
+```
+
+Diese gibt eine Liste von Wikibase-Items zurück, die den Suchbegriff im Label enthalten, und kann für clientseitige Autocomplete-Widgets genutzt werden.
+
+---
+
+## 5. Datenmodell
+
+### 5.1 Interner Speicher in Wikibase
+
+#### 5.1.1 Wikibase-Entitäten (Items)
+
+Jede Concept Description wird als ein **Wikibase Item** (QID) gespeichert. Die Items haben folgende Struktur:
+
+```
+Item: Q21
+├── Label[de]:       "Nennspannung"
+├── Label[en]:       "Rated Voltage"
+├── Description[de]: "Spannung, für die ein Gerät ausgelegt ist"
+├── Description[en]: "Voltage for which a device is designed"
+├── Alias[de]:       ["Bemessungsspannung"]
+└── Statements:
+    ├── P1  (semanticId):         "https://semanticid.aas-connect.com/id/Q21"
+    ├── P35 (preferredName):      "Nennspannung" [de], "Rated Voltage" [en]
+    ├── P36 (shortName):          "U_N" [en]
+    ├── P37 (unit):               Item:Q174789 (Volt)
+    ├── P40 (sourceOfDefinition): "0112-2---61360_4#AAA123#001"
+    ├── P41 (symbol):             "U"
+    ├── P42 (dataType):           "REAL_MEASURE"
+    └── P44 (definition):         "..." [de], "..." [en]
+```
+
+#### 5.1.2 Wikibase-Properties
+
+Die Wikibase-Instanz enthält dedizierte Properties, die die IEC 61360-Felder abbilden:
+
+| Property-ID | Name | Datentyp | IEC 61360-Entsprechung |
+|-------------|------|----------|------------------------|
+| P1 | semanticId | URL | Globale Semantic ID |
+| P35 | preferredName | Monolingual text | Bevorzugter Name |
+| P36 | shortName | Monolingual text | Kurzname |
+| P37 | unit | Item | Einheit (Verweis auf Einheits-Item) |
+| P40 | sourceOfDefinition | String | Quellverweis |
+| P41 | symbol | String | Symbol (z. B. V, Ω) |
+| P42 | dataType | Item | Datentyp (STRING, REAL, etc.) |
+| P43 | unitId | External ID | Einheiten-Kennung (IEC Code) |
+| P44 | definition | Monolingual text | Definition |
+| P45 | valueFormat | String | Werteformat |
+| P46 | valueList | Item | Werteliste (Enum) |
+| P47 | value | Quantity | Nominalwert |
+| P48 | levelType | Item | Wertebereich-Typ |
+
+#### 5.1.3 RDF/Turtle-Repräsentation
+
+Intern speichert Wikibase alle Aussagen als RDF-Tripel im Blazegraph-Triplestore. Beispiel für `Q21`:
+
+```turtle
+@prefix wd:  <https://semanticid.aas-connect.com/entity/> .
+@prefix wdt: <https://semanticid.aas-connect.com/prop/direct/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+wd:Q21
+    rdfs:label "Nennspannung"@de, "Rated Voltage"@en ;
+    wdt:P1  "https://semanticid.aas-connect.com/id/Q21" ;
+    wdt:P35 "Nennspannung"@de, "Rated Voltage"@en ;
+    wdt:P37 wd:Q174789 ;
+    wdt:P41 "U" ;
+    wdt:P42 wd:Q_REAL_MEASURE ;
+    wdt:P44 "Spannung, für die ein Gerät ausgelegt ist"@de .
+```
+
+### 5.2 Externe Repräsentation als AAS Concept Description
+
+Die externe JSON-Darstellung, wie sie die API zurückgibt, folgt dem AAS-Metamodell Part 3a (IEC 61360 Data Specification). Das vollständig befüllte Beispiel für „Volt" aus der `qudt_mapper.py`-Ausgabe (`SOURCE/source_mapping/QUDT/Volt.json`):
+
+```json
 {
-  "id": "https://semantic.example.org/id/Q21",
-  "preferredName": { "en": "diameter", "de": "Durchmesser" },
-  "definition": { "en": "Length through the center of a circle", "de": "Länge durch das Zentrum eines Kreises" },
-  "unit": { "id": "https://semantic.example.org/id/Q174789", "label": { "en": "millimetre" } },
-  "valueFormat": "xsd:decimal",
-  "sourceReferences": [
-    { "system": "IEC CDD", "id": "0112-2---61360_4#AFD116" }
-  ],
-  "version": "1.0",
-  "provenance": {
-    "createdBy": "editor1",
-    "createdAt": "2025-10-05T12:00:00Z"
+  "query": {
+    "search": "Volt",
+    "mode": "term",
+    "lang": "en",
+    "source": "QUDT"
+  },
+  "total": 1,
+  "result": {
+    "modelType": "ConceptDescription",
+    "id": "http://qudt.org/vocab/unit/V",
+    "idShort": "V",
+    "category": "REFERENCE",
+    "embeddedDataSpecifications": [
+      {
+        "dataSpecification": {
+          "type": "ExternalReference",
+          "keys": [{
+            "type": "GlobalReference",
+            "value": "https://admin-shell.io/DataSpecificationTemplates/DataSpecificationIec61360/3"
+          }]
+        },
+        "dataSpecificationContent": {
+          "modelType": "DataSpecificationIec61360",
+          "semanticId": "http://qudt.org/vocab/unit/V",
+          "preferredName": [
+            {"language": "de", "text": "Volt"},
+            {"language": "en", "text": "Volt"},
+            {"language": "zh", "text": "伏特"},
+            {"language": "ar", "text": "فولت"}
+          ],
+          "shortName": [{"language": "en", "text": "V"}],
+          "unit": "V",
+          "unitId": {
+            "type": "ExternalReference",
+            "keys": [{"type": "GlobalReference", "value": "http://qudt.org/vocab/unit/V"}]
+          },
+          "symbol": "V",
+          "dataType": "IRI",
+          "definition": [{
+            "language": "en",
+            "text": "Volt is the SI unit of electric potential..."
+          }]
+        }
+      }
+    ]
   }
 }
+```
 
-2. RDF / Turtle (SPARQL-accessible)
-- Used internally by Wikibase and available through its SPARQL endpoint.
-- Enables linking to external ontologies such as QUDT, ECLASS, or IEC CDD.
+### 5.3 Datenquellen und Source-Mapping
 
-Data Flow
-1. Read (AAS → Wikibase)
-- An AAS element stores only the semantic reference URI.
-- When queried, the AAS Backend sends a request to the Semantic Facade.
-- The Facade fetches the corresponding RDF entity from Wikibase and returns it in IEC 61360 JSON format.
+Die Semantic Wikibase bindet im aktuellen Projektstand drei externe Datenquellen an:
 
-2. Write (AAS → Wikibase)
-- When a new Concept Description is created in an AAS tool, the AAS client sends it via POST /semantic to the Facade.
-- The Facade converts the AAS JSON structure into Wikibase’s API format and creates or updates the item directly in Wikibase.
-- The new concept immediately becomes accessible via its URI.
+- QUDT
+- VEC
+- KBL
 
-3. Query (External Tools → Wikibase)
-- Tools or services can use the Wikibase SPARQL endpoint to query, filter, or federate semantic data.
-- The AAS Backend does not replicate or transform this data; it relies entirely on Wikibase for retrieval.
+Diese Quellen unterscheiden sich in ihrer technischen Struktur. QUDT und VEC basieren auf RDF-, TTL- bzw. OWL-Strukturen, während KBL auf XML/XSD basiert. Aus architektonischer Sicht werden diese Unterschiede durch separate Mapper gekapselt. Jeder Mapper übernimmt die Verarbeitung seiner jeweiligen Quelle und überführt die Daten anschließend in das gemeinsame IEC61360-nahe Zielmodell.
 
-Information Consistency and Provenance
-- Single source of truth: Wikibase.
-- References only: AAS Connect Backend (Neo4j).
-- Transformation only: Semantic Facade (no persistence).
-- Provenance and versioning are managed within Wikibase through its built-in revision system.
+| Datenquelle | Quellformat | Verarbeitung | Ergebnis |
+|---|---|---|---|
+| QUDT | RDF / TTL / SPARQL | QUDT-API und QUDT-Mapper | ConceptDescriptions für Einheiten, Größen und Symbole |
+| VEC | RDF / OWL / TTL | VEC-Mapper | ConceptDescriptions für VEC-Konzepte |
+| KBL | XML / XSD | KBL-Mapper | ConceptDescriptions für KBL-Elemente, Typen und Enumerationen |
 
-### 5.1.4 Deployment View: Containers & Topology Baseline (from repo)
-- aas-backend container (existing)
-- neo4j container (presistent volumes: neo4j/data, neo4j/logs)
-- basyx-gui (integrated)
+Die detaillierten Mapping-Regeln, Feldzuordnungen und Besonderheiten der einzelnen Quellen sind in der Moduldokumentation beschrieben:
 
-Added components: 
-- wikibase container (MediaWiki + Wikibase)
-- semantic-facade container (Node.js/Python Flask) for IEC61360 JSON translation.
-- sync-service container
-- nginx reverse proxy for Pretty URIs and SSL termination (rewrite rules to map /id/Qxxx -> SemanticFacade)
+- [MOD Kapitel 4.1 QUDT](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#41-qudt)
+- [MOD Kapitel 4.2 VEC](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#42-vec)
+- [MOD Kapitel 4.3 KBL](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#43-kbl)
+- [MOD Kapitel 5 Gemeinsames Mapping über alle Quellen](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#5-gemeinsames-mapping-über-alle-quellen)
 
-Env configuration: .env (extend .env.sample), new variables for Wikibase DB, SPARQL endpoint, facade configs, admin credentials.
+---
 
-### 5.2
+## 6. Nicht-funktionale Anforderungen
 
-- The structural view defines a SemanticFacade interface that the behavioral flows expect (translation to IEC61360). The information view provides the schema the facade must implement. The deployment view maps each logical component to a container defined in docker-compose.yml extension.
+### 6.1 Skalierbarkeit der Suche
 
-- Known inconsistency: The existing AAS Connect backend may embed semantic references as simple IRDIs or strings; a migration adapter is required to map those to full HTTP SIDs. This adapter is specified in Mapping Service.
+#### 6.1.1 API-Latenz-Anforderungen
 
-### 5.3 Architectural Rationale
-- Avoids duplicate data storage: Only Wikibase holds semantic data.
-- Lightweight integration: The Semantic Facade API acts as translator, not as repository
-- Reduced complexity: No sync, mapping, or consistency managment needed
-- Future proof: Other AAS repositories can reuse the same Facade without thight copling.
+Gemäß CRS und den Projektanforderungen gelten folgende Performance-Ziele:
 
-# 6 Quality Attributes & Requirements
-Functional Requierments:
-- FR1: Provide GET /semantic/{sid}?lang={lang} returning IEC61360 JSON.
-- FR2: POST/PUT/PATCH via Wikibase UI/API for concept creation
-- FR3: Provide mapping endpoints to import/export mappings between AAS Backend and Wikibase
-- FR4: Expose SPARQL for advanced queries.
+| Anforderung | Zielwert | Aktueller Status |
+|------------|----------|-----------------|
+| API-Antwortzeit (gecacht) | < 300 ms | Abhängig von QUDT-Endpunkt |
+| API-Antwortzeit (ungecacht) | < 3000 ms | SPARQL-Timeout: 30 s konfiguriert |
+| SPARQL-Kandidatenabfrage | < 2000 ms | `LIMIT 1` sichert Performance |
+| SPARQL-Detailabfrage | < 2000 ms | Sprachfilter reduziert Ergebnismenge |
 
-Non-Functional Requirments:
+#### 6.1.2 Caching-Strategie
 
-- NFR1: API latency < 300ms for cached responses
-- NFR2: Persistent storage durability (Neo4j + Wikibase DB volumes).
-- NFR3: Scalability via container orchestration (initially docker compose)
-- NFR4: Security via OAuth2 for programmatic endpoints and role-based access for edits.
+Die aktuelle Implementierung enthält **kein Caching**. Die empfohlene Architektur für Produktivbetrieb:
 
-# 7 Implementation Notes (practical steps)
+1. **HTTP-Level-Cache** (Nginx): `Cache-Control: public, max-age=3600` für GET-Anfragen
+2. **Application-Level-Cache** (Redis): Gecachte ConceptDescription-Objekte nach URI, TTL: 1 Stunde
+3. **SPARQL-Result-Cache**: Blazegraph interner Query-Cache (konfigurierbar via `queryCache.maxSize`)
 
-1. Start the existing AAS Connect stack unchanged (docker compose up -d)
-2. Add two new containers
-- "wikibase" for MediaWiki and Wikibase
-- "semantic-facade" for statless REST API
+#### 6.1.3 Skalierungsmodell
 
-3. Implement Facade API (Node.js/FastAPI)
-- Endpoints:
-    - GET /semantic/{sid}?lang=de -> returns IEC 61360 JSON
-    - POST /semantic -> imports new CDs into Wikibase
-- Translates directly to Wikibase SPARQL or REST API calls.
-- No presistent storage, no synchronization logic.     
+```
+                    Load Balancer (Nginx)
+                           │
+              ┌────────────┴────────────┐
+              ▼                         ▼
+      API-Instanz 1              API-Instanz 2
+      (FastAPI/Uvicorn)          (FastAPI/Uvicorn)
+              │                         │
+              └────────────┬────────────┘
+                           ▼
+                  Redis Cache Cluster
+                           │
+                           ▼
+                  QUDT Fuseki (extern)
+                  Wikibase Blazegraph (intern)
+```
 
+Containerisierung via Docker Compose (Entwicklung) / Kubernetes (Produktion) ermöglicht horizontale Skalierung der API-Schicht.
 
-5. Wikibase configuration:
-- Create properties for IEC61360 fields (preferred name, definition, unit, value format, IRDI, external IDs).
-- Configure pretty URIs and allow rewriting, e.g. https://semantic.example.org/id/Q{item}.
+#### 6.1.4 Wikibase SPARQL-Skalierbarkeit
 
-5. Mapping & Sync:
-- Script to import AAS submodel templates into Wikibase items (with provenance), and to export Wikibase SIDs into Neo4j as SemanticReference nodes/edges.
+Für den Wikibase-internen SPARQL-Endpunkt (Blazegraph) gelten:
+- Empfohlene JVM-Heap-Größe: mindestens 8 GB (`-Xmx8g`)
+- Query-Timeout-Konfiguration: 60 Sekunden
+- Für Produktionslast: Blazegraph-Replikation oder Wechsel zu Apache Jena TDB2
 
-6. Testing:
-Test with AASX Explorer and BaSyx UI by creating a submodel that references a SID and verifying resolved IEC61360 JSON via the AAS backend.
+### 6.2 Sicherheit der API
 
+#### 6.2.1 Aktuelle Sicherheitslage
 
+Die aktuelle API-Implementierung ist für Entwicklungs- und Demo-Zwecke ausgelegt:
+- **Kein TLS**: Nur HTTP, kein HTTPS in der lokalen Entwicklungsumgebung
+- **Keine Authentifizierung**: Alle Endpunkte sind ohne Token erreichbar
+- **CORS**: Flask-CORS ist aktiviert (`CORS(app)`), erlaubt alle Origins
 
-# 8 Compliance / Acceptance Criteria
+#### 6.2.2 Sicherheitsmaßnahmen für Produktionsbetrieb
 
-SAS is accepted if:
-GET /semantics/{sid}?lang={lang} works for sample SID and returns IEC61360 JSON.
-AAS Connect Backend can be started unmodified and used together with the added Wikibase stack in docker-compose.
-Basic CRUD of concepts through Wikibase UI + created SIDs can be resolved from AAS clients.
-Basic mapping script can import at least one submodel template into Wikibase.
+**Pflichtmaßnahmen vor Produktivgang:**
 
-# 9 Conclusion
+| Bereich | Maßnahme | Implementierung |
+|---------|----------|-----------------|
+| **Transport** | TLS 1.3 erzwingen | Nginx: `ssl_protocols TLSv1.3;` |
+| **Authentifizierung** | OAuth2 / JWT | FastAPI: `python-jose`, `passlib` |
+| **CORS** | Einschränken auf bekannte Origins | `CORSMiddleware` mit `allow_origins=["https://..."]` |
+| **Input-Validierung** | Parameter-Sanitierung | FastAPI Pydantic-Validierung bereits integriert |
+| **Rate Limiting** | Anfragen pro IP begrenzen | Nginx `limit_req_zone` oder API-Gateway |
+| **SPARQL-Injection** | Suchbegriff escapen | `safe_search = search.replace('"', '\\"')` bereits implementiert |
+| **Secrets Management** | Keine Credentials im Code | Environment Variables, `.env`-Dateien |
 
-This SAS defines an API-based integration between the existing AAS Connect Backend and a Semantic Wikibase.
-The Wikibase becomes the sole registry for Concept Descriptions, accessed via a lightweight REST API Facade that translates between AAS and Wikibase data models.
-This eliminates redundant data storage and synchronization, ensuring a clean separation of concerns and straightforward deployment.
+#### 6.2.3 SPARQL-Injection-Schutz
+
+Die Implementierung enthält bereits grundlegende Schutzmaßnahmen:
+
+```python
+# In build_candidate_query():
+safe_search = search.replace('"', '\\"')
+safe_expanded = expanded.replace('"', '\\"')
+```
+
+Für Produktionsumgebungen wird zusätzlich empfohlen:
+- Whitelisting erlaubter URI-Präfixe
+- Maximale Länge des `search`-Parameters (z. B. 512 Zeichen)
+- Parametrisierte SPARQL-Abfragen (wo vom Endpunkt unterstützt)
+
+#### 6.2.4 Wikibase-Berechtigungsmodell
+
+MediaWiki bietet eine differenzierte Zugriffssteuerung:
+
+```php
+// LocalSettings.php – Nur angemeldete Nutzer können Edits vornehmen
+$wgGroupPermissions['*']['edit'] = false;
+$wgGroupPermissions['user']['edit'] = true;
+$wgGroupPermissions['sysop']['deleterevision'] = true;
+
+// API-Zugriff für maschinelle Clients
+$wgGroupPermissions['bot']['edit'] = true;
+$wgGroupPermissions['bot']['apihighlimits'] = true;
+```
+
+---
+
+## 7. Zusammenfassung und Ausblick
+
+### 7.1 Zusammenfassung der Architektur
+
+Die Semantic Wikibase Architektur realisiert eine offene Plattform zur Verwaltung und Bereitstellung industrieller Concept Descriptions gemäß IEC61360-nahem Zielmodell und AAS-Kontext. Die wesentlichen Architekturentscheidungen sind:
+
+1. **Wikibase als zentrale semantische Plattform**: Die Wikibase dient als zentrale Umgebung zur Verwaltung, Pflege und Bereitstellung semantischer Definitionen. ConceptDescriptions können dort als strukturierte Items mit Properties und Statements abgebildet werden.
+
+2. **API-Gateway als zentrale Zugriffsschicht**: Externe Clients greifen nicht direkt auf einzelne Datenquellen zu, sondern über eine zentrale API-Schicht. Diese nimmt Anfragen entgegen und leitet sie abhängig von Quelle oder Suchkontext an die passenden Einzel-APIs bzw. Mapper weiter.
+
+3. **Modulare Mapper-Struktur**: Die Datenquellen QUDT, VEC und KBL werden über getrennte Mapper verarbeitet. Dadurch bleiben Unterschiede zwischen RDF/TTL/OWL-Quellen und XML/XSD-Quellen innerhalb der jeweiligen Module gekapselt.
+
+4. **Gemeinsames Zielmodell**: Alle Mapper führen ihre Ergebnisse in ein einheitliches IEC61360-nahes JSON-Zielmodell über. Dadurch können externe Clients unabhängig von der ursprünglichen Datenquelle eine konsistente Antwortstruktur verwenden.
+
+5. **Erweiterbarkeit der Architektur**: Durch die Trennung von Gateway, Einzel-APIs, Mapping-Schicht und Wikibase können weitere Datenquellen oder zusätzliche Schnittstellen später ergänzt werden, ohne die gesamte Architektur neu aufzubauen.
+
+Die detaillierten Mapping-Regeln und konkreten Feldzuordnungen sind in der Moduldokumentation beschrieben.
+
+### 7.2 Bekannte Einschränkungen und offene Punkte
+
+| Thema | Aktueller Stand | Handlungsbedarf |
+|-------|-----------------|-----------------|
+| **Authentifizierung** | Nicht implementiert | OAuth2/JWT-Integration notwendig |
+| **Caching** | Nicht implementiert | Redis-Cache für Produktivbetrieb |
+| **Batch-Import** | Noch nicht implementiert | POST `/semanticIds` (Batch) ist geplant |
+| **Export-Endpunkt** | Noch nicht implementiert | GET `/semanticIds/export` (CSV/JSON) geplant |
+| **`Special:GoBySemanticId`** | Konzept vorhanden | MediaWiki-PHP-Extension muss implementiert werden |
+| **AASX-Import** (FA.007) | Im CRS spezifiziert | Parsing und Mapping von AASX-Paketen |
+| **FoP Consult GmbH** | Im SAS erwähnt | Identity-Provider-Integration offen |
+| **Wikibase-Deployment** | Docker-Compose-Konzept vorhanden | Konfiguration der Wikibase-Properties muss finalisiert werden |
+
+### 7.3 Technische Schulden
+
+- Einzelne API- und Mapping-Komponenten enthalten teilweise ähnliche Logik zur Datenabfrage, Transformation und Fehlerbehandlung. Perspektivisch sollte gemeinsame Logik in eine gemeinsame Library oder ein gemeinsames Package ausgelagert werden.
+- Für externe Datenquellen fehlt teilweise eine robuste Retry- und Timeout-Strategie. Für einen produktiven Betrieb sollten Wiederholungsmechanismen und klar definierte Fehlerfälle ergänzt werden.
+- Das Error-Handling sollte vereinheitlicht werden, damit Fehler aus externen Quellen, Mappern und API-Endpunkten strukturiert und konsistent zurückgegeben werden.
+
+### 7.4 Roadmap und nächste Schritte
+
+**Sprint 1 (sofort umzusetzen):**
+- [ ] Wikibase-Instanz mit konfigurierten Properties (P1–P48) aufsetzen
+- [ ] Pretty-URI-Konfiguration in Nginx aktivieren
+- [ ] Docker-Compose-Stack für Entwicklungsumgebung fertigstellen
+
+**Sprint 2:**
+- [ ] `Special:GoBySemanticId` als MediaWiki-Extension implementieren
+- [ ] QUDT-Bulk-Import-Script: automatisches Befüllen der Wikibase mit QUDT-Einheiten
+- [ ] API-Authentifizierung mit OAuth2 implementieren
+
+**Sprint 3:**
+- [ ] Suchfeld-Widget auf Main_Page integrieren
+- [ ] CirrusSearch konfigurieren und testen
+- [ ] `POST /semanticIds` (Einzelimport und Batch) implementieren
+- [ ] `GET /semanticIds/export` implementieren
+
+**Mittelfristig:**
+- [ ] AASX-Import (FA.007 aus CRS)
+- [ ] Federated Query zu Catena-X Semantic Hub
+- [ ] Automatisierter Abgleich mit IEC CDD und ECLASS (Verlinkung, kein Datenkopie)
+- [ ] FoP Consult GmbH Identity-Provider Integration
+
+---
+
+## Anhang: Konfigurationsdateien und Referenzen
+
+### A.1 Abhängigkeiten (Python)
+
+**FastAPI-Stack** (`SOURCE/API_QUDT/`):
+```
+fastapi
+uvicorn
+requests
+```
+
+**Flask-Stack** (`SOURCE/Wikibase_API/`):
+```
+flask
+flask-cors
+requests
+```
+
+**Lokaler Mapper** (`SOURCE/source_mapping/QUDT/requirements.txt`):
+```
+rdflib
+```
+
+### A.2 Hinweise zu Mapper-Konfigurationen
+
+Die konkreten Konfigurationen der einzelnen Mapper, beispielsweise erlaubte QUDT-Typen, Quell-URIs, Namespace-Präfixe oder Mapping-spezifische Einstellungen, sind Bestandteil der jeweiligen Implementierung.
+
+Im SAS werden diese Details nicht vollständig aufgeführt, da sie zur Modulebene gehören und in der Moduldokumentation bzw. im Quellcode nachvollziehbar sind.
+
+Weitere Informationen befinden sich in:
+
+- [MOD Kapitel 4.1 QUDT](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#41-qudt)
+- [MOD Kapitel 4.2 VEC](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#42-vec)
+- [MOD Kapitel 4.3 KBL](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#43-kbl)
+- [MOD Kapitel 5 Gemeinsames Mapping über alle Quellen](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#5-gemeinsames-mapping-über-alle-quellen)
+
+### A.3 Referenzen
+
+| Dokument / Artefakt | Pfad im Repository | Beschreibung |
+|---|---|---|
+| Moduldokumentation (MOD) | `PROJECT/TINF24F_4-MOD-Semantic-Wikibase-0v1.md` | Detailbeschreibung der APIs, Mapper, Mapping-Regeln, Zielmodelle und Modultests |
+| OpenAPI-Spezifikation | `SOURCE/API_QUDT/Source_Code/openapi.yaml` | Maschinenlesbare Beschreibung der QUDT-API |
+| QUDT API | `SOURCE/API_QUDT/Source_Code/api_qudt.py` | Implementierung der QUDT-API |
+| Wikibase API | `SOURCE/Wikibase_API/app.py` | Flask-App-Einstiegspunkt für die Wikibase-API |
+| QUDT Service | `SOURCE/Wikibase_API/api_v3/qudt_service.py` | Service-Schicht für QUDT-Abfragen |
+| QUDT Mapper | `SOURCE/source_mapping/QUDT/qudt_mapper.py` | Mapping von QUDT-Daten auf das gemeinsame Zielmodell |
+| KBL Mapper | `SOURCE/source_mapping/KBL/kbl_xsd_mapper.py` | Mapping von KBL-XSD-Strukturen auf das gemeinsame Zielmodell |
+| VEC Mapper | `SOURCE/source_mapping/VEC/vec_var_API.py` | Mapping der VEC-Ontologie auf das gemeinsame Zielmodell |
+| Lastenheft (CRS) | `PROJECT/CRS.md` | Kundenanforderungen |
+| Pflichtenheft (SRS) | `PROJECT/SRS.md` | Technische und funktionale Systemspezifikation |
+| Business Case | `PROJECT/BC.md` | Wirtschaftliche Begründung |
+| Projektplan | `PROJECT/PM.md` | Zeitplanung, Organisation und Projektstruktur |
+
+---
+
+*Dieses Dokument beschreibt die übergeordnete Softwarearchitektur des Projekts `DHBW-TINF24F/Team4-Semantic-Wikibase`. Detaillierte Beschreibungen einzelner APIs, Mapper, Mapping-Regeln und Modultests sind in der Moduldokumentation (MOD) enthalten.*
