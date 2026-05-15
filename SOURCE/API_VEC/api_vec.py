@@ -1,23 +1,39 @@
+# Importiert JSON-Funktionen
 import json
-import requests
+
+# Importiert Systemfunktionen
 import sys
+
+# Typdefinitionen
 from typing import Any, Dict, List, Optional
+
+# HTTP Requests zum Laden der VEC-TTL-Datei
+import requests
+
+# FastAPI Framework für REST API
+from fastapi import FastAPI, Query, HTTPException
+
+# RDF Parser
 from rdflib import Graph, URIRef, Literal
 from rdflib.namespace import RDF, RDFS, OWL
 
+# UTF-8 Ausgabe aktivieren
 sys.stdout.reconfigure(encoding="utf-8")
+
+# Erstellt die FastAPI-Anwendung
+app = FastAPI(
+    title="VEC to IEC61360 Mapping API",
+    description="API zum Abfragen von VEC-Daten aus einer TTL-Datei und Mapping auf IEC61360.",
+    version="1.0.0"
+)
 
 # =========================
 # VEC TTL Quelle
 # =========================
+
 VEC_TTL_URL = "https://ecad-wiki.prostep.org/specifications/vec/v220/vec-2.2.0-ontology.ttl"
 
-# =========================
-# Konfigurierbare Variablen
-# =========================
-SEARCH = "WireElement"   # z.B. "WireElement" oder komplette URI
-LANG = "en"
-
+# Erlaubte Sprachen
 ALLOWED_LANGS = ["en", "de"]
 
 
@@ -28,6 +44,7 @@ ALLOWED_LANGS = ["en", "de"]
 def normalize_lang(lang: str) -> str:
     if not lang:
         return "en"
+
     return lang if lang in ALLOWED_LANGS else "en"
 
 
@@ -124,7 +141,10 @@ def push_unique(arr: List[Any], value: Any) -> None:
 
     serialized = json.dumps(value, ensure_ascii=False, sort_keys=True)
 
-    if not any(json.dumps(item, ensure_ascii=False, sort_keys=True) == serialized for item in arr):
+    if not any(
+        json.dumps(item, ensure_ascii=False, sort_keys=True) == serialized
+        for item in arr
+    ):
         arr.append(value)
 
 
@@ -173,7 +193,11 @@ def empty_concept_description(uri: str) -> Dict[str, Any]:
     }
 
 
-def ensure_additional_property(target: Dict[str, Any], field_name: str, value: Any) -> None:
+def ensure_additional_property(
+    target: Dict[str, Any],
+    field_name: str,
+    value: Any
+) -> None:
     additional = target["additionalProperties"]
 
     if field_name not in additional:
@@ -211,21 +235,34 @@ def is_mapped_predicate(predicate_uri: str) -> bool:
 # =========================
 
 def load_vec_graph() -> Graph:
-    response = requests.get(
-        VEC_TTL_URL,
-        headers={
-            "Accept": "text/turtle",
-            "User-Agent": "VEC-SemanticHub-IEC61360-Bridge/1.0"
-        },
-        timeout=30
-    )
+    try:
+        response = requests.get(
+            VEC_TTL_URL,
+            headers={
+                "Accept": "text/turtle",
+                "User-Agent": "VEC-SemanticHub-IEC61360-Bridge/1.0"
+            },
+            timeout=30
+        )
 
-    response.raise_for_status()
+        response.raise_for_status()
 
-    graph = Graph()
-    graph.parse(data=response.text, format="turtle")
+        graph = Graph()
+        graph.parse(data=response.text, format="turtle")
 
-    return graph
+        return graph
+
+    except requests.RequestException as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"VEC TTL konnte nicht geladen werden: {str(e)}"
+        )
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"VEC TTL konnte nicht geparst werden: {str(e)}"
+        )
 
 
 # =========================
@@ -272,11 +309,12 @@ def find_candidate(graph: Graph, search: str, lang: str) -> Optional[str]:
                     candidates.append((1, subject_uri))
                     break
 
-        # 3. Enthält Label oder LocalName
+        # 3. Enthält LocalName
         if subject_local and search_lower in subject_local.lower():
             candidates.append((2, subject_uri))
             continue
 
+        # 4. Enthält Label
         for label in labels:
             if isinstance(label, Literal):
                 label_text = str(label)
@@ -297,7 +335,12 @@ def find_candidate(graph: Graph, search: str, lang: str) -> Optional[str]:
 # Mapping
 # =========================
 
-def map_resource_to_semantichub(graph: Graph, entity_uri: str, lang: str) -> Dict[str, Any]:
+def map_resource_to_semantichub(
+    graph: Graph,
+    entity_uri: str,
+    lang: str
+) -> Dict[str, Any]:
+
     entity = URIRef(entity_uri)
     result = empty_concept_description(entity_uri)
     iec = result["embeddedDataSpecifications"][0]["dataSpecificationContent"]
@@ -346,7 +389,7 @@ def map_resource_to_semantichub(graph: Graph, entity_uri: str, lang: str) -> Dic
             elif iec["dataType"]["value"] is None:
                 iec["dataType"]["value"] = value
 
-    # Leere Listen zu null machen
+    # Leere Listen behandeln
     if not iec["preferredName"]["value"]:
         iec["preferredName"]["value"] = None
 
@@ -367,24 +410,41 @@ def map_resource_to_semantichub(graph: Graph, entity_uri: str, lang: str) -> Dic
 
 
 # =========================
-# Main
+# API Endpunkte
 # =========================
 
-def main() -> None:
-    lang = normalize_lang(LANG)
+@app.get("/")
+def root():
+    return {
+        "message": "VEC to IEC61360 Mapping API",
+        "swagger": "/docs"
+    }
 
-    if not SEARCH.strip():
-        raise ValueError("SEARCH darf nicht leer sein.")
+
+@app.get("/map")
+def map_vec_to_iec61360(
+    search: str = Query(..., description="Suchbegriff oder vollständige VEC-URI"),
+    lang: str = Query("en", description="Sprache, z. B. en oder de")
+):
+    lang = normalize_lang(lang)
+
+    if not search.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="Parameter 'search' darf nicht leer sein."
+        )
+
+    mode = detect_search_mode(search)
 
     graph = load_vec_graph()
 
-    entity_uri = find_candidate(graph, SEARCH, lang)
+    entity_uri = find_candidate(graph, search, lang)
 
     if not entity_uri:
-        output = {
+        return {
             "query": {
-                "search": SEARCH,
-                "mode": detect_search_mode(SEARCH),
+                "search": search,
+                "mode": mode,
                 "lang": lang,
                 "source": VEC_TTL_URL
             },
@@ -392,24 +452,15 @@ def main() -> None:
             "result": None
         }
 
-        print(json.dumps(output, ensure_ascii=False, indent=2))
-        return
-
     mapped = map_resource_to_semantichub(graph, entity_uri, lang)
 
-    output = {
+    return {
         "query": {
-            "search": SEARCH,
-            "mode": detect_search_mode(SEARCH),
+            "search": search,
+            "mode": mode,
             "lang": lang,
             "source": VEC_TTL_URL
         },
         "total": 1,
         "result": mapped
     }
-
-    print(json.dumps(output, ensure_ascii=False, indent=2))
-
-
-if __name__ == "__main__":
-    main()

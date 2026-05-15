@@ -1,86 +1,58 @@
 # Team4-Semantic-Wikibase
+
+[![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/DHBW-TINF24F/Team4-Semantic-Wikibase)
+[![Python](https://img.shields.io/badge/Python-80.8%25-blue?logo=python)](#sprachkomposition)
+[![JavaScript](https://img.shields.io/badge/JavaScript-18.1%25-yellow?logo=javascript)](#sprachkomposition)
+[![License](https://img.shields.io/badge/License-MIT-green)](#lizenz)
+
+## Über das Projekt
+
+Dieses Repository enthält die Ergebnisse des DHBW-Projekts Semantic Wikibase des Teams 4 (TINF24F). Das Projekt fokussiert auf die Entwicklung und Implementierung von semantischen Technologien im Kontext von Wikibase-Systemen.
+
+Detaillierte Informationen zur Projektbeschreibung finden sich in der [offiziellen Projektdokumentation](https://github.com/DHBW-TINF24F/.github/blob/main/project4_semantic_wikibase.md).
+
 This repo contains the results of project: https://github.com/DHBW-TINF24F/.github/blob/main/project4_semantic_wikibase.md
 
+### Verwendete Technologien
 
-# Projekt 4: Semantic Wikibase
-
-## Versionskontrolle:
-
-| Version | Datum      | Autor       | Kommentar                         |
-|-|-|-|-|
-| 1.0     | 15.10.2025 | Zuteil KI generiert & Kristanna Pfeil | Erster Überblick |
-
-<br>
-
-## Inhaltsverzeichnis
-
-1. Übersicht
-2. Die aktuelle Problemstellung
-3. Lösungsansatz des Projekts
-4. AAS
-5. Überblick der Projektstruktur
-6. Ziele des Projekts
-7. Notwendigkeit des Projekts
-8. Quellen und Links
-
-<br>
-
-
-
-## Übersicht
-
-Das Projekt „Semantic Wikibase“ beschäftigt sich damit, wie Begriffe aus der Industrie (wie Maßeinheiten, Bauteile, Eigenschaften) eindeutig, offen und für Computer verständlich im Internet beschrieben werden können. Ziel ist es, eine Plattform zu bauen, auf der jeder solche Begriffe anlegen, beschreiben und wiederverwenden kann – ähnlich wie bei Wikipedia, aber speziell für industrielle Begriffe.
+![Python](https://img.shields.io/badge/Python-3776ab?style=for-the-badge&logo=python&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![HTML5](https://img.shields.io/badge/HTML5-E34C26?style=for-the-badge&logo=html5&logoColor=white)
+![Wikibase](https://img.shields.io/badge/Wikibase-339933?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzMzOTkzMyIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9ImFyaWFsIiBmb250LXNpemU9IjYwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPldCPC90ZXh0Pjwvc3ZnPg==)
+![RDF](https://img.shields.io/badge/RDF-0066CC?style=for-the-badge&logo=w3c&logoColor=white)
+![SPARQL](https://img.shields.io/badge/SPARQL-0066CC?style=for-the-badge&logo=w3c&logoColor=white)
 
 ---
 
-## Die aktuelle Problemstellung
+## Projektübersicht
 
-- Es gibt schon Datenbanken für solche Begriffe (z.B. IEC-CDD, ECLASS), aber die sind oft:
-  - schwer zugänglich
-  - nicht offen für alle
-  - technisch altmodisch (schlechte APIs, langsame Prozesse)
-- Begriffe haben keine sprechenden, eindeutigen Web-Links (URIs), die man einfach benutzen kann.
-- Neue Begriffe einzufügen oder zu standardisieren dauert lange.
-- Maschinen und Programme können Begriffe nicht einfach und eindeutig nachschlagen.
+- **Zielgruppe**: Entwickler im Semantic-Web-Bereich
+- **Technologie-Stack**: Python (80.8%), JavaScript (18.1%), HTML (1.1%)
+- **Verwendete Technologien**: 
+  - Backend: Python
+  - Frontend: JavaScript/HTML
+  - Semantische Technologien: Wikibase, RDF, SPARQL
 
----
+### Projektbeschreibung
 
-## Lösungsansatz des Projekts
+Das Projekt „Semantic Wikibase" beschäftigt sich damit, wie Begriffe aus der Industrie (wie Maßeinheiten, Bauteile, Eigenschaften) eindeutig, offen und für Computer verständlich im Internet beschrieben und erreichbar werden können. 
 
-- Es wird **Wikibase** genutzt (die Software hinter Wikidata/Wikipedia), um ein „Wikipedia für Industrie-Begriffe“ zu bauen.
-- Jeder Begriff bekommt eine eigene, eindeutige Internetadresse (URI).
-- Jeder kann neue Begriffe anlegen, beschreiben und nutzen.
-- Die Plattform ist offen, modern und leicht zugänglich.
-- Programme können über eine REST-API Begriffe abfragen und weiterverwenden.
-- Später sollen Begriffe auf existierende Standards (IEC, ECLASS, etc.) gemappt oder weitergeleitet werden.
+**Ziel ist es, eine Plattform zu bauen, auf der jeder solche Begriffe anlegen, beschreiben und wiederverwenden kann** - ähnlich wie bei Wikipedia, aber speziell für industrielle Begriffe und semantische Daten.
+
+![Semantic Wikibase](/PROJECT/images/semanticwikibase.png)
 
 ---
 
-## AAS
+## Projektmitglieder
 
-**AAS** steht für **Asset Administration Shell** („Verwaltungsschale“):
-
-- Das ist das digitale „Datenblatt“ oder der „Steckbrief“ eines physischen Objekts (z.B. Maschine, Bauteil).
-- Die AAS sammelt und verwaltet alle Daten über ein Asset, damit Computer diese Informationen automatisch nutzen können.
-- Sie ist ein zentrales Konzept in der Industrie 4.0 und macht aus jedem Ding einen digitalen Zwilling.
-
----
-
-## Ziele des Projekts
-
-- **Offene, auflösbare URIs** für Begriffe schaffen.
-- **Niedrigschwelliger Zugang:** Jeder kann Begriffe anlegen und verwenden.
-- **Migration und Weiterleitung:** Begriffe können auf offizielle Standards gemappt werden.
-- **Spezifikation und Prototyp:** Einen ersten lauffähigen Prototypen und eine klare Beschreibung erstellen.
-- **Optimale Wikibase-Konfiguration:** Damit der Arbeitsablauf einfach und effektiv ist.
-
----
-
-## Notwendigkeit des Projekts
-
-- Maschinen und Programme können so eindeutige Begriffe verwenden und verstehen.
-- Firmen können weltweit besser zusammenarbeiten.
-- Begriffe sind für alle zugänglich, offen und flexibel nutzbar.
+| Name | Rolle | GitHub |
+|------|-------|--------|
+| Yvonne Wagner | Projektleiter & Entwickler | [@Y1v0Nne](https://github.com/Y1v0Nne) |
+| Kristanna Pfeil | Produktmanager & Entwickler | [@KsanaWolf](https://github.com/KsanaWolf) |
+| Marvin Igrec | Testmanager & Entwickler | [@Maffin23](https://github.com/Maffin23) |
+| Colin Dietschmann | Systemarchitekt & Entwickler | [@Codi0517](https://github.com/Codi0517) |
+| Lucrezia Trabalza | Technischer Redakteur & Entwickler | [@Lucrezia Trabalza](https://github.com/lucree2308) |
+| Marina Hidalgo Burova | Technischer Redakteur & Entwickler | [@Marina Hidalgo Burova](https://github.com/marinaaa0209) |
 
 ---
 
@@ -90,3 +62,15 @@ Das Projekt „Semantic Wikibase“ beschäftigt sich damit, wie Begriffe aus de
 - [AAS Concept Description](https://industrialdigitaltwin.io/aas-specifications/IDTA-01001/v3.2/spec-metamodel/concept-description.html)
 - [Beispiel im Wiki](https://semanticid.aas-connect.com/w/index.php?title=Item:Q21&oldid=207)
 - [ECLASS Webservice API](https://app.swaggerhub.com/apis/ECLASS_Standard/ECLASS_Download_JSON/2.0.3#/)
+- [ARENA 2036](https://arena2036.de/files/downloads/veranstaltungen/aas-expertenworkshop-oktober-202/impuls_4_aas_netzwerktreffen_ren.pdf)
+- [semantic-hub.io - COMMUNITY](https://semantic-hub-community.coapp.io/)
+
+
+---
+
+## Versionskontrolle
+
+| Version | Datum | Autor | Kommentar |
+|---------|-------|-------|-----------|
+| 1.0 | 15.10.2025 | Zuteil KI generiert & Kristanna Pfeil | Erster Überblick |
+| 2.0 | 11.05.2026 | Zuteil KI generiert & Kristanna Pfeil | Überarbeitung |

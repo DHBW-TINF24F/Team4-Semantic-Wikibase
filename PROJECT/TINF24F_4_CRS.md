@@ -11,6 +11,7 @@
 |3.0    | 07.11.2025 | Kristanna Pfeil | Überarbeitung & neue Formatierung |
 |4.0     | 12.11.2025 | Kristanna Pfeil | Überarbeitung nach Herr Rentschlers Empfehlung |
 |5.0     | 13.11.2025 | Kristanna Pfeil | Kleine Änderungen |
+|6.0	| 05.05.2025  | Kristanna Pfeil | Überarbeitung für 2. Semester |
 
 <br>
 
@@ -29,7 +30,6 @@
 		- [5.3 Use Case 03 - REST-Abfrage für AAS](#53-use-case-03---rest-abfrage-für-aas)
 		- [5.4 Use Case 04 - Quellenverweis](#54-use-case-04---quellenverweis)
 		- [5.5 Use Case 05 - Pflege der Datensätze](#55-use-case-05---pflege-der-datensätze)
-		- [5.6 Use Case 06 - AASX-Datei importieren](#56-use-case-06---aasx-datei-importieren)
 	- [6. Anforderungen](#6-anforderungen)
 		- [6.1 Funktionale Anforderungen](#61-funktionale-anforderungen)
 			- [6.1.1 FA-001 - Auflösbare URIs um Concept Descriptions bereit zustellen](#611-fa-001---auflösbare-uris-um-concept-descriptions-bereit-zustellen)
@@ -38,10 +38,11 @@
 			- [6.1.4 FA.004 - REST‑API Sprache](#614-fa004---restapi-sprache)
 			- [6.1.5 FA.005 - Edit‑Workflow](#615-fa005---editworkflow)
 			- [6.1.6 FA.006 - Verlinkung externen Quellen](#616-fa006---verlinkung-externen-quellen)
-			- [6.1.11 FA.007 - Import und Verarbeitung von AASX-Dateien](#6111-fa007---import-und-verarbeitung-von-aasx-dateien)
-			- [6.1.8 FA.008 - Leichte Spezifikation \& Governance](#618-fa008---leichte-spezifikation--governance)
-			- [6.1.9 FA.009 - Verwaltung und Bereitstellung standardisierbarer Begriffe](#619-fa009---verwaltung-und-bereitstellung-standardisierbarer-begriffe)
-			- [6.1.12 FA.010 - Automatisierter Import externer Concept Descriptions per URI](#6112-fa010---automatisierter-import-externer-concept-descriptions-per-uri)
+			- [6.1.7 FA.007 - Leichte Spezifikation \& Governance](#618-fa007---leichte-spezifikation--governance)
+			- [6.1.8 FA.008 - Verwaltung und Bereitstellung standardisierbarer Begriffe](#619-fa008---verwaltung-und-bereitstellung-standardisierbarer-begriffe)
+			- [6.1.09 FA.009 - Automatisierter Import externer Concept Descriptions per URI](#619-fa009---automatisierter-import-externer-concept-descriptions-per-uri)
+			- [6.1.10 FA.010 - Überarbeitete und strukturierte Startseite mit verbesserter Suchfunktion](#6110-fa010---überarbeitete-und-strukturierte-startseite-mit-verbesserter-suchfunktion)
+]
 		- [6.2 Nicht-funktionale Anforderungen (NFR)](#62-nicht-funktionale-anforderungen-nfr)
 			- [6.2.1  NFA.001 - Verfügbarkeit / Stabilität](#621--nfa001---verfügbarkeit--stabilität)
 			- [6.2.2 NFA.002 - Performance](#622-nfa002---performance)
@@ -150,18 +151,6 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 
 ![Diagramm](images/UseCase_05.png)
 
-### 5.6 Use Case 06 - AASX-Datei importieren
-
-| Use Case ID  | UC06 |
-|--------------|------|
-| Beschreibung | Ein Nutzer lädt eine AASX-Datei hoch. Das System scannt enthaltene ConceptDescriptions (CDs) und EmbeddedDataSpecifications (EDSs), macht Mappingvorschläge zu bestehenden Wikibase-Einträgen und legt bei Bedarf neue Einträge an. |
-| Beteiligte Rollen | Nutzer |
-| Systemgrenze | Semantic Wikibase (Web-UI + Importer-Komponente) |
-| Vorbedingung | Nutzer ist angemeldet und berechtigt, Daten zu importieren. Die AASX-Datei liegt lokal oder über einen Pfad/Upload vor. Die Wikibase ist erreichbar. |
-| Nachbedingung bei Erfolg | Alle in der AASX gefundenen CDs und EDSs sind entweder bestehenden Einträgen in der Wikibase zugeordnet oder als neue Einträge gemäß IEC-61360-Datentemplate angelegt und im System sichtbar. |
-| Auslösendes Ereignis | Nutzer wählt in der Web-UI die Funktion „AASX importieren“ und startet den Import mit einer ausgewählten Datei. |
-
-![Diagramm](images/UseCase_06.png)
 
 ## 6. Anforderungen
 
@@ -215,36 +204,38 @@ Ein besonderer Fokus liegt darauf, die Bedienung intuitiv und den Zugang niedrig
 |Erfüllungskriterium|Für referenzierte Concept Descriptions mit externen Beziehungen werden in der Detailansicht klickbare Links angezeigt und führen korrekt zu den externen Quellen.|
 |Priorität| Optional|
 
-#### 6.1.11 FA.007 - Import und Verarbeitung von AASX-Dateien
+
+
+#### 6.1.7 FA.007 - Leichte Spezifikation & Governance
 
 |Requirement ID|FA.007|
-|--------------|------|
-|Übersicht|Das System soll eine Funktion bereitstellen, mit der AASX-Dateien importiert und die darin enthaltenen ConceptDescriptions (CDs) sowie EmbeddedDataSpecifications (EDSs) automatisiert erkannt, analysiert und in der Wikibase abgebildet werden.|
-|Erfüllungskriterium|Beim Hochladen einer AASX-Datei wird der Inhalt automatisch gescannt. Das System erkennt alle enthaltenen CDs und EDSs, gleicht sie mit bestehenden Einträgen in der Wikibase ab und zeigt dem Nutzer Mapping-Vorschläge an. Für nicht vorhandene Elemente erstellt das System neue Wikibase-Einträge gemäß dem IEC-61360-Datentemplate. Der Importprozess ist abgeschlossen, wenn alle gefundenen Elemente entweder gemappt oder neu angelegt wurden und im System sichtbar sind.|
-|Priorität| Notwendig|
-
-#### 6.1.8 FA.008 - Leichte Spezifikation & Governance
-
-|Requirement ID|FA.008|
 |--------------|------|
 |Übersicht|Für die Erstellung und Pflege von Concept Descriptions gelten eindeutige und einfache Mindestvorgaben: Name, Definition, Sprache, Datentyp und Quelle sind verpflichtend.|
 |Erfüllungskriterium|Die Plattform stellt bei der Erfassung sicher, dass alle Pflichtfelder ausgefüllt sind, sodass jedes Konzept eindeutig und nachvollziehbar dokumentiert ist.|
 |Priorität| Notwendig|
 
-#### 6.1.9 FA.009 - Verwaltung und Bereitstellung standardisierbarer Begriffe
+#### 6.1.8 FA.008 - Verwaltung und Bereitstellung standardisierbarer Begriffe
 
-|Requirement ID|FA.009|
+|Requirement ID|FA.008|
 |--------------|------|
 |Übersicht|Die in der Semantic Wikibase gespeicherten Begriffe und Definitionen sollen so aufgebaut und verwaltet werden, dass sie später problemlos auf internationale Standard-Systeme (z. B. IEC-CDD, ECLASS, QUDT) migriert oder automatisch weitergeleitet werden können.|
 |Erfüllungskriterium|Jede im Wiki erzeugte URI und die dazugehörige Datenstruktur sind so gestaltet, dass sie mit den Identifiern und Strukturen etablierter Normsysteme kompatibel sind. Bei Migration eines Begriffs in einen offiziellen Standard lässt sich die ursprüngliche Wiki-URI technisch einfach (z. B. per Redirect) zur neuen Standard-URI weiterleiten.|
 |Priorität| Notwendig|
 
-#### 6.1.12 FA.010 - Automatisierter Import externer Concept Descriptions per URI
+#### 6.1.9 FA.009 - Automatisierter Import externer Concept Descriptions per URI
 
-|Requirement ID|FA.010|
+|Requirement ID|FA.009|
 |--------------|------|
 |Übersicht|Das System soll eine Funktion bereitstellen, mit der Nutzer eine externe URI (z. B. zu einem IEC-CDD-, ECLASS- oder anderen semantischen Katalogeintrag) angeben können. Das System ruft die verlinkte Ressource ab, extrahiert automatisch die relevanten Informationen (z. B. Name, Definition, Einheit, Datentyp, Identifier) aus der HTML- oder API-Antwort und überführt diese Daten in das interne IEC-61360-Datenformat der Semantic Wikibase. Falls ein passender Eintrag bereits existiert, wird ein Mapping vorgeschlagen; andernfalls wird ein neuer Concept-Description-Eintrag angelegt.|
 |Erfüllungskriterium|Gibt der Nutzer eine gültige externe URI zu einer Concept Description an, wird die Ressource vom System automatisch geladen und analysiert. Das System zeigt dem Nutzer eine Zusammenfassung der erkannten Metadaten sowie Mapping-Vorschläge auf bestehende Konzepte an. Nach Bestätigung durch den Nutzer werden entweder bestehende Einträge verknüpft oder neue IEC-61360-konforme Concept Descriptions in der Wikibase erzeugt. Die importierten Einträge sind anschließend über URI, REST-API und Detailansicht abrufbar.|
+|Priorität| Notwendig|
+
+#### 6.1.10 FA.010 - Überarbeitete und strukturierte Startseite mit verbesserter Suchfunktion
+
+|Requirement ID|FA.010|
+|--------------|------|
+|Übersicht|Die Startseite der Semantic Wikibase soll übersichtlicher und benutzerfreundlicher gestaltet werden. Das System soll eine erweiterte Suchfunktion bereitstellen, die es Nutzern ermöglicht, sowohl nach einzelnen Begriffen als auch nach semantischen IDs zu suchen. Die Startseite soll eine klare Struktur mit logisch organisierten Bereichen (z. B. Schnellzugriffe, Kategorienh) aufweisen und die Navigationsoptionen intuitiv anordnen. Die Suchleiste soll prominent positioniert sein.|
+|Erfüllungskriterium|Die Startseite der Wikibase präsentiert sich in einer organisierten Struktur mit klar definierten Bereichen und visuellen Hierarchien. Die Suchfunktion unterstützt Mehrfeld-Suche mit folgenden Funktionen: (1) Volltextsuche nach Begriffen und Definitionen, (2) Suche nach semantischen IDs. Die Suchergebnisse werden übersichtlich formatiert angezeigt.|
 |Priorität| Notwendig|
 
 ### 6.2 Nicht-funktionale Anforderungen (NFR)

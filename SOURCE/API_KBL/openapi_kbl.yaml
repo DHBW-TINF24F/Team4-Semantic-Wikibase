@@ -1,0 +1,302 @@
+openapi: 3.0.3
+
+info:
+  title: KBL to IEC61360 Mapping API
+  description: >
+    Diese API sucht Begriffe in der KBL-XSD-Datei und mappt die gefundenen
+    XML-Schema-Strukturen auf eine IEC61360-nahe ConceptDescription-Struktur.
+    Die API deckt GET-Anfragen zur Suche nach einzelnen XSD-Begriffen ab.
+    Keine POST-Anfragen. Die API kann über Swagger UI getestet werden.
+  version: 1.0.0
+
+servers:
+  - url: http://127.0.0.1:8000
+    description: Lokaler Entwicklungsserver
+
+paths:
+  /:
+    get:
+      summary: Root-Endpunkt
+      description: Gibt eine kurze API-Information und den Swagger-Pfad zurück.
+      responses:
+        "200":
+          description: Erfolgreiche Antwort mit Basisinformationen
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: KBL to IEC61360 Mapping API
+                  swagger:
+                    type: string
+                    example: /docs
+
+  /map:
+    get:
+      summary: KBL-XSD-Begriff auf IEC61360 mappen
+      description: >
+        Sucht einen XSD-Begriff in der KBL-XSD-Datei und gibt das Ergebnis
+        als IEC61360-nahe ConceptDescription zurück.
+      parameters:
+        - name: search
+          in: query
+          required: true
+          description: XSD-Begriff, zum Beispiel complexType, simpleType oder element.
+          schema:
+            type: string
+          examples:
+            complexType:
+              summary: Suche nach ComplexType
+              value: Wire_occurrence
+            harness:
+              summary: Suche nach Harness
+              value: Harness
+            simpleType:
+              summary: Suche nach SimpleType / Enumeration
+              value: Harness_content
+
+        - name: lang
+          in: query
+          required: false
+          description: Sprache für generierte Labels. Aktuell werden en und de akzeptiert.
+          schema:
+            type: string
+            enum:
+              - en
+              - de
+            default: en
+          example: en
+
+      responses:
+        "200":
+          description: Erfolgreiches Mapping oder kein Treffer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MapResponse"
+              examples:
+                found:
+                  summary: Beispielantwort für Wire_occurrence
+                  value:
+                    query:
+                      search: Wire_occurrence
+                      mode: xsd-term
+                      lang: en
+                      source: https://ecad-wiki.prostep.org/specifications/kbl/v25-sr1/kbl2.5-sr1.xsd
+                    total: 1
+                    result:
+                      modelType: ConceptDescription
+                      id: https://ecad-wiki.prostep.org/specifications/kbl/v25-sr1/kbl2.5-sr1.xsd#Wire_occurrence
+                      idShort: Wire_occurrence
+                      embeddedDataSpecifications:
+                        - dataSpecification:
+                            type: ExternalReference
+                            keys:
+                              - type: GlobalReference
+                                value: http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0
+                          dataSpecificationContent:
+                            modelType: DataSpecificationIec61360
+                            semanticId:
+                              property: P1
+                              value: https://ecad-wiki.prostep.org/specifications/kbl/v25-sr1/kbl2.5-sr1.xsd#Wire_occurrence
+                            preferredName:
+                              property: P35
+                              value:
+                                - value: Wire_occurrence
+                                  lang: en
+                            shortName:
+                              property: P36
+                              value: Wire_occurrence
+                            unit:
+                              property: P37
+                              value: null
+                            sourceOfDefinition:
+                              property: P40
+                              value:
+                                - type: xsdSource
+                                  value: https://ecad-wiki.prostep.org/specifications/kbl/v25-sr1/kbl2.5-sr1.xsd
+                            Symbol:
+                              property: P41
+                              value: null
+                            dataType:
+                              property: P42
+                              value: XSDComplexType
+                            unitId:
+                              property: P43
+                              value: null
+                            Definition:
+                              property: P44
+                              value:
+                                - type: generatedDefinition
+                                  value: Wire_occurrence is defined in the KBL 2.5 SR-1 XML schema as XSDComplexType.
+                            valueFormat:
+                              property: P45
+                              value: null
+                            valueList:
+                              property: P46
+                              value: null
+                            value:
+                              property: P47
+                              value: null
+                            levelType:
+                              property: P48
+                              value: null
+                      additionalProperties:
+                        xsdType: XSDComplexType
+                        extensionBase: kbl:General_wire_occurrence
+                        children:
+                          - name: Wire_number
+                            type: xs:string
+                            minOccurs: null
+                            maxOccurs: null
+                            documentation: null
+                        attributes: []
+                notFound:
+                  summary: Kein Treffer
+                  value:
+                    query:
+                      search: NotExisting
+                      mode: xsd-term
+                      lang: en
+                      source: https://ecad-wiki.prostep.org/specifications/kbl/v25-sr1/kbl2.5-sr1.xsd
+                    total: 0
+                    result: null
+
+        "422":
+          description: Validierungsfehler bei Query-Parametern
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationError"
+
+        "500":
+          description: Fehler beim Laden oder Parsen der KBL-XSD-Datei
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    MapResponse:
+      type: object
+      properties:
+        query:
+          $ref: "#/components/schemas/QueryInfo"
+        total:
+          type: integer
+          example: 1
+        result:
+          nullable: true
+          oneOf:
+            - $ref: "#/components/schemas/ConceptDescription"
+            - type: "null"
+
+    QueryInfo:
+      type: object
+      properties:
+        search:
+          type: string
+          example: Wire_occurrence
+        mode:
+          type: string
+          enum:
+            - xsd-term
+          example: xsd-term
+        lang:
+          type: string
+          enum:
+            - en
+            - de
+          example: en
+        source:
+          type: string
+          example: https://ecad-wiki.prostep.org/specifications/kbl/v25-sr1/kbl2.5-sr1.xsd
+
+    ConceptDescription:
+      type: object
+      properties:
+        modelType:
+          type: string
+          example: ConceptDescription
+        id:
+          type: string
+          example: https://ecad-wiki.prostep.org/specifications/kbl/v25-sr1/kbl2.5-sr1.xsd#Wire_occurrence
+        idShort:
+          type: string
+          example: Wire_occurrence
+        embeddedDataSpecifications:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmbeddedDataSpecification"
+        additionalProperties:
+          type: object
+          additionalProperties: true
+
+    EmbeddedDataSpecification:
+      type: object
+      properties:
+        dataSpecification:
+          type: object
+        dataSpecificationContent:
+          $ref: "#/components/schemas/DataSpecificationIec61360"
+
+    DataSpecificationIec61360:
+      type: object
+      properties:
+        modelType:
+          type: string
+          example: DataSpecificationIec61360
+        semanticId:
+          $ref: "#/components/schemas/IecField"
+        preferredName:
+          $ref: "#/components/schemas/IecField"
+        shortName:
+          $ref: "#/components/schemas/IecField"
+        unit:
+          $ref: "#/components/schemas/IecField"
+        sourceOfDefinition:
+          $ref: "#/components/schemas/IecField"
+        Symbol:
+          $ref: "#/components/schemas/IecField"
+        dataType:
+          $ref: "#/components/schemas/IecField"
+        unitId:
+          $ref: "#/components/schemas/IecField"
+        Definition:
+          $ref: "#/components/schemas/IecField"
+        valueFormat:
+          $ref: "#/components/schemas/IecField"
+        valueList:
+          $ref: "#/components/schemas/IecField"
+        value:
+          $ref: "#/components/schemas/IecField"
+        levelType:
+          $ref: "#/components/schemas/IecField"
+
+    IecField:
+      type: object
+      properties:
+        property:
+          type: string
+          example: P35
+        value:
+          nullable: true
+          description: Wert des IEC61360-Feldes. Kann String, Objekt, Array oder null sein.
+
+    ErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+          example: KBL XSD konnte nicht geladen werden.
+
+    ValidationError:
+      type: object
+      properties:
+        detail:
+          type: array
+          items:
+            type: object

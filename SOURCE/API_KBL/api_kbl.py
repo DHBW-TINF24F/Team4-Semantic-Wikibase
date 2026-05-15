@@ -1,14 +1,47 @@
+# Importiert JSON-Funktionen
 import json
-import requests
-import xml.etree.ElementTree as ET
+
+# Typdefinitionen
 from typing import Any, Dict, List, Optional
+
+# HTTP Requests zum Laden der KBL-XSD-Datei
+import requests
+
+# XML Parser für XSD
+import xml.etree.ElementTree as ET
+
+# FastAPI Framework für REST API
+from fastapi import FastAPI, Query, HTTPException
+
+# Erstellt die FastAPI-Anwendung
+app = FastAPI(
+    title="KBL to IEC61360 Mapping API",
+    description="API zum Abfragen von KBL-XSD-Strukturen und Mapping auf IEC61360.",
+    version="1.0.0"
+)
+
+# =========================
+# KBL XSD Quelle
+# =========================
 
 KBL_XSD_URL = "https://ecad-wiki.prostep.org/specifications/kbl/v25-sr1/kbl2.5-sr1.xsd"
 
-SEARCH = "Wire_occurrence"
-LANG = "en"
+# Erlaubte Sprachen
+ALLOWED_LANGS = ["en", "de"]
 
+# XML Schema Namespace
 XS_NS = {"xs": "http://www.w3.org/2001/XMLSchema"}
+
+
+# =========================
+# Hilfsfunktionen
+# =========================
+
+def normalize_lang(lang: str) -> str:
+    if not lang:
+        return "en"
+
+    return lang if lang in ALLOWED_LANGS else "en"
 
 
 def create_iec_field(property_number: str, value: Any = None) -> Dict[str, Any]:
@@ -21,10 +54,11 @@ def create_iec_field(property_number: str, value: Any = None) -> Dict[str, Any]:
 def get_text(elem: Optional[ET.Element]) -> Optional[str]:
     if elem is None or elem.text is None:
         return None
+
     return elem.text.strip()
 
 
-def empty_concept_description(identifier: str, id_short: str) -> Dict[str, Any]:
+def empty_concept_description(identifier: str, id_short: str, lang: str) -> Dict[str, Any]:
     semantic_id = f"{KBL_XSD_URL}#{identifier}"
 
     return {
@@ -48,7 +82,7 @@ def empty_concept_description(identifier: str, id_short: str) -> Dict[str, Any]:
                     "preferredName": create_iec_field("P35", [
                         {
                             "value": id_short,
-                            "lang": LANG
+                            "lang": lang
                         }
                     ]),
                     "shortName": create_iec_field("P36", id_short),
@@ -72,20 +106,6 @@ def empty_concept_description(identifier: str, id_short: str) -> Dict[str, Any]:
         ],
         "additionalProperties": {}
     }
-
-
-def load_xsd_root() -> ET.Element:
-    response = requests.get(
-        KBL_XSD_URL,
-        headers={
-            "Accept": "application/xml,text/xml,*/*",
-            "User-Agent": "KBL-SemanticHub-IEC61360-Bridge/1.0"
-        },
-        timeout=30
-    )
-
-    response.raise_for_status()
-    return ET.fromstring(response.text)
 
 
 def detect_xsd_type(elem: ET.Element) -> str:
@@ -159,6 +179,34 @@ def collect_enumerations(type_elem: ET.Element) -> List[str]:
     return values
 
 
+def load_xsd_root() -> ET.Element:
+    try:
+        response = requests.get(
+            KBL_XSD_URL,
+            headers={
+                "Accept": "application/xml,text/xml,*/*",
+                "User-Agent": "KBL-SemanticHub-IEC61360-Bridge/1.0"
+            },
+            timeout=30
+        )
+
+        response.raise_for_status()
+
+        return ET.fromstring(response.text)
+
+    except requests.RequestException as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"KBL XSD konnte nicht geladen werden: {str(e)}"
+        )
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"KBL XSD konnte nicht geparst werden: {str(e)}"
+        )
+
+
 def find_candidate(root: ET.Element, search: str) -> Optional[ET.Element]:
     for elem in root.findall(".//xs:complexType", XS_NS):
         if elem.get("name") == search:
@@ -175,15 +223,18 @@ def find_candidate(root: ET.Element, search: str) -> Optional[ET.Element]:
     return None
 
 
-def map_xsd_element_to_semantichub(elem: ET.Element) -> Dict[str, Any]:
+def map_xsd_element_to_semantichub(elem: ET.Element, lang: str) -> Dict[str, Any]:
     name = elem.get("name")
 
     if not name:
-        raise ValueError("XSD-Element hat keinen Namen.")
+        raise HTTPException(
+            status_code=500,
+            detail="XSD-Element hat keinen Namen."
+        )
 
     xsd_type = detect_xsd_type(elem)
 
-    result = empty_concept_description(name, name)
+    result = empty_concept_description(name, name, lang)
     iec = result["embeddedDataSpecifications"][0]["dataSpecificationContent"]
 
     iec["dataType"]["value"] = xsd_type
@@ -226,38 +277,56 @@ def map_xsd_element_to_semantichub(elem: ET.Element) -> Dict[str, Any]:
     return result
 
 
-def main() -> None:
-    root = load_xsd_root()
-    candidate = find_candidate(root, SEARCH)
+# =========================
+# API Endpunkte
+# =========================
+
+@app.get("/")
+def root():
+    return {
+        "message": "KBL to IEC61360 Mapping API",
+        "swagger": "/docs"
+    }
+
+
+@app.get("/map")
+def map_kbl_to_iec61360(
+    search: str = Query(..., description="XSD-Begriff, z. B. Wire_occurrence, Harness oder Unit"),
+    lang: str = Query("en", description="Sprache, z. B. en oder de")
+):
+    lang = normalize_lang(lang)
+
+    if not search.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="Parameter 'search' darf nicht leer sein."
+        )
+
+    root_xml = load_xsd_root()
+
+    candidate = find_candidate(root_xml, search)
 
     if candidate is None:
-        output = {
+        return {
             "query": {
-                "search": SEARCH,
+                "search": search,
                 "mode": "xsd-term",
+                "lang": lang,
                 "source": KBL_XSD_URL
             },
             "total": 0,
             "result": None
         }
 
-        print(json.dumps(output, ensure_ascii=False, indent=2))
-        return
+    mapped = map_xsd_element_to_semantichub(candidate, lang)
 
-    mapped = map_xsd_element_to_semantichub(candidate)
-
-    output = {
+    return {
         "query": {
-            "search": SEARCH,
+            "search": search,
             "mode": "xsd-term",
+            "lang": lang,
             "source": KBL_XSD_URL
         },
         "total": 1,
         "result": mapped
     }
-
-    print(json.dumps(output, ensure_ascii=False, indent=2))
-
-
-if __name__ == "__main__":
-    main()
