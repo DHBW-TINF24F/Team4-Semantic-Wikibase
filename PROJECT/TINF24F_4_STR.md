@@ -93,12 +93,12 @@ Die Testfälle wurden im STP anforderungsbasiert definiert. Die Ergebnisse werde
 
 | Testart | Beschreibung | Durchführung |
 |-|-|-|
-| Funktionale Tests | Prüfung sichtbarer Funktionen wie Suche, API-Abruf, Import und Export | Geplant |
-| Systemtests | Prüfung des Gesamtsystems aus Nutzer- und API-Client-Sicht | Geplant |
-| API-Tests | Prüfung von Endpunkten, HTTP-Statuscodes, Query-Parametern und JSON-Strukturen | Geplant |
-| Mapping-Tests | Prüfung der sichtbaren Mapping-Ergebnisse aus QUDT, VEC und KBL | Geplant |
-| Fehlertests | Prüfung von ungültigen Suchbegriffen, ungültigen Identifiern und nicht vorhandenen Daten | Geplant |
-| Usability-orientierte Tests | Prüfung der Auffindbarkeit und Bedienbarkeit der Suchfunktion | Geplant |
+| Funktionale Tests | Prüfung sichtbarer Funktionen wie Suche, API-Abruf, Import und Export | Durchgeführt / eingeschränkt durchgeführt |
+| Systemtests | Prüfung des Gesamtsystems aus Nutzer- und API-Client-Sicht | Durchgeführt |
+| API-Tests | Prüfung von Endpunkten, HTTP-Statuscodes, Query-Parametern und JSON-Strukturen | Durchgeführt |
+| Mapping-Tests | Prüfung der sichtbaren Mapping-Ergebnisse aus QUDT, VEC und KBL | Durchgeführt |
+| Fehlertests | Prüfung von ungültigen Suchbegriffen, ungültigen Identifiern und nicht vorhandenen Daten | Durchgeführt |
+| Usability-orientierte Tests | Prüfung der Auffindbarkeit und Bedienbarkeit der Suchfunktion | Eingeschränkt durchgeführt |
 
 ### 4.2 Nicht durchgeführte Tests
 
@@ -127,11 +127,11 @@ Die Tests werden in einer lokalen Entwicklungs- und Testumgebung durchgeführt.
 | Programmiersprache | Python |
 | API-Framework | FastAPI / Flask, abhängig vom getesteten API-Modul |
 | Lokale API-URL | `http://localhost:8000`, falls die lokale API auf diesem Port gestartet wird |
-| Wikibase-/Semantic-Hub-URL | [einfügen] |
+| Wikibase-/Semantic-Hub-URL | `https://wikibase.localhost/wiki/Main_Page` |
 | Datenquellen | QUDT, VEC, KBL |
 | Repository / Branch | `DHBW-TINF24F/Team4-Semantic-Wikibase`, Branch `main`, Commit-ID nach Testdurchführung ergänzen |
-| Testdatum | [einfügen] |
-| Tester | [einfügen] |
+| Testdatum | 15.05.2026 |
+| Tester | Marvin Igrec |
 
 ---
 
@@ -140,27 +140,27 @@ Die Tests werden in einer lokalen Entwicklungs- und Testumgebung durchgeführt.
 | Kennzahl | Anzahl |
 |-|-:|
 | Geplante Testfälle | 10 |
-| Durchgeführte Testfälle | 0 |
-| Bestanden | 0 |
-| Teilweise bestanden | 0 |
+| Durchgeführte Testfälle | 10 |
+| Bestanden | 4 |
+| Teilweise bestanden | 4 |
 | Fehlgeschlagen | 0 |
-| Blockiert / nicht durchführbar | 0 |
-| Offen / noch nicht getestet | 10 |
+| Blockiert / nicht durchführbar | 2 |
+| Offen / noch nicht getestet | 0 |
 
 ### 6.1 Ergebnisübersicht pro Testfall
 
 | Testfall-ID | Kurzbeschreibung | Status | Nachweis |
 |-|-|-|-|
-| ST-01 | Aufruf der Startseite und Prüfung der Erreichbarkeit | Noch nicht durchgeführt | [Screenshot/Link einfügen] |
-| ST-02 | Suchfeld auf der Startseite auffindbar | Noch nicht durchgeführt | [Screenshot/Link einfügen] |
-| ST-03 | Suche nach bekannter semanticId | Noch nicht durchgeführt | [Screenshot/Link einfügen] |
-| ST-04 | Suche mit Teilbegriff, Sonderzeichen und ohne Treffer | Noch nicht durchgeführt | [Screenshot/Link einfügen] |
-| ST-05 | Liste aller semanticIds abrufen | Noch nicht durchgeführt | [Screenshot/Output einfügen] |
-| ST-06 | Einzelne semanticId abrufen und Sprachparameter prüfen | Noch nicht durchgeführt | [Screenshot/Output einfügen] |
-| ST-07 | Sortierung und Filterung der semanticIds prüfen | Noch nicht durchgeführt | [Screenshot/Output einfügen] |
-| ST-08 | Ungültigen Identifier abrufen | Noch nicht durchgeführt | [Screenshot/Output einfügen] |
-| ST-09 | QUDT-Daten in AAS-Concept-Description-Struktur prüfen | Noch nicht durchgeführt | [Screenshot/Output einfügen] |
-| ST-10 | VEC-/KBL-Mapping sowie Import und Export prüfen | Noch nicht durchgeführt | [Screenshot/Output einfügen] |
+| ST-01 | Aufruf der Startseite und Prüfung der Erreichbarkeit | Bestanden | `images/str-st01-startseite.png` |
+| ST-02 | Suchfeld auf der Startseite auffindbar | Teilweise bestanden | `images/str-st02-suchfeld.png` |
+| ST-03 | Suche nach bekannter semanticId | Teilweise bestanden | `images/str-st03-semanticid-suche-ui.png`, `images/str-st03-semanticid-suche-api.png` |
+| ST-04 | Suche mit Teilbegriff, Sonderzeichen und ohne Treffer | Teilweise bestanden | `images/str-st04-suchvarianten-ui.png`, `images/str-st04-suchvarianten-api.png` |
+| ST-05 | Liste aller semanticIds abrufen | Blockiert | `images/str-st05-api-semanticids-not-found.png` |
+| ST-06 | Einzelne semanticId abrufen und Sprachparameter prüfen | Bestanden | `images/str-st06-api-lang-de.png`, `images/str-st06-api-lang-en.png` |
+| ST-07 | Sortierung und Filterung der semanticIds prüfen | Blockiert | `images/str-st07-api-sort-not-found.png`, `images/str-st07-api-filter-not-found.png` |
+| ST-08 | Ungültigen Identifier abrufen | Bestanden | `images/str-st08-api-error.png`, `images/str-st08-api-after-error.png` |
+| ST-09 | QUDT-Daten in AAS-Concept-Description-Struktur prüfen | Bestanden | `images/str-st09-qudt-mapping.png` |
+| ST-10 | VEC-/KBL-Mapping sowie Import und Export prüfen | Teilweise bestanden | `images/str-st10-vec-mapping.png`, `images/str-st10-kbl-mapping.png`, `images/str-st10-export-not-found.png` |
 
 **Statuswerte:** Bestanden, Teilweise bestanden, Fehlgeschlagen, Blockiert, Noch nicht durchgeführt.
 
@@ -239,7 +239,7 @@ Die Tests werden in einer lokalen Entwicklungs- und Testumgebung durchgeführt.
 | Tatsächliches Ergebnis | Die Suchvarianten konnten über die Benutzeroberfläche nur eingeschränkt geprüft werden. Die allgemeine Wikibase-Suche verarbeitet Eingaben wie `V`, `Unit`, eine vollständige URI sowie einen nicht vorhandenen Suchbegriff und leitet jeweils auf eine Suchergebnisseite weiter. Für die getesteten Begriffe wurden in der UI jedoch keine fachlichen QUDT-/SemanticId-Ergebnisse angezeigt, da die Benutzeroberfläche im aktuellen Stand noch nicht mit der entwickelten Mapping-API verbunden ist. Die technische Suchlogik wurde ersatzweise über den Gateway-Endpunkt `/map` geprüft. Dort wurden gültige Begriffe wie „Volt“ verarbeitet; ein nicht vorhandener Begriff führte kontrolliert zu `total: 0` und `results: []`. |
 | Status | Teilweise bestanden |
 | Nachweis | UI: `images/str-st04-suchvarianten-ui.png`<br>API: `images/str-st04-suchvarianten-api.png` |
-| Bemerkung | Die UI-Suche ist grundsätzlich nutzbar und bricht bei verschiedenen Eingaben nicht ab. Die vollständige SemanticId-/API-gestützte Suche ist im aktuellen UI-Stand jedoch noch nicht integriert. | |
+| Bemerkung | Die UI-Suche ist grundsätzlich nutzbar und bricht bei verschiedenen Eingaben nicht ab. Die vollständige SemanticId-/API-gestützte Suche ist im aktuellen UI-Stand jedoch noch nicht integriert. |
 
 ---
 
@@ -543,7 +543,6 @@ Beispielhafte Feldprüfung:
 | Testdaten | Beispielhafte VEC-/KBL-Begriffe, `POST /semanticIds`, `GET /semanticIds/export` |
 | Testschritte | 1. VEC- und KBL-Testdaten vorbereiten.<br>2. Mapping ausführen oder vorhandene Mapping-Ergebnisse verwenden.<br>3. Mehrere semanticIds über `POST /semanticIds` importieren.<br>4. Export über `GET /semanticIds/export` ausführen.<br>5. Prüfen, ob die importierten und exportierten Daten nachvollziehbar dem Zielmodell entsprechen. |
 | Erwartetes Ergebnis | VEC- und KBL-Daten werden in eine einheitliche Struktur übertragen. Fehlende oder abweichende Felder werden kontrolliert behandelt. Import und Export liefern strukturierte Daten, die mit dem semantischen Zielmodell kompatibel sind. |
-| Tatsächliches Ergebnis | Das VEC- und KBL-Mapping konnte über den implementierten Gateway-Endpunkt `/map` geprüft werden. Für VEC wurde der Begriff „Volt“ über `/map?search=Volt&source=vec&lang=de&only_found=true` getestet. Die API lieferte eine strukturierte Concept-Description-Ausgabe mit `source: vec`, `sourceName: VEC`, `modelType: ConceptDescription` und dem Ergebnis `NominalVoltage`. Für KBL wurde der Begriff „Wire“ über `/map?search=Wire&source=kbl&lang=de&only_found=true` getestet. Auch hier konnte eine strukturierte Mapping-Ausgabe erzeugt werden. Die geplanten Import- und Exportfunktionen über `/semanticIds` konnten im aktuellen Projektstand jedoch nicht vollständig getestet werden. |
 | Tatsächliches Ergebnis | Das VEC- und KBL-Mapping konnte über den implementierten Gateway-Endpunkt `/map` geprüft werden. Für VEC wurde der Begriff „Volt“ über `/map?search=Volt&source=vec&lang=de&only_found=true` getestet. Die API lieferte eine strukturierte Concept-Description-Ausgabe mit `source: vec`, `sourceName: VEC`, `modelType: ConceptDescription` und dem Ergebnis `NominalVoltage`. Für KBL wurde der Begriff „Wire“ über `/map?search=Wire&source=kbl&lang=de&only_found=true` getestet. Auch hier konnte eine strukturierte Mapping-Ausgabe erzeugt werden. Der geplante Export-Endpunkt `/semanticIds/export` wurde ebenfalls geprüft, lieferte jedoch `{"detail": "Not Found"}`. Die Import- und Exportfunktionen über `/semanticIds` konnten daher im aktuellen Projektstand nicht vollständig getestet werden. |
 | Status | Teilweise bestanden |
 | Nachweis | VEC: `images/str-st10-vec-mapping.png`<br>KBL: `images/str-st10-kbl-mapping.png`<br>Export: `images/str-st10-export-not-found.png` |
@@ -835,22 +834,20 @@ Die Detailbeschreibung wird ergänzt, sobald bei der Testdurchführung ein Fehle
 
 ## 9. Bewertung der Anforderungen
 
-Die folgende Tabelle dient zur späteren Bewertung der Anforderungen nach der Testdurchführung. Da die Tests noch nicht ausgeführt wurden, stehen alle Anforderungen zunächst auf **Offen**.
-
 | Anforderung | Beschreibung | Zugeordnete Testfälle | Bewertung nach Testdurchführung |
 |-|-|-|-|
-| FA.001 | Auflösbare URIs / Detailseiten | ST-01, ST-03, ST-06 | Offen |
-| FA.002 | REST-API zum Abrufen von Concept Descriptions | ST-05, ST-06, ST-07, ST-08, ST-10 | Offen |
-| FA.003 | Mapping auf IEC-61360-Datentemplate | ST-06, ST-09, ST-10 | Offen |
-| FA.004 | Sprachabhängige API-Ausgabe | ST-06 | Offen |
-| FA.006 | Verlinkung externer Quellen | ST-07, ST-09 | Offen |
-| FA.009 | Automatisierter Import externer Concept Descriptions per URI | ST-09, ST-10 | Offen |
-| FA.010 | Überarbeitete Startseite und verbesserte Suchfunktion | ST-01, ST-02, ST-03, ST-04 | Offen |
-| FA.011 | Quellenspezifische Mapper für QUDT, VEC und KBL auf IEC61360 | ST-09, ST-10 | Offen |
-| NFA.001 | Verfügbarkeit / Stabilität | ST-01, ST-04, ST-05, ST-08 | Offen |
-| NFA.002 | Performance / Antwortzeit | ST-05, ST-06, ST-07 | Offen |
-| NFA.003 | Sicherheit / kontrollierter Schreibzugriff | ST-10 | Offen |
-| NFA.004 | Benutzerfreundlichkeit | ST-01, ST-02, ST-03, ST-04 | Offen |
+| FA.001 | Auflösbare URIs / Detailseiten | ST-01, ST-03, ST-06 | Teilweise erfüllt |
+| FA.002 | REST-API zum Abrufen von Concept Descriptions | ST-05, ST-06, ST-07, ST-08, ST-10 | Teilweise erfüllt |
+| FA.003 | Mapping auf IEC-61360-Datentemplate | ST-06, ST-09, ST-10 | Erfüllt |
+| FA.004 | Sprachabhängige API-Ausgabe | ST-06 | Erfüllt |
+| FA.006 | Verlinkung externer Quellen | ST-07, ST-09 | Teilweise erfüllt |
+| FA.009 | Automatisierter Import externer Concept Descriptions per URI | ST-09, ST-10 | Teilweise erfüllt |
+| FA.010 | Überarbeitete Startseite und verbesserte Suchfunktion | ST-01, ST-02, ST-03, ST-04 | Teilweise erfüllt |
+| FA.011 | Quellenspezifische Mapper für QUDT, VEC und KBL auf IEC61360 | ST-09, ST-10 | Teilweise erfüllt |
+| NFA.001 | Verfügbarkeit / Stabilität | ST-01, ST-04, ST-05, ST-08 | Teilweise erfüllt |
+| NFA.002 | Performance / Antwortzeit | ST-05, ST-06, ST-07 | Teilweise erfüllt |
+| NFA.003 | Sicherheit / kontrollierter Schreibzugriff | ST-10 | Offen / nicht bewertet |
+| NFA.004 | Benutzerfreundlichkeit | ST-01, ST-02, ST-03, ST-04 | Teilweise erfüllt |
 
 ## 10. Traceability Matrix
 
@@ -858,16 +855,16 @@ Die Traceability Matrix zeigt, welche Testfälle welche Anforderungen abdecken u
 
 | Testfall-ID | Abgedeckte Anforderungen | Ergebnis |
 |-|-|-|
-| ST-01 | FA.001, FA.010, NFA.001, NFA.004 | Noch nicht durchgeführt |
-| ST-02 | FA.010, NFA.004 | Noch nicht durchgeführt |
-| ST-03 | FA.001, FA.010, NFA.004 | Noch nicht durchgeführt |
-| ST-04 | FA.010, NFA.001, NFA.004 | Noch nicht durchgeführt |
-| ST-05 | FA.002, NFA.001, NFA.002 | Noch nicht durchgeführt |
-| ST-06 | FA.001, FA.002, FA.003, FA.004 | Noch nicht durchgeführt |
-| ST-07 | FA.002, FA.006, NFA.002 | Noch nicht durchgeführt |
-| ST-08 | FA.002, NFA.001 | Noch nicht durchgeführt |
-| ST-09 | FA.003, FA.006, FA.009, FA.011 | Noch nicht durchgeführt |
-| ST-10 | FA.002, FA.003, FA.009, FA.011, NFA.003 | Noch nicht durchgeführt |
+| ST-01 | FA.001, FA.010, NFA.001, NFA.004 | Bestanden |
+| ST-02 | FA.010, NFA.004 | Teilweise bestanden |
+| ST-03 | FA.001, FA.010, NFA.004 | Teilweise bestanden |
+| ST-04 | FA.010, NFA.001, NFA.004 | Teilweise bestanden |
+| ST-05 | FA.002, NFA.001, NFA.002 | Blockiert |
+| ST-06 | FA.001, FA.002, FA.003, FA.004 | Bestanden |
+| ST-07 | FA.002, FA.006, NFA.002 | Blockiert |
+| ST-08 | FA.002, NFA.001 | Bestanden |
+| ST-09 | FA.003, FA.006, FA.009, FA.011 | Bestanden |
+| ST-10 | FA.002, FA.003, FA.009, FA.011, NFA.003 | Teilweise bestanden |
 
 ## 11. Screenshots und Nachweise
 
@@ -877,14 +874,21 @@ Zur Nachvollziehbarkeit der Testdurchführung werden Screenshots, API-Antworten 
 |-|-|-|-|
 | N-01 | ST-01 | Startseite erreichbar | `images/str-st01-startseite.png` |
 | N-02 | ST-02 | Suchfeld sichtbar | `images/str-st02-suchfeld.png` |
-| N-03 | ST-03 | Suchergebnis für bekannte semanticId | `images/str-st03-semanticid-suche.png` |
-| N-04 | ST-04 | Suche ohne Treffer / Sonderzeichen | `images/str-st04-suchvarianten.png` |
-| N-05 | ST-05 | API-Antwort `GET /semanticIds` | `images/str-st05-api-semanticids.png` |
-| N-06 | ST-06 | API-Antwort mit Sprachparameter | `images/str-st06-api-lang.png` |
-| N-07 | ST-07 | API-Antwort mit Sortierung / Filterung | `images/str-st07-api-filter-sort.png` |
-| N-08 | ST-08 | Fehlerantwort bei ungültigem Identifier | `images/str-st08-api-error.png` |
-| N-09 | ST-09 | QUDT-Mapping-Ausgabe | `images/str-st09-qudt-mapping.png` |
-| N-10 | ST-10 | VEC-/KBL-Mapping, Import und Export | `images/str-st10-import-export.png` |
+| N-03 | ST-03 | UI-Suche nach bekanntem Begriff | `images/str-st03-semanticid-suche-ui.png` |
+| N-04 | ST-03 | API-Suche nach bekanntem Begriff | `images/str-st03-semanticid-suche-api.png` |
+| N-05 | ST-04 | UI-Suche mit Suchvarianten | `images/str-st04-suchvarianten-ui.png` |
+| N-06 | ST-04 | API-Gegenprüfung der Suchvarianten | `images/str-st04-suchvarianten-api.png` |
+| N-07 | ST-05 | API-Antwort `GET /semanticIds` nicht verfügbar | `images/str-st05-api-semanticids-not-found.png` |
+| N-08 | ST-06 | API-Antwort mit Sprachparameter Deutsch | `images/str-st06-api-lang-de.png` |
+| N-09 | ST-06 | API-Antwort mit Sprachparameter Englisch | `images/str-st06-api-lang-en.png` |
+| N-10 | ST-07 | Sortierung nicht verfügbar | `images/str-st07-api-sort-not-found.png` |
+| N-11 | ST-07 | Filterung nicht verfügbar | `images/str-st07-api-filter-not-found.png` |
+| N-12 | ST-08 | Fehlerantwort bei ungültigem Suchbegriff | `images/str-st08-api-error.png` |
+| N-13 | ST-08 | Kontrollanfrage nach Fehlerfall | `images/str-st08-api-after-error.png` |
+| N-14 | ST-09 | QUDT-Mapping-Ausgabe | `images/str-st09-qudt-mapping.png` |
+| N-15 | ST-10 | VEC-Mapping-Ausgabe | `images/str-st10-vec-mapping.png` |
+| N-16 | ST-10 | KBL-Mapping-Ausgabe | `images/str-st10-kbl-mapping.png` |
+| N-17 | ST-10 | Export-Endpunkt nicht verfügbar | `images/str-st10-export-not-found.png` |
 
 Beispiel für die Einbindung eines Screenshots:
 
@@ -898,17 +902,15 @@ Abbildung 1 zeigt die JSON-Antwort des Endpunkts `GET /semanticIds` während der
 
 ## 12. Gesamteinschätzung
 
-Da die Systemtests zum Zeitpunkt der Erstellung dieser STR-Vorlage noch nicht durchgeführt wurden, kann noch keine abschließende Bewertung der Systemqualität erfolgen.
+## 12. Gesamteinschätzung
 
-Die Gesamteinschätzung wird nach Durchführung der Testfälle ST-01 bis ST-10 ergänzt. Bewertet werden insbesondere:
+Die Systemtests wurden im Rahmen des aktuellen prototypischen Projektstands durchgeführt. Insgesamt wurden zehn geplante Systemtestfälle betrachtet. Vier Testfälle wurden bestanden, vier Testfälle wurden teilweise bestanden und zwei Testfälle waren aufgrund fehlender Implementierung blockiert.
 
-- Erreichbarkeit der Startseite und grundlegende Stabilität,
-- Auffindbarkeit und Nutzbarkeit der Suchfunktion,
-- REST-API und Query-Parameter,
-- Fehlerbehandlung bei ungültigen Eingaben,
-- QUDT-, VEC- und KBL-Mapping,
-- Import- und Exportfunktionen,
-- erkennbare Abweichungen zwischen Planung und tatsächlichem Systemverhalten.
+Positiv bewertet werden können insbesondere die lokale Erreichbarkeit der Wikibase-Startseite, die grundlegende UI-Suche, die funktionierende API über den Gateway-Endpunkt `/map`, die Sprachparameterverarbeitung, die Fehlerbehandlung bei nicht vorhandenen Suchbegriffen sowie das Mapping von QUDT-, VEC- und KBL-Daten in eine IEC61360-nahe Concept-Description-Struktur.
+
+Einschränkungen bestehen vor allem bei den ursprünglich geplanten `/semanticIds`-Endpunkten. Die Endpunkte für Listenabruf, Sortierung, Filterung und Export waren im aktuellen Projektstand nicht verfügbar und lieferten `{"detail": "Not Found"}`. Außerdem ist die Benutzeroberfläche aktuell noch nicht vollständig mit der entwickelten Mapping-API verbunden. Die UI-Suche ist zwar sichtbar und nutzbar, findet jedoch keine QUDT-/SemanticId-Ergebnisse aus der API.
+
+Insgesamt zeigt der Teststand, dass zentrale technische Teilfunktionen des Prototyps funktionieren. Für eine vollständige Umsetzung der geplanten Semantic-Wikibase-Lösung müssen jedoch die UI-API-Integration sowie die geplanten `/semanticIds`-Endpunkte weiter implementiert werden.
 
 ### 12.1 Zusammenfassung
 
@@ -918,23 +920,25 @@ Die Gesamteinschätzung wird nach Durchführung der Testfälle ST-01 bis ST-10 e
 
 | Bereich | Bewertung |
 |-|-|
-| Startseite / UI | Offen |
-| Suchfunktion | Offen |
-| REST-API | Offen |
-| Query-Parameter | Offen |
-| Fehlerbehandlung | Offen |
-| QUDT-Mapping | Offen |
-| VEC-/KBL-Mapping | Offen |
-| Import / Export | Offen |
-| Gesamtbewertung | Offen |
+| Startseite / UI | Teilweise erfüllt |
+| Suchfunktion | Teilweise erfüllt |
+| REST-API | Teilweise erfüllt |
+| Query-Parameter | Blockiert |
+| Fehlerbehandlung | Erfüllt |
+| QUDT-Mapping | Erfüllt |
+| VEC-/KBL-Mapping | Teilweise erfüllt |
+| Import / Export | Blockiert |
+| Gesamtbewertung | Teilweise erfüllt |
 
 ## 13. Offene Punkte und Empfehlungen
 
 | Offener Punkt | Beschreibung | Empfehlung | Priorität |
 |-|-|-|-|
-| OP-01 | [einfügen] | [einfügen] | [hoch / mittel / niedrig] |
-| OP-02 | [einfügen] | [einfügen] | [einfügen] |
-| OP-03 | [einfügen] | [einfügen] | [einfügen] |
+| OP-01 | UI-Suche ist noch nicht mit der Mapping-/SemanticId-API verbunden. | API-Anbindung der UI-Suche an den `/map`-Endpunkt oder einen finalen SemanticId-Endpunkt implementieren. | hoch |
+| OP-02 | Geplante `/semanticIds`-Endpunkte sind nicht verfügbar. | Endpunkte `GET /semanticIds`, `GET /semanticIds/{identifier}`, `POST /semanticIds` und `GET /semanticIds/export` gemäß Spezifikation umsetzen oder STP/Spezifikation an `/map` anpassen. | hoch |
+| OP-03 | Sortierung und Filterung über `/semanticIds` konnte nicht getestet werden. | Query-Parameter `sortbyDate` und `filterbyURI` implementieren oder über den Gateway-Endpunkt bereitstellen. | mittel |
+| OP-04 | Import und Export sind nicht vollständig umgesetzt. | Import-/Exportfunktionen ergänzen und mit QUDT-, VEC- und KBL-Beispieldaten erneut testen. | hoch |
+| OP-05 | Startseite ist aktuell noch Standard-Wikibase und nicht final angepasst. | Finales Startseitenlayout mit hervorgehobener SemanticId-Suche integrieren und ST-01 bis ST-04 erneut testen. | mittel |
 
 Mögliche offene Punkte nach der Testdurchführung können sein:
 
@@ -973,16 +977,15 @@ Mögliche offene Punkte nach der Testdurchführung können sein:
 ### 14.2 Beispielhafte API-Requests
 
 ```bash
-curl http://localhost:8000/semanticIds
-curl "http://localhost:8000/api/v3/search?search=Volt&lang=de&types=unit"
-curl http://localhost:8000/semanticIds/volt
-curl "http://localhost:8000/semanticIds/volt?lang=de"
-curl "http://localhost:8000/semanticIds/volt?lang=en"
-curl "http://localhost:8000/semanticIds?filterbyURI=qudt.org"
-curl "http://localhost:8000/semanticIds?sortbyDate=asc"
-curl "http://localhost:8000/semanticIds?sortbyDate=desc"
-curl -i http://localhost:8000/semanticIds/nichtVorhanden123
-curl http://localhost:8000/semanticIds/export
+curl.exe "http://localhost:8000/map?search=Volt&source=qudt&lang=de&types=unit&only_found=true"
+curl.exe "http://localhost:8000/map?search=Volt&source=qudt&lang=en&types=unit&only_found=true"
+curl.exe "http://localhost:8000/map?search=nichtVorhanden123&source=qudt&lang=de&types=unit&only_found=true"
+curl.exe "http://localhost:8000/map?search=Volt&source=vec&lang=de&only_found=true"
+curl.exe "http://localhost:8000/map?search=Wire&source=kbl&lang=de&only_found=true"
+curl.exe "http://localhost:8000/semanticIds"
+curl.exe "http://localhost:8000/semanticIds?sortbyDate=asc"
+curl.exe "http://localhost:8000/semanticIds?filterbyURI=qudt.org"
+curl.exe "http://localhost:8000/semanticIds/export"
 ```
 
 ### 14.3 Beispielhafte Testdaten
