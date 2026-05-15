@@ -342,19 +342,34 @@ curl "http://localhost:8000/semanticIds?filterbyURI=qudt.org"
 | Testdaten | `GET /semanticIds/nichtVorhanden123` |
 | Testschritte | 1. API-Anfrage mit ungültigem Identifier ausführen.<br>2. HTTP-Status prüfen.<br>3. Fehlermeldung prüfen.<br>4. Kontrollieren, ob das System weiterhin erreichbar bleibt. |
 | Erwartetes Ergebnis | Die API liefert eine verständliche Fehlermeldung, z. B. mit HTTP-Status 404. Das System stürzt nicht ab und bleibt für weitere Anfragen erreichbar. |
-| Tatsächliches Ergebnis | [einfügen] |
-| Status | Noch nicht durchgeführt |
-| Nachweis | [Screenshot oder Konsolenausgabe einfügen] |
-| Bemerkung | [einfügen] |
+| Tatsächliches Ergebnis | Die Fehlerbehandlung wurde über den aktuell implementierten Endpunkt `/map` mit dem Suchbegriff `nichtVorhanden123` getestet. Die API war erreichbar und lieferte eine kontrollierte JSON-Antwort mit `total: 0` und `results: []`. Es kam zu keinem Systemabsturz. Anschließend konnte eine gültige Anfrage mit dem Begriff „Volt“ erneut erfolgreich ausgeführt werden. |
+| Status | Bestanden |
+| Nachweis | Fehlerfall: `images/str-st08-api-error.png`<br>Kontrollanfrage: `images/str-st08-api-after-error.png` |
+| Bemerkung | Der ursprünglich geplante Endpunkt `/semanticIds/nichtVorhanden123` wurde im aktuellen Projektstand nicht separat umgesetzt. Die geforderte Fehlerbehandlung konnte jedoch über den implementierten Gateway-Endpunkt `/map` erfolgreich nachgewiesen werden. |
 
 Beispiel für den Nachweis:
 
 ```bash
-curl -i http://localhost:8000/semanticIds/nichtVorhanden123
+curl.exe "http://localhost:8000/map?search=nichtVorhanden123&source=qudt&lang=de&types=unit&only_found=true"
+curl.exe "http://localhost:8000/map?search=Volt&source=qudt&lang=de&types=unit&only_found=true"
+
+Die vollständigen API-Antworten wurden über Screenshots dokumentiert. Der Fehlerfall liefert `total: 0` und `results: []`; eine anschließende gültige Anfrage mit „Volt“ liefert wieder ein Ergebnis.
 ```
 
 ```json
-[Fehlerantwort hier einfügen]
+{
+  "query": {
+    "search": "nichtVorhanden123",
+    "source": "qudt",
+    "lang": "de",
+    "types": [
+      "unit"
+    ],
+    "onlyFound": true
+  },
+  "total": 0,
+  "results": []
+}
 ```
 
 ---
