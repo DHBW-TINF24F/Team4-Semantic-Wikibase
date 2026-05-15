@@ -183,7 +183,7 @@ Die Tests werden in einer lokalen Entwicklungs- und Testumgebung durchgeführt.
 | Erwartetes Ergebnis | Die Startseite wird ohne Fehlermeldung geladen. Wichtige Einstiegspunkte wie Suche oder Navigation sind sichtbar. |
 | Tatsächliches Ergebnis | Die Startseite der lokalen Wikibase-Instanz konnte über `https://wikibase.localhost/wiki/Main_Page` geöffnet werden. Die Seite wurde über die Docker-basierte Wikibase-Umgebung geladen und zeigte die überarbeitete Startseitenstruktur der Semantic Wikibase. Sichtbar waren unter anderem der Begrüßungsbereich, die „Semantic ID Suche“, die „Globale Volltextsuche“ sowie die grundlegende Wikibase-Navigation. Es trat keine sichtbare Server-Fehlermeldung auf. |
 | Status | Bestanden |
-| Nachweis | `images/str-st01-startseite.png` |
+| Nachweis | [str-st01-startseite.png](images/str-st01-startseite.png) |
 | Bemerkung | Der Test bestätigt die Erreichbarkeit der lokalen Wikibase-Startseite. Die Startseiteninhalte wurden im aktuellen Teststand manuell auf der Wikibase-Seite eingepflegt. Die funktionale Prüfung der Suchfelder erfolgt in den folgenden Testfällen. |
 
 ---
@@ -202,7 +202,7 @@ Die Tests werden in einer lokalen Entwicklungs- und Testumgebung durchgeführt.
 | Erwartetes Ergebnis | Das Suchfeld oder der Suchzugang ist klar sichtbar und direkt verwendbar. |
 | Tatsächliches Ergebnis | Auf der lokalen Wikibase-Startseite sind zwei Suchzugänge klar sichtbar: eine „Semantic ID Suche“ für den direkten Sprung zu einer Entität über eine Semantic ID sowie eine „Globale Volltextsuche“ für die Suche nach Begriffen, Items, Properties und Bezeichnungen. Beide Suchbereiche sind prominent auf der Startseite platziert und ohne Umwege erreichbar. |
 | Status | Bestanden |
-| Nachweis | `images/str-st02-suchfeld.png` |
+| Nachweis | [str-st02-suchfeld.png](images/str-st02-suchfeld.png) |
 | Bemerkung | Die Anforderung zur Auffindbarkeit der Suche ist auf UI-Ebene erfüllt. Die Startseitenstruktur wurde im aktuellen Teststand manuell in der Wikibase-Seite hinterlegt. Die tatsächliche Ergebnisverarbeitung der Suchfelder wird in ST-03 und ST-04 separat bewertet. |
 
 ---
@@ -221,7 +221,7 @@ Die Tests werden in einer lokalen Entwicklungs- und Testumgebung durchgeführt.
 | Erwartetes Ergebnis | Der passende Eintrag wird gefunden und angezeigt. Der Nutzer kann den Eintrag öffnen und die Detailansicht wird geladen. |
 | Tatsächliches Ergebnis | Die Suche nach einer bekannten Semantic ID konnte über die auf der Startseite integrierte „Semantic ID Suche“ ausgeführt werden. Beim Test mit `http://qudt.org/vocab/unit/V` wurde auf die Spezialseite „Go by Semantic ID“ weitergeleitet. Die UI verarbeitete die Eingabe kontrolliert, es wurde jedoch kein passender Wikibase-Eintrag gefunden. Die Meldung lautete sinngemäß, dass kein Item mit dieser Semantic ID vorhanden ist. Fachlich konnte die Suche ersatzweise über den Gateway-Endpunkt `/map` geprüft werden. Dort wurde für „Volt“ ein passender QUDT-Eintrag mit der ID `http://qudt.org/vocab/unit/V` zurückgegeben. |
 | Status | Teilweise bestanden |
-| Nachweis | UI: `images/str-st03-semanticid-suche-ui.png`<br>API: `images/str-st03-semanticid-suche-api.png` |
+| Nachweis | UI: [str-st03-semanticid-suche-ui.png](images/str-st03-semanticid-suche-ui.png)<br>API: [str-st03-semanticid-suche-api.png](images/str-st03-semanticid-suche-api.png) |
 | Bemerkung | Die UI-Weiterleitung zur Semantic-ID-Suche ist vorhanden und funktioniert technisch. Der gesuchte QUDT-Eintrag ist im aktuellen Wikibase-Datenbestand jedoch nicht als Item vorhanden bzw. nicht mit der Semantic ID verknüpft. Die fachliche Mapping-Funktion konnte über `/map` separat nachgewiesen werden. |
 ---
 
@@ -239,7 +239,7 @@ Die Tests werden in einer lokalen Entwicklungs- und Testumgebung durchgeführt.
 | Erwartetes Ergebnis | Passende Einträge werden bei gültigen Teilbegriffen oder URIs angezeigt. Bei nicht vorhandenen Begriffen zeigt das System eine verständliche Meldung wie „Keine Ergebnisse gefunden“. Es treten keine Darstellungsfehler oder Systemabbrüche auf. |
 | Tatsächliches Ergebnis | Die Suchvarianten konnten über die Benutzeroberfläche kontrolliert ausgeführt werden. Die globale Volltextsuche verarbeitet Eingaben wie `Volt` und leitet auf eine Suchergebnisseite weiter. Für den getesteten Begriff wurden jedoch keine Treffer angezeigt. Die UI reagierte dabei stabil und zeigte eine verständliche Meldung, dass keine Ergebnisse zur Suchanfrage vorhanden sind. Die technische Suchlogik wurde ergänzend über den Gateway-Endpunkt `/map` geprüft. Dort wurden gültige Begriffe wie „Volt“ verarbeitet; ein nicht vorhandener Begriff führte kontrolliert zu `total: 0` und `results: []`. |
 | Status | Teilweise bestanden |
-| Nachweis | UI: `images/str-st04-suchvarianten-ui.png`<br>API: `images/str-st04-suchvarianten-api.png` |
+| Nachweis | UI: [str-st04-suchvarianten-ui.png](images/str-st04-suchvarianten-ui.png)<br>API: [str-st04-suchvarianten-api.png](images/str-st04-suchvarianten-api.png) |
 | Bemerkung | Die globale UI-Suche ist sichtbar und ausführbar, findet im aktuellen Wikibase-Datenbestand jedoch keine QUDT-/SemanticId-Ergebnisse. Die API-gestützte Suche bzw. das Mapping funktioniert separat über den Gateway-Endpunkt `/map`. |
 
 ---
@@ -258,7 +258,7 @@ Die Tests werden in einer lokalen Entwicklungs- und Testumgebung durchgeführt.
 | Erwartetes Ergebnis | Die API liefert HTTP-Status 200 und eine strukturierte JSON-Antwort mit verfügbaren semanticIds. |
 | Tatsächliches Ergebnis | Der geplante Endpunkt `GET /semanticIds` wurde über `http://localhost:8000/semanticIds` getestet. Die API war grundsätzlich erreichbar, der Endpunkt selbst lieferte jedoch die Antwort `{"detail": "Not Found"}`. Damit ist der Listen-Endpunkt im aktuellen Projektstand nicht implementiert bzw. nicht verfügbar. |
 | Status | Blockiert |
-| Nachweis | `images/str-st05-api-semanticids-not-found.png` |
+| Nachweis | [str-st05-api-semanticids-not-found.png](images/str-st05-api-semanticids-not-found.png) |
 | Bemerkung | Der ursprünglich geplante Endpunkt `/semanticIds` wurde im aktuellen Projektstand nicht separat umgesetzt. Die API-Funktionalität ist stattdessen über den implementierten Gateway-Endpunkt `/map` verfügbar. Der Test kann nach Umsetzung des Listen-Endpunkts erneut durchgeführt werden. |
 
 Beispiel für den Nachweis:
@@ -291,7 +291,7 @@ Die API antwortete mit `{"detail": "Not Found"}`. Der Endpunkt ist im aktuellen 
 | Erwartetes Ergebnis | Die API liefert den passenden Eintrag als JSON zurück. Relevante Felder wie Identifier, semanticId, Beschreibung, Definition oder weitere gemappte Eigenschaften sind enthalten. Bei gesetztem Sprachparameter werden vorhandene Sprachdaten passend zurückgegeben oder fehlende Übersetzungen kontrolliert behandelt. |
 | Tatsächliches Ergebnis | Der Sprachparameter wurde über den aktuell implementierten Endpunkt `/map` mit dem Beispiel „Volt“ getestet. Die API war erreichbar und lieferte sowohl für `lang=de` als auch für `lang=en` strukturierte JSON-Antworten. Der Sprachparameter wurde in der Anfrage verarbeitet und in der Antwort bei `query.lang` sowie im Feld `preferredName` sichtbar übernommen. Bei `lang=de` wurde `preferredName` mit `lang: de` zurückgegeben, bei `lang=en` entsprechend mit `lang: en`. |
 | Status | Bestanden |
-| Nachweis | Screenshots: `images/str-st06-api-lang-de.png`, `images/str-st06-api-lang-en.png` |
+| Nachweis | Screenshots: [Deutsch](images/str-st06-api-lang-de.png), [Englisch](images/str-st06-api-lang-en.png) |
 | Bemerkung | Der ursprünglich im STP genannte Endpunkt `/semanticIds/{identifier}` wurde im aktuellen Projektstand nicht separat umgesetzt. Die geforderte Funktion zur sprachabhängigen API-Ausgabe konnte jedoch über den implementierten Gateway-Endpunkt `/map` erfolgreich nachgewiesen werden. Da „Volt“ in Deutsch und Englisch gleich benannt ist, unterscheidet sich der Wert des preferredName nicht, der Sprachcode wird jedoch korrekt übernommen. Die vollständigen JSON-Antworten wurden über Screenshots dokumentiert. |
 
 Beispiel für den Nachweis:
@@ -317,7 +317,7 @@ curl.exe "http://localhost:8000/map?search=Volt&source=qudt&lang=en&types=unit&o
 | Erwartetes Ergebnis | Die API gibt semanticIds in der angeforderten Sortierreihenfolge zurück. Beim Domain-Filter werden nur passende Einträge angezeigt. Ungültige oder nicht passende Parameter werden verständlich behandelt. |
 | Tatsächliches Ergebnis | Die Sortierung und Filterung der semanticIds wurde über die geplanten Endpunkte `GET /semanticIds?sortbyDate=asc`, `GET /semanticIds?sortbyDate=desc` und `GET /semanticIds?filterbyURI=qudt.org` geprüft. Die API war grundsätzlich erreichbar, die angefragten Endpunkte lieferten jedoch jeweils die Antwort `{"detail": "Not Found"}`. Damit konnten Sortierung und Filterung im aktuellen Projektstand nicht durchgeführt werden. |
 | Status | Blockiert |
-| Nachweis | Sortierung: `images/str-st07-api-sort-not-found.png`<br>Filterung: `images/str-st07-api-filter-not-found.png` |
+| Nachweis | Sortierung: [str-st07-api-sort-not-found.png](images/str-st07-api-sort-not-found.png)<br>Filterung: [str-st07-api-filter-not-found.png](images/str-st07-api-filter-not-found.png) |
 | Bemerkung | Der geplante `/semanticIds`-Endpunkt sowie die zugehörigen Query-Parameter für Sortierung und Filterung sind im aktuellen Projektstand nicht separat implementiert. Die API-Funktionalität ist stattdessen über den Gateway-Endpunkt `/map` verfügbar. Der Test kann nach Umsetzung der geplanten Listen- und Filter-Endpunkte erneut durchgeführt werden. |
 
 Beispiel für den Nachweis:
@@ -352,7 +352,7 @@ Die API antwortete bei den getesteten `/semanticIds`-Query-Requests jeweils mit 
 | Erwartetes Ergebnis | Die API liefert eine verständliche Fehlermeldung, z. B. mit HTTP-Status 404. Das System stürzt nicht ab und bleibt für weitere Anfragen erreichbar. |
 | Tatsächliches Ergebnis | Die Fehlerbehandlung wurde über den aktuell implementierten Endpunkt `/map` mit dem Suchbegriff `nichtVorhanden123` getestet. Die API war erreichbar und lieferte eine kontrollierte JSON-Antwort mit `total: 0` und `results: []`. Es kam zu keinem Systemabsturz. Anschließend konnte eine gültige Anfrage mit dem Begriff „Volt“ erneut erfolgreich ausgeführt werden. |
 | Status | Bestanden |
-| Nachweis | Fehlerfall: `images/str-st08-api-error.png`<br>Kontrollanfrage: `images/str-st08-api-after-error.png` |
+| Nachweis | Fehlerfall: [str-st08-api-error.png](images/str-st08-api-error.png)<br>Kontrollanfrage: [str-st08-api-after-error.png](images/str-st08-api-after-error.png) |
 | Bemerkung | Der ursprünglich geplante Endpunkt `/semanticIds/nichtVorhanden123` wurde im aktuellen Projektstand nicht separat umgesetzt. Die geforderte Fehlerbehandlung konnte jedoch über den implementierten Gateway-Endpunkt `/map` erfolgreich nachgewiesen werden. |
 
 Beispiel für den Nachweis:
@@ -396,7 +396,7 @@ Die vollständigen API-Antworten wurden über Screenshots dokumentiert. Der Fehl
 | Erwartetes Ergebnis | Die API-Antwort enthält eine strukturierte Concept Description. Relevante Eigenschaften wie semanticId, preferredName, shortName, definition, unit, symbol oder Beschreibung sind korrekt zugeordnet, sofern sie in der Quelle vorhanden sind. Quellenverweise bleiben nachvollziehbar. |
 | Tatsächliches Ergebnis | Das QUDT-Mapping konnte anhand des Beispiels „Volt“ über den Endpunkt `/map?search=Volt&source=qudt&lang=de&types=unit&only_found=true` geprüft werden. Die API war erreichbar und lieferte eine strukturierte JSON-Antwort aus der Quelle QUDT. In der Antwort sind unter anderem `modelType: ConceptDescription`, die ID `http://qudt.org/vocab/unit/V`, `idShort: V`, eine `semanticId`, der `preferredName` „Volt“ mit `lang: de`, die Einheit `Volt`, das Symbol `V`, der Datentyp `http://qudt.org/schema/qudt/Unit`, eine `unitId`, Quellenverweise, Definitionen und ein `valueFormat` enthalten. |
 | Status | Bestanden |
-| Nachweis | `images/str-st09-qudt-mapping.png` |
+| Nachweis | [str-st09-qudt-mapping.png](images/str-st09-qudt-mapping.png) |
 | Bemerkung | Das QUDT-Mapping ist für das Beispiel „Volt“ nachvollziehbar und liefert die wichtigsten IEC61360-nahen Felder. Einzelne Felder wie `shortName`, `valueList`, `value` und `levelType` sind `null`, da diese Werte aus der QUDT-Quelle nicht direkt ableitbar bzw. für das getestete Einheitenbeispiel nicht relevant sind. |
 
 Beispiel für den Nachweis:
@@ -546,7 +546,7 @@ Beispielhafte Feldprüfung:
 | Erwartetes Ergebnis | VEC- und KBL-Daten werden in eine einheitliche Struktur übertragen. Fehlende oder abweichende Felder werden kontrolliert behandelt. Import und Export liefern strukturierte Daten, die mit dem semantischen Zielmodell kompatibel sind. |
 | Tatsächliches Ergebnis | Das VEC- und KBL-Mapping konnte über den implementierten Gateway-Endpunkt `/map` geprüft werden. Für VEC wurde der Begriff „Volt“ über `/map?search=Volt&source=vec&lang=de&only_found=true` getestet. Die API lieferte eine strukturierte Concept-Description-Ausgabe mit `source: vec`, `sourceName: VEC`, `modelType: ConceptDescription` und dem Ergebnis `NominalVoltage`. Für KBL wurde der Begriff „Wire“ über `/map?search=Wire&source=kbl&lang=de&only_found=true` getestet. Auch hier konnte eine strukturierte Mapping-Ausgabe erzeugt werden. Der geplante Export-Endpunkt `/semanticIds/export` wurde ebenfalls geprüft, lieferte jedoch `{"detail": "Not Found"}`. Die Import- und Exportfunktionen über `/semanticIds` konnten daher im aktuellen Projektstand nicht vollständig getestet werden. |
 | Status | Teilweise bestanden |
-| Nachweis | VEC: `images/str-st10-vec-mapping.png`<br>KBL: `images/str-st10-kbl-mapping.png`<br>Export: `images/str-st10-export-not-found.png` |
+| Nachweis | VEC: [str-st10-vec-mapping.png](images/str-st10-vec-mapping.png)<br>KBL: [str-st10-kbl-mapping.png](images/str-st10-kbl-mapping.png)<br>Export: [str-st10-export-not-found.png](images/str-st10-export-not-found.png) |
 | Bemerkung | Die quellenspezifischen Mapper für VEC und KBL sind über den Gateway-Endpunkt `/map` grundsätzlich funktionsfähig. Die geplanten Endpunkte `POST /semanticIds` und `GET /semanticIds/export` sind im aktuellen Projektstand nicht separat umgesetzt bzw. nicht verfügbar. |
 
 Beispiel für den Nachweis:
