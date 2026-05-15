@@ -22,14 +22,7 @@ Etablierte semantische Referenzsysteme (z.B. IEC-CDD, ECLASS, UNSPSC, ETIM) biet
 
 **Innerhalb dieses Projekts** wurde die Suchfunktion der Wikibase optimiert und APIs mit quellenspezifischen Mappern für QUDT, KBL und VEC entwickelt, die externe Daten automatisiert auf das IEC61360-Datenmodell abbilden.
 
-Weitere Informationen sind im [Benutzerhandbuch]() zusehen.
-
-- **Zielgruppe**: Entwickler im Semantic-Web-Bereich
-- **Technologie-Stack**: Python, JavaScript, HTML
-- **Verwendete Technologien**: 
-  - Backend: Python
-  - Frontend: JavaScript/HTML
-  - Semantische Technologien: Wikibase, RDF, SPARQL
+Weitere Informationen sind im [Benutzerhandbuch](https://github.com/DHBW-TINF24F/Team4-Semantic-Wikibase/blob/d30f840d06a78725a317fbb8e5b3604773a431bf/Benutzer_manual.md) zusehen.
 
 ---
 
