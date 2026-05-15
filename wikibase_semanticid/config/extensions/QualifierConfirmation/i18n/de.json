@@ -1,0 +1,7 @@
+{
+	"@metadata": {
+		"authors": []
+	},
+	"qualifierconfirmation-desc": "Zeigt einen Bestätigungsdialog beim Speichern einer Aussage, die einen als standardisiert markierten Qualifier enthält.",
+	"qualifierconfirmation-dialog-title": "Bestätigung erforderlich"
+}

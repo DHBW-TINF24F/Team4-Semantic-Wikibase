@@ -1,0 +1,278 @@
+{
+	"name": "EntitySchema",
+	"author": [
+		"The Wikidata team"
+	],
+	"url": "https://www.mediawiki.org/wiki/Extension:EntitySchema",
+	"descriptionmsg": "entityschema-desc",
+	"license-name": "GPL-2.0-or-later",
+	"type": "wikibase",
+	"requires": {
+		"MediaWiki": ">= 1.46"
+	},
+	"load_composer_autoloader": true,
+	"AutoloadNamespaces": {
+		"EntitySchema\\": "src/"
+	},
+	"TestAutoloadNamespaces": {
+		"EntitySchema\\Tests\\Integration\\": "tests/phpunit/integration/",
+		"EntitySchema\\Tests\\Unit\\": "tests/phpunit/unit/",
+		"EntitySchema\\Tests\\Mocks\\": "tests/phpunit/Mocks/"
+	},
+	"ExtensionMessagesFiles": {
+		"EntitySchemaAlias": "EntitySchema.i18n.alias.php"
+	},
+	"MessagesDirs": {
+		"EntitySchema": [
+			"i18n"
+		]
+	},
+	"HookHandlers": {
+		"PageHistoryLineEnding": {
+			"class": "\\EntitySchema\\MediaWiki\\Hooks\\PageHistoryLineEndingHookHandler",
+			"services": [
+				"EntitySchema.EntitySchemaIsRepo"
+			],
+			"optional_services": [
+				"LinkRenderer",
+				"PermissionManager",
+				"RevisionStore"
+			]
+		},
+		"HtmlPageLinkRendererEnd": {
+			"class": "\\EntitySchema\\MediaWiki\\Hooks\\HtmlPageLinkRendererEndHookHandler",
+			"factory": "\\EntitySchema\\MediaWiki\\Hooks\\HtmlPageLinkRendererEndHookHandler::factory",
+			"services": [
+				"LanguageFactory",
+				"EntitySchema.EntitySchemaIsRepo"
+			],
+			"optional_services": [
+				"EntitySchema.SchemaDataResolvingLabelLookup"
+			]
+		},
+		"WikibaseClientDataTypes": {
+			"class": "\\EntitySchema\\Wikibase\\Hooks\\WikibaseClientDataTypesHookHandler"
+		},
+		"WikibaseRepoDataTypes": {
+			"class": "\\EntitySchema\\Wikibase\\Hooks\\WikibaseRepoDataTypesHookHandler",
+			"services": [
+				"LinkRenderer",
+				"TitleFactory",
+				"EntitySchema.EntitySchemaIsRepo"
+			],
+			"optional_services": [
+				"WikibaseRepo.LanguageNameLookupFactory",
+				"WikibaseRepo.LocalEntitySource",
+				"EntitySchema.EntitySchemaExistsValidator",
+				"EntitySchema.SchemaDataResolvingLabelLookup"
+			]
+		},
+		"WikibaseRepoEntitySearchHelperCallbacks": {
+			"class": "\\EntitySchema\\Wikibase\\Hooks\\WikibaseRepoEntitySearchHelperCallbacksHookHandler",
+			"services": [
+				"EntitySchema.EntitySchemaIsRepo"
+			],
+			"optional_services": [
+				"EntitySchema.EntitySchemaSearchHelperFactory"
+			]
+		},
+		"WikibaseRepoOnParserOutputUpdaterConstruction": {
+			"class": "\\EntitySchema\\Wikibase\\Hooks\\WikibaseRepoOnParserOutputUpdaterConstructionHookHandler",
+			"services": [
+				"EntitySchema.EntitySchemaIsRepo"
+			],
+			"optional_services": [
+				"WikibaseRepo.PropertyDataTypeLookup"
+			]
+		},
+		"WikibaseRepoSearchableEntityScopes": {
+			"class": "\\EntitySchema\\Wikibase\\Hooks\\WikibaseRepoSearchableEntityScopesHookHandler"
+		},
+		"WikibaseRepoSearchableEntityScopesMessages": {
+			"class": "\\EntitySchema\\Wikibase\\Hooks\\WikibaseRepoSearchableEntityScopesMessagesHookHandler"
+		},
+		"SidebarBeforeOutput": {
+			"class": "\\EntitySchema\\MediaWiki\\Hooks\\SidebarBeforeOutputHookHandler",
+			"services": [
+				"EntitySchema.EntitySchemaIsRepo"
+			],
+			"optional_services": [
+				"WikibaseRepo.LocalEntitySource"
+			]
+		},
+		"TitleGetRestrictionTypes": {
+			"class": "\\EntitySchema\\MediaWiki\\Hooks\\TitleGetRestrictionTypesHookHandler",
+			"services": [
+				"EntitySchema.EntitySchemaIsRepo"
+			]
+		},
+		"ImportHandleRevisionXMLTag": {
+			"class": "\\EntitySchema\\MediaWiki\\Hooks\\ImportHandleRevisionXMLTagHookHandler"
+		},
+		"ContentModelCanBeUsedOn": {
+			"class": "\\EntitySchema\\MediaWiki\\Hooks\\ContentModelCanBeUsedOnHookHandler",
+			"services": [
+				"EntitySchema.EntitySchemaIsRepo"
+			]
+		},
+		"ExtensionTypes": {
+			"class": "\\EntitySchema\\MediaWiki\\Hooks\\ExtensionTypesHookHandler"
+		},
+		"BeforeDisplayNoArticleText": {
+			"class": "\\EntitySchema\\MediaWiki\\Hooks\\BeforeDisplayNoArticleTextHookHandler",
+			"services": [
+				"EntitySchema.EntitySchemaIsRepo"
+			]
+		},
+		"FormatAutocomments": {
+			"class": "\\EntitySchema\\MediaWiki\\Hooks\\FormatAutocommentsHookHandler",
+			"services": [
+				"EntitySchema.AutocommentFormatter",
+				"EntitySchema.EntitySchemaIsRepo"
+			]
+		},
+		"LoadExtensionSchemaUpdates": {
+			"class": "\\EntitySchema\\MediaWiki\\Hooks\\LoadExtensionSchemaUpdatesHookHandler"
+		},
+		"SpecialPageInitList": {
+			"class": "EntitySchema\\MediaWiki\\Hooks\\SpecialPageInitListHookHandler",
+			"services": [
+				"EntitySchema.EntitySchemaIsRepo"
+			]
+		},
+		"GetContentModels": {
+			"class": "EntitySchema\\MediaWiki\\Hooks\\GetContentModelsHookHandler",
+			"services": [
+				"EntitySchema.EntitySchemaIsRepo"
+			]
+		},
+		"ContentHandlerForModelID": {
+			"class": "EntitySchema\\MediaWiki\\Hooks\\ContentHandlerForModelIDHookHandler",
+			"services": [
+				"ConfigFactory",
+				"LanguageNameUtils",
+				"ParsoidParserFactory",
+				"TitleFactory",
+				"EntitySchema.EntitySchemaIsRepo"
+			],
+			"optional_services": [
+				"EntitySchema.LabelLookup",
+				"WikibaseRepo.LanguageNameLookupFactory"
+			]
+		},
+		"OutputPageParserOutput": {
+			"class": "EntitySchema\\MediaWiki\\Hooks\\OutputPageParserOutputHookHandler"
+		},
+		"ResourceLoaderRegisterModules": {
+			"class": "EntitySchema\\MediaWiki\\Hooks\\ResourceLoaderRegisterModulesHookHandler",
+			"services": [
+				"EntitySchema.EntitySchemaIsRepo"
+			]
+		},
+		"SkinTemplateNavigationUniversal": {
+			"class": "EntitySchema\\MediaWiki\\SkinTemplateNavigationUniversalHookHandler",
+			"services": [
+				"EntitySchema.EntitySchemaIsRepo"
+			]
+		},
+		"CanonicalNamespaces": {
+			"class": "EntitySchema\\MediaWiki\\Hooks\\CanonicalNamespacesHookHandler"
+		}
+	},
+	"QUnitTestModule": {
+		"localBasePath": "",
+		"remoteExtPath": "EntitySchema",
+		"packageFiles": [
+			"tests/qunit/index.js",
+			"tests/qunit/experts/EntitySchema.tests.js"
+		],
+		"dependencies": [
+			"mediawiki.widgets",
+			"oojs-ui-core",
+			"oojs-ui-widgets",
+			"oojs-ui",
+			"vue",
+			"vuex",
+			"wikibase.datamodel",
+			"ext.EntitySchema.experts.EntitySchema",
+			"test.WikibaseRepository"
+		]
+	},
+	"Hooks": {
+		"SkinTemplateNavigation::Universal": "SkinTemplateNavigationUniversal",
+		"LoadExtensionSchemaUpdates": "LoadExtensionSchemaUpdates",
+		"ExtensionTypes": "ExtensionTypes",
+		"BeforeDisplayNoArticleText": "BeforeDisplayNoArticleText",
+		"PageHistoryLineEnding": "PageHistoryLineEnding",
+		"HtmlPageLinkRendererEnd": "HtmlPageLinkRendererEnd",
+		"FormatAutocomments": "FormatAutocomments",
+		"ContentModelCanBeUsedOn": "ContentModelCanBeUsedOn",
+		"ImportHandleRevisionXMLTag": "ImportHandleRevisionXMLTag",
+		"TitleGetRestrictionTypes": "TitleGetRestrictionTypes",
+		"CanonicalNamespaces": "CanonicalNamespaces",
+		"WikibaseRepoEntitySearchHelperCallbacks": "WikibaseRepoEntitySearchHelperCallbacks",
+		"WikibaseRepoDataTypes": "WikibaseRepoDataTypes",
+		"WikibaseRepoOnParserOutputUpdaterConstruction": "WikibaseRepoOnParserOutputUpdaterConstruction",
+		"WikibaseRepoSearchableEntityScopes": "WikibaseRepoSearchableEntityScopes",
+		"WikibaseRepoSearchableEntityScopesMessages": "WikibaseRepoSearchableEntityScopesMessages",
+		"SidebarBeforeOutput": "SidebarBeforeOutput",
+		"WikibaseClientDataTypes": "WikibaseClientDataTypes",
+		"SpecialPage_initList": "SpecialPageInitList",
+		"GetContentModels": "GetContentModels",
+		"ContentHandlerForModelID": "ContentHandlerForModelID",
+		"OutputPageParserOutput": "OutputPageParserOutput",
+		"ResourceLoaderRegisterModules": "ResourceLoaderRegisterModules"
+	},
+	"namespaces": [
+		{
+			"id": 640,
+			"constant": "NS_ENTITYSCHEMA_JSON",
+			"name": "EntitySchema",
+			"subpages": false,
+			"content": true,
+			"defaultcontentmodel": "EntitySchema",
+			"movable": false,
+			"conditional": true
+		},
+		{
+			"id": 641,
+			"constant": "NS_ENTITYSCHEMA_JSON_TALK",
+			"name": "EntitySchema_talk",
+			"subpages": true,
+			"content": false,
+			"defaultcontentmodel": "wikitext",
+			"conditional": true
+		}
+	],
+	"config": {
+		"EntitySchemaIsRepo": {
+			"value": true,
+			"description": "Set to indicate that this wiki is a WikibaseRepo.",
+			"public": true
+		},
+		"EntitySchemaSchemaTextMaxSizeBytes": {
+			"value": 50000,
+			"description": "Max length of the Schema text in bytes",
+			"public": true
+		},
+		"EntitySchemaNameBadgeMaxSizeChars": {
+			"value": 250,
+			"description": "Max length of the label description or combined aliases in characters",
+			"public": true
+		},
+		"EntitySchemaShExSimpleUrl": {
+			"value": null,
+			"description": "The URL for a shex-simple installation. Users are sent here to check entities against schema, with a schemaURL=… url query parameter appended to the URL specifying a URL for the schema text.",
+			"public": true
+		},
+		"EntitySchemaSkippedIDs": {
+			"value": [],
+			"description": "A list of integers to skip when generating new IDs. These must be pure integer numbers, _not_ strings starting with an E!",
+			"public": true
+		}
+	},
+	"manifest_version": 2,
+	"ServiceWiringFiles": [
+		"src/EntitySchema.ServiceWiring.php"
+	]
+}

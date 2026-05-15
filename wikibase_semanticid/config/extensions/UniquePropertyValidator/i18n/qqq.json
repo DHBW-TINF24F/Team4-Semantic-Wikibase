@@ -1,0 +1,7 @@
+{
+	"@metadata": {
+		"authors": []
+	},
+	"uniquepropertyvalidator-desc": "{{desc|name=UniquePropertyValidator|url=}}",
+	"uniquepropertyvalidator-duplicate-value": "Error message shown when a property value is not unique. Parameters:\n* $1 - the property ID\n* $2 - the value\n* $3 - the entity ID (item or property) that already has this value"
+}

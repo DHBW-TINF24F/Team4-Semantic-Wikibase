@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": []
+	},
+	"semanticidresolver-desc": "Provides a special page to resolve items and properties by their semantic ID property value",
+	"gobysemanticid": "Go by Semantic ID",
+	"semanticidresolver-label": "Semantic ID",
+	"semanticidresolver-submit": "Go",
+	"semanticidresolver-notfound": "No item found with semantic ID \"$1\".",
+	"semanticidresolver-error": "An error occurred while trying to find the item."
+}

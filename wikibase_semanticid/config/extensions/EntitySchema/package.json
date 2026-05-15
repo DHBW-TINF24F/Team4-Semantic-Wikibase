@@ -1,0 +1,46 @@
+{
+	"name": "EntitySchema",
+	"private": true,
+	"scripts": {
+		"fix": "npm-run-all fix:*",
+		"test": "npm-run-all test:*",
+		"test:lint": "eslint --cache --no-fix --max-warnings 0 --ignore-path .gitignore .",
+		"test:lintcss": "stylelint --cache \"**/*.{css,less}\" --ignore-path .gitignore",
+		"test:linti18n": "banana-checker i18n/",
+		"fix:js": "eslint --fix --ignore-path .gitignore .",
+		"fix:css": "stylelint --fix \"**/*.{css,less}\" --ignore-path .gitignore",
+		"selenium-test": "CYPRESS_CACHE_FOLDER=./cypress/.cache cypress run",
+		"cypress:open": "CYPRESS_CACHE_FOLDER=./cypress/.cache cypress open"
+	},
+	"devDependencies": {
+		"api-testing": "1.7.1",
+		"cypress": "^13.17.0",
+		"cypress-terminal-report": "^7.1.0",
+		"eslint-config-wikimedia": "0.32.3",
+		"eslint-plugin-chai-friendly": "^1.0.1",
+		"eslint-plugin-cypress": "^3.4.0",
+		"grunt-banana-checker": "^0.13.0",
+		"lint-staged": "^15.2.11",
+		"npm-run-all": "^4.1.5",
+		"stylelint-config-wikimedia": "0.18.0"
+	},
+	"eslintIgnore": [
+		"vendor/**"
+	],
+	"lint-staged": {
+		"*.js": [
+			"eslint --fix"
+		],
+		"*.php": [
+			"vendor/bin/parallel-lint --colors",
+			"./.phpcbf",
+			"vendor/bin/phpcs -s"
+		],
+		"*.json": [
+			"eslint --fix"
+		],
+		"*.{css,scss,less}": [
+			"stylelint --fix"
+		]
+	}
+}
