@@ -14,11 +14,15 @@ This repo contains the results of project: https://github.com/DHBW-TINF24F/.gith
 
 ![Semantic Wikibase](/PROJECT/images/semanticwikibase.png)
 
-Das allgemeine Projekt „Semantic Wikibase" beschäftigt sich damit, wie Begriffe aus der Industrie (wie Maßeinheiten, Bauteile, Eigenschaften) eindeutig, offen und für Computer verständlich im Internet beschrieben und erreichbar werden können. 
+Etablierte semantische Referenzsysteme (z.B. IEC-CDD, ECLASS, UNSPSC, ETIM) bieten oftmals keine maschinenlesbare Zugänglichkeit über das Internet und die Prozesse zur Veröffentlichung neuer Merkmale sind meist träge. Wünschenswert wäre daher ergänzend ein webbasierter „SemanticService“, der eine AAS-kompatible Schnittstellezu den entsprechenden Informationsquellen bereitstellt.
+
+**Das allgemeine Projekt „Semantic Wikibase" beschäftigt sich damit**, wie Begriffe aus der Industrie (wie Maßeinheiten, Bauteile, Eigenschaften) eindeutig, offen und für Computer verständlich im Internet beschrieben und erreichbar werden können. 
 
 **Ziel ist es, eine Plattform zu bauen, auf der jeder solche Begriffe anlegen, beschreiben und wiederverwenden kann**. Ähnlich wie bei Wikipedia, aber speziell für industrielle Begriffe und semantische Daten.
 
-Innerhalb dieses Projekts wurde die Suchfunktion der Wikibase optimiert und APIs mit quellenspezifischen Mappern für QUDT, KBL und VEC entwickelt, die externe Daten automatisiert auf das IEC61360-Datenmodell abbilden.
+**Innerhalb dieses Projekts** wurde die Suchfunktion der Wikibase optimiert und APIs mit quellenspezifischen Mappern für QUDT, KBL und VEC entwickelt, die externe Daten automatisiert auf das IEC61360-Datenmodell abbilden.
+
+Weitere Informationen sind im [Benutzerhandbuch]() zusehen.
 
 - **Zielgruppe**: Entwickler im Semantic-Web-Bereich
 - **Technologie-Stack**: Python, JavaScript, HTML
