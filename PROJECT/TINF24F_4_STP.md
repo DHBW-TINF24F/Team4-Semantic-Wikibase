@@ -11,6 +11,7 @@
 | 0.2 | 12.05.2026 | Team Semantic Wikibase | Anpassung an CRS-, SRS- und SAS-Struktur |
 | 0.3 | 12.05.2026 | Team Semantic Wikibase | Reduktion auf ca. 10 Systemtestfälle, Ergänzung der Testbasis und Traceability |
 | 0.4 | 12.05.2026 | Team Semantic Wikibase | Ergänzung weiterer Projektartefakte als Referenzen |
+| 0.5 | 15.05.2026 | Team Semantic Wikibase | Abgleich mit aktueller SRS-Anforderungsnummerierung, Ergänzung FA.011 und API-v3-Request |
 
 <br>
 
@@ -147,10 +148,15 @@ Besonders relevante Anforderungen für diesen STP sind:
 | FA.003 | Mapping auf ein IEC-61360-orientiertes Datenmodell muss geprüft werden. |
 | FA.004 | Sprachabhängige API-Ausgabe muss berücksichtigt werden. |
 | FA.006 | Quellenverweise sollen in Detailansicht oder API nachvollziehbar sein. |
-| FA.010 | Import bzw. Verarbeitung externer Concept Descriptions per URI ist relevant für Mapper-Tests. |
+| FA.009 | Import bzw. Verarbeitung externer Concept Descriptions per URI ist relevant für Import- und Mapper-Tests. |
+| FA.010 | Startseite und verbesserte Suchfunktion müssen geprüft werden. |
+| FA.011 | Quellenspezifische Mapper für QUDT, VEC und KBL müssen gegen das IEC61360-Zielmodell geprüft werden. |
 | NFA.001 | System soll während Test und Demo stabil erreichbar sein. |
 | NFA.002 | API soll ohne wahrnehmbare Verzögerung antworten. |
+| NFA.003 | Schreibzugriffe und sicherheitsrelevante API-Funktionen müssen kontrolliert betrachtet werden. |
 | NFA.004 | Benutzeroberfläche und Suche sollen intuitiv nutzbar sein. |
+
+Durch diese Zuordnung wird sichergestellt, dass die Testfälle nicht isoliert betrachtet werden, sondern direkt auf die aktuell dokumentierten Anforderungen aus CRS und SRS zurückgeführt werden können. Besonders wichtig ist dabei die korrekte Abgrenzung zwischen Importfunktionen, verbesserter Suchfunktion und quellenspezifischen Mappern.
 
 ---
 
@@ -263,7 +269,7 @@ Die genaue Testumgebung wird im späteren STR mit konkreten Versionen, URLs, Por
 |-|-|
 | Testfall-ID | ST-01 |
 | Testobjekt | Startseite / Benutzeroberfläche |
-| Zugehörige Anforderung | FA.001, NFA.001, NFA.004 |
+| Zugehörige Anforderung | FA.010, NFA.001, NFA.004 |
 | Ziel | Prüfen, ob die Startseite des Semantic Hub korrekt erreichbar ist. |
 | Vorbedingung | Lokale Wikibase-/Semantic-Hub-Instanz ist gestartet. |
 | Testdaten | URL der lokalen Instanz. |
@@ -280,7 +286,7 @@ Die genaue Testumgebung wird im späteren STR mit konkreten Versionen, URLs, Por
 |-|-|
 | Testfall-ID | ST-02 |
 | Testobjekt | Suchfunktion / Startseite |
-| Zugehörige Anforderung | FA.001, NFA.004 |
+| Zugehörige Anforderung | FA.010, NFA.004 |
 | Ziel | Prüfen, ob Nutzer die Suche einfach auf der Startseite finden. |
 | Vorbedingung | Startseite ist geöffnet. |
 | Testdaten | Keine besonderen Testdaten. |
@@ -297,7 +303,7 @@ Die genaue Testumgebung wird im späteren STR mit konkreten Versionen, URLs, Por
 |-|-|
 | Testfall-ID | ST-03 |
 | Testobjekt | Suchfunktion |
-| Zugehörige Anforderung | FA.001, FA.002, NFA.004 |
+| Zugehörige Anforderung | FA.001, FA.010, NFA.004 |
 | Ziel | Prüfen, ob eine bekannte semanticId gefunden wird. |
 | Vorbedingung | Mindestens ein semantischer Eintrag ist in Wikibase/Semantic Hub vorhanden. |
 | Testdaten | Beispiel: `http://qudt.org/vocab/unit/V` oder eine bekannte semanticId aus dem Projekt. |
@@ -314,7 +320,7 @@ Die genaue Testumgebung wird im späteren STR mit konkreten Versionen, URLs, Por
 |-|-|
 | Testfall-ID | ST-04 |
 | Testobjekt | Suchfunktion / Fehlerbehandlung |
-| Zugehörige Anforderung | FA.001, NFA.001, NFA.004 |
+| Zugehörige Anforderung | FA.010, NFA.001, NFA.004 |
 | Ziel | Prüfen, ob die Suchfunktion unterschiedliche Eingaben kontrolliert verarbeitet. |
 | Vorbedingung | Suchfunktion ist erreichbar und mindestens ein semantischer Eintrag ist vorhanden. |
 | Testdaten | `Volt`, `V`, `Unit`, `http://qudt.org/vocab/unit/V`, `xyzTestEintragNichtVorhanden123` |
@@ -399,7 +405,7 @@ Die genaue Testumgebung wird im späteren STR mit konkreten Versionen, URLs, Por
 |-|-|
 | Testfall-ID | ST-09 |
 | Testobjekt | QUDT-Mapper / API-Ausgabe |
-| Zugehörige Anforderung | FA.003, FA.006, FA.010 |
+| Zugehörige Anforderung | FA.003, FA.006, FA.011 |
 | Ziel | Prüfen, ob QUDT-Daten korrekt in das AAS-Concept-Description-Format übertragen werden. |
 | Vorbedingung | QUDT-Daten wurden geladen und gemappt. |
 | Testdaten | Beispiel: QUDT Unit Volt, `http://qudt.org/vocab/unit/V`. |
@@ -416,7 +422,7 @@ Die genaue Testumgebung wird im späteren STR mit konkreten Versionen, URLs, Por
 |-|-|
 | Testfall-ID | ST-10 |
 | Testobjekt | VEC-Mapper, KBL-Mapper, REST-API / Import und Export |
-| Zugehörige Anforderung | FA.002, FA.003, FA.010 |
+| Zugehörige Anforderung | FA.002, FA.003, FA.009, FA.011, NFA.003 |
 | Ziel | Prüfen, ob VEC- und KBL-Daten nachvollziehbar in das gemeinsame semantische Modell übertragen und über Import-/Export-Funktionen verarbeitet werden können. |
 | Vorbedingung | VEC- und KBL-Beispieldaten oder Mapping-Dateien sind vorhanden. Die API unterstützt Import und Export. |
 | Testdaten | Beispielhafte VEC-/KBL-Begriffe, `POST /semanticIds`, `GET /semanticIds/export` |
@@ -429,7 +435,7 @@ Die genaue Testumgebung wird im späteren STR mit konkreten Versionen, URLs, Por
 
 ## 9. Traceability Matrix
 
-Die Traceability Matrix zeigt, welche Anforderungen durch welche Testfälle abgedeckt werden.
+Die Traceability Matrix zeigt, welche Anforderungen durch welche Testfälle abgedeckt werden. Sie basiert auf der aktuellen Nummerierung der funktionalen und nicht-funktionalen Anforderungen aus dem SRS.
 
 | Anforderung | Beschreibung | Zugeordnete Testfälle |
 |-|-|-|
@@ -438,10 +444,15 @@ Die Traceability Matrix zeigt, welche Anforderungen durch welche Testfälle abge
 | FA.003 | Mapping auf IEC-61360-Datentemplate | ST-06, ST-09, ST-10 |
 | FA.004 | Sprachabhängige API-Ausgabe | ST-06 |
 | FA.006 | Verlinkung externer Quellen | ST-07, ST-09 |
-| FA.010 | Automatisierter Import externer Concept Descriptions per URI | ST-09, ST-10 |
+| FA.009 | Automatisierter Import externer Concept Descriptions per URI | ST-09, ST-10 |
+| FA.010 | Überarbeitete Startseite und verbesserte Suchfunktion | ST-01, ST-02, ST-03, ST-04 |
+| FA.011 | Quellenspezifische Mapper für QUDT, VEC und KBL auf IEC61360 | ST-09, ST-10 |
 | NFA.001 | Verfügbarkeit / Stabilität | ST-01, ST-04, ST-05, ST-08 |
 | NFA.002 | Performance / Antwortzeit | ST-05, ST-06, ST-07 |
+| NFA.003 | Sicherheit / kontrollierter Schreibzugriff | ST-10 |
 | NFA.004 | Benutzerfreundlichkeit | ST-01, ST-02, ST-03, ST-04 |
+
+Die Anforderungen FA.005, FA.007, FA.008 und NFA.005 werden in diesem STP nicht durch eigenständige Systemtestfälle vollständig abgedeckt, da der Fokus dieses Testplans auf der Suchfunktion, der API, den Mappern sowie den sichtbaren Systemreaktionen liegt. Diese Anforderungen können bei Bedarf in ergänzenden Tests oder Reviews betrachtet werden.
 
 ---
 
@@ -555,6 +566,7 @@ curl "http://localhost:8000/semanticIds?filterbyURI=qudt.org"
 curl "http://localhost:8000/semanticIds?sortbyDate=asc"
 curl "http://localhost:8000/semanticIds?sortbyDate=desc"
 curl http://localhost:8000/semanticIds/export
+curl "http://localhost:8000/api/v3/search?search=Volt&lang=de&types=unit"
 ```
 
 ### 14.3 Beispielhafte Testdaten
@@ -567,3 +579,4 @@ curl http://localhost:8000/semanticIds/export
 | KBL | Beispielhafter KBL-Begriff aus Mapping-Datei | Prüfung des KBL-Mappings. |
 | Testdaten | `xyzTestEintragNichtVorhanden123` | Negativtest ohne Treffer. |
 | API | `nichtVorhanden123` | Negativtest für ungültigen Identifier. |
+| API v3 | `/api/v3/search?search=Volt&lang=de&types=unit` | Test des dokumentierten Such-Endpunkts aus MOD und SAS_AAS_Wikibase. |
