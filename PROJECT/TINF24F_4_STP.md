@@ -490,7 +490,7 @@ Es wird erwartet, dass die grundlegenden Funktionen des Systems erfolgreich übe
 - erkennbare Mapping-Ergebnisse für QUDT, VEC und KBL,
 - nachvollziehbarer Import und Export von semanticIds.
 
-Bei noch nicht vollständig implementierten Funktionen wird erwartet, dass diese im STR als **Offen**, **Teilweise erfolgreich** oder **Fehlgeschlagen** dokumentiert werden.
+Bei noch nicht vollständig implementierten Funktionen wird erwartet, dass diese im STR als **Blockiert**, **Teilweise bestanden** oder **Fehlgeschlagen** dokumentiert werden.
 
 ---
 
@@ -558,15 +558,9 @@ Abbildung 1 zeigt die JSON-Antwort des Endpunkts `GET /semanticIds` während der
 ### 14.2 Beispielhafte API-Requests
 
 ```bash
-curl http://localhost:8000/semanticIds
-curl http://localhost:8000/semanticIds/volt
-curl "http://localhost:8000/semanticIds/volt?lang=de"
-curl "http://localhost:8000/semanticIds/volt?lang=en"
-curl "http://localhost:8000/semanticIds?filterbyURI=qudt.org"
-curl "http://localhost:8000/semanticIds?sortbyDate=asc"
-curl "http://localhost:8000/semanticIds?sortbyDate=desc"
-curl http://localhost:8000/semanticIds/export
-curl "http://localhost:8000/api/v3/search?search=Volt&lang=de&types=unit"
+curl.exe "http://localhost:8000/map?search=Volt&source=qudt&lang=de&types=unit&only_found=true"
+curl.exe "http://localhost:8000/map?search=Volt&source=vec&lang=de&only_found=true"
+curl.exe "http://localhost:8000/map?search=Wire&source=kbl&lang=de&only_found=true"
 ```
 
 ### 14.3 Beispielhafte Testdaten
