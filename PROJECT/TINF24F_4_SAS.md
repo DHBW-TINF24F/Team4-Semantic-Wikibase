@@ -321,11 +321,11 @@ Für das Semantic Wikibase-Projekt wird **CirrusSearch in Kombination mit einer 
 
 | Kriterium | CirrusSearch | FacettedSearch | Gewichtung |
 |-----------|:---:|:---:|:---:|
-| Volltext über Labels & Beschreibungen | ✅ | ⚠️ | Hoch |
-| Mehrsprachige Suche | ✅ | ✅ | Hoch |
-| Semantic ID (URI-Suche) | ⚠️ | ✅ | Sehr hoch |
-| Property-basiertes Filtern | ⚠️ | ✅ | Mittel |
-| Wikibase-native Integration | ✅ | ⚠️ | Hoch |
+| Volltext über Labels & Beschreibungen | Unterstützt | Eingeschränkt | Hoch |
+| Mehrsprachige Suche | Unterstützt | Unterstützt | Hoch |
+| Semantic ID (URI-Suche) | Eingeschränkt | Unterstützt | Sehr hoch |
+| Property-basiertes Filtern | Eingeschränkt | Unterstützt | Mittel |
+| Wikibase-native Integration | Unterstützt | Eingeschränkt | Hoch |
 | Deploymentaufwand | Gering | Mittel-Hoch | Mittel |
 | Community-Support | Sehr hoch | Mittel | Mittel |
 
