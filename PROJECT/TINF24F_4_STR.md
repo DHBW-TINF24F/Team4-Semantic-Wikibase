@@ -370,36 +370,147 @@ curl -i http://localhost:8000/semanticIds/nichtVorhanden123
 |-|-|
 | Testfall-ID | ST-09 |
 | Testobjekt | QUDT-Mapper / API-Ausgabe |
-| Zugehörige Anforderung | FA.003, FA.006, FA.011, FA.009 |
+| Zugehörige Anforderung | FA.003, FA.006, FA.009, FA.011 |
 | Ziel | Prüfen, ob QUDT-Daten korrekt in das AAS-Concept-Description-Format übertragen werden. |
 | Vorbedingung | QUDT-Daten wurden geladen und gemappt. |
 | Testdaten | Beispiel: QUDT Unit Volt, `http://qudt.org/vocab/unit/V`. |
 | Testschritte | 1. QUDT-Eintrag importieren oder vorhandenen Eintrag verwenden.<br>2. API-Abfrage zum Eintrag ausführen.<br>3. JSON-Antwort prüfen.<br>4. Felder mit erwarteter AAS-CD-Struktur vergleichen.<br>5. Prüfen, ob Quellenbezug bzw. URI nachvollziehbar ist. |
 | Erwartetes Ergebnis | Die API-Antwort enthält eine strukturierte Concept Description. Relevante Eigenschaften wie semanticId, preferredName, shortName, definition, unit, symbol oder Beschreibung sind korrekt zugeordnet, sofern sie in der Quelle vorhanden sind. Quellenverweise bleiben nachvollziehbar. |
-| Tatsächliches Ergebnis | [einfügen] |
-| Status | Noch nicht durchgeführt |
-| Nachweis | [Screenshot oder JSON-Ausgabe einfügen] |
-| Bemerkung | [einfügen] |
+| Tatsächliches Ergebnis | Das QUDT-Mapping konnte anhand des Beispiels „Volt“ über den Endpunkt `/map?search=Volt&source=qudt&lang=de&types=unit&only_found=true` geprüft werden. Die API war erreichbar und lieferte eine strukturierte JSON-Antwort aus der Quelle QUDT. In der Antwort sind unter anderem `modelType: ConceptDescription`, die ID `http://qudt.org/vocab/unit/V`, `idShort: V`, eine `semanticId`, der `preferredName` „Volt“ mit `lang: de`, die Einheit `Volt`, das Symbol `V`, der Datentyp `http://qudt.org/schema/qudt/Unit`, eine `unitId`, Quellenverweise, Definitionen und ein `valueFormat` enthalten. |
+| Status | Bestanden |
+| Nachweis | `images/str-st09-qudt-mapping.png` |
+| Bemerkung | Das QUDT-Mapping ist für das Beispiel „Volt“ nachvollziehbar und liefert die wichtigsten IEC61360-nahen Felder. Einzelne Felder wie `shortName`, `valueList`, `value` und `levelType` sind `null`, da diese Werte aus der QUDT-Quelle nicht direkt ableitbar bzw. für das getestete Einheitenbeispiel nicht relevant sind. |
 
 Beispiel für den Nachweis:
 
 ```bash
-curl "http://localhost:8000/api/v3/search?search=Volt&lang=de&types=unit"
+curl.exe "http://localhost:8000/map?search=Volt&source=qudt&lang=de&types=unit&only_found=true"
 ```
 
 ```json
-[Antwort hier einfügen]
+{
+  "query": {
+    "search": "Volt",
+    "source": "qudt",
+    "lang": "de",
+    "types": [
+      "unit"
+    ],
+    "onlyFound": true
+  },
+  "total": 1,
+  "results": [
+    {
+      "source": "qudt",
+      "sourceName": "QUDT",
+      "success": true,
+      "response": {
+        "query": {
+          "search": "Volt",
+          "mode": "term",
+          "lang": "de",
+          "types": [
+            "unit"
+          ]
+        },
+        "total": 1,
+        "result": {
+          "modelType": "ConceptDescription",
+          "id": "http://qudt.org/vocab/unit/V",
+          "idShort": "V",
+          "embeddedDataSpecifications": [
+            {
+              "dataSpecificationContent": {
+                "modelType": "DataSpecificationIec61360",
+                "semanticId": {
+                  "property": "P1",
+                  "value": "http://qudt.org/vocab/unit/V"
+                },
+                "preferredName": {
+                  "property": "P35",
+                  "value": [
+                    {
+                      "value": "Volt",
+                      "lang": "de"
+                    }
+                  ]
+                },
+                "shortName": {
+                  "property": "P36",
+                  "value": null
+                },
+                "unit": {
+                  "property": "P37",
+                  "value": "Volt"
+                },
+                "sourceOfDefinition": {
+                  "property": "P40",
+                  "value": [
+                    "http://qudt.org/3.2.1/vocab/unit",
+                    "https://cdd.iec.ch/cdd/iec62720/iec62720.nsf/Units/0112-2---62720%23UAA296",
+                    "https://en.wikipedia.org/wiki/Volt?oldid=494812083"
+                  ]
+                },
+                "Symbol": {
+                  "property": "P41",
+                  "value": "V"
+                },
+                "dataType": {
+                  "property": "P42",
+                  "value": "http://qudt.org/schema/qudt/Unit"
+                },
+                "unitId": {
+                  "property": "P43",
+                  "value": "0112/2///62720#UAA296"
+                },
+                "Definition": {
+                  "property": "P44",
+                  "value": [
+                    {
+                      "type": "description",
+                      "value": "$\\textit{Volt}$ is the SI unit of electric potential.\n  Separating electric charges creates potential energy, which can be measured in energy units such as joules.\n  Electric potential is defined as the amount of potential energy present per unit of charge.\n  Electric potential is measured in volts, with one volt representing a potential of one joule per coulomb of charge.\n  The name of the unit honors the Italian scientist Count Alessandro Volta (1745-1827), the inventor of the first battery.\n  The volt also may be expressed with a variety of other units.\n  For example, a volt is also equal to one watt per ampere ($W/A$) and one joule per ampere per second ($J/A/s$).\n  "
+                    },
+                    {
+                      "type": "latexDefinition",
+                      "value": "$\\textit{V}\\ \\equiv\\ \\text{volt}\\ \\equiv\\ \\frac{\\text{J}}{\\text{C}}\\ \\equiv\\ \\frac{\\text{joule}}{\\text{coulomb}}\\ \\equiv\\ \\frac{\\text{W.s}}{\\text{C}}\\ \\equiv\\ \\frac{\\text{watt.second}}{\\text{coulomb}}\\ \\equiv\\ \\frac{\\text{W}}{\\text{A}}\\ \\equiv\\ \\frac{\\text{watt}}{\\text{amp}}$"
+                    }
+                  ]
+                },
+                "valueFormat": {
+                  "property": "P45",
+                  "value": "W/A"
+                },
+                "valueList": {
+                  "property": "P46",
+                  "value": null
+                },
+                "value": {
+                  "property": "P47",
+                  "value": null
+                },
+                "levelType": {
+                  "property": "P48",
+                  "value": null
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
 ```
 
 Beispielhafte Feldprüfung:
 
 | Feld | Erwartung | Tatsächlicher Wert | Bewertung |
 |-|-|-|-|
-| semanticId | `http://qudt.org/vocab/unit/V` | [einfügen] | [bestanden / nicht bestanden] |
-| preferredName | Volt oder sprachabhängiger Name | [einfügen] | [einfügen] |
-| symbol | `V` | [einfügen] | [einfügen] |
-| dataType | Unit / qudt:Unit | [einfügen] | [einfügen] |
-| source / URI | Quelle nachvollziehbar | [einfügen] | [einfügen] |
+| semanticId | `http://qudt.org/vocab/unit/V` | http://qudt.org/vocab/unit/V | bestanden |
+| preferredName | Volt oder sprachabhängiger Name | Volt mit lang: de | bestanden |
+| symbol | `V` | V | bestanden |
+| dataType | Unit / qudt:Unit | http://qudt.org/schema/qudt/Unit | bestanden |
+| source / URI | Quelle nachvollziehbar | QUDT-Quelle, IEC-CDD-Link und Wikipedia-Link vorhanden | bestanden |
 
 ---
 
