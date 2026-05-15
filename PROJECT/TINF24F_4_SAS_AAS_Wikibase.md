@@ -5,7 +5,7 @@
 
 | Dokument-ID   | SAS_AAS_Wikibase                                  |
 |---------------|---------------------------------------------------|
-| Version       | 1.0                                               |
+| Version       | 1.1                                               |
 | Datum         | 08.05.2026                                        |
 | Autor         | GitHub Copilot Agent (Senior Software Architekt)  |
 | Basis         | IEEE 1471-2000 / ISO/IEC/IEEE 42010               |
@@ -18,6 +18,7 @@
 | Version | Datum      | Autor                              | Kommentar                |
 |---------|------------|------------------------------------|--------------------------|
 | 1.0     | 08.05.2026 | GitHub Copilot (Architekturanalyse) | Erstversion auf Basis der Repository-Analyse |
+| 1.1     | 15.05.2026 | Team 4 | Überarbeitung der API-Architektur, Kürzung doppelter Mapper-Beschreibungen und Verweis auf die Moduldokumentation |
 
 ---
 
@@ -25,11 +26,12 @@
 
 1. [Einleitung & Vision](#1-einleitung--vision)
 2. [Systemübersicht](#2-systemübersicht)
-3. [Detaillierte API-Architektur](#3-detaillierte-api-architektur)
-   - 3.1 [OpenAPI-Spezifikation](#31-openapi-spezifikation)
-   - 3.2 [AAS-CD Daten-Mapping (Transformationsschicht)](#32-aas-cd-daten-mapping-transformationsschicht)
-   - 3.3 [Filter- und Sortierlogik](#33-filter--und-sortierlogik)
-   - 3.4 [Konzept für rollenbasierte Zugriffskontrolle](#34-konzept-für-rollenbasierte-zugriffskontrolle)
+3. [API-Architektur und Gateway-Konzept](#3-api-architektur-und-gateway-konzept)
+   - 3.1 [Rolle der API-Architektur](#31-rolle-der-api-architektur)
+   - 3.2 [API-Gateway und Einzel-APIs](#32-api-gateway-und-einzel-apis)
+   - 3.3 [Datenfluss der API](#33-datenfluss-der-api)
+   - 3.4 [Abgrenzung zur Moduldokumentation](#34-abgrenzung-zur-moduldokumentation)
+   - 3.5 [Zugriffskontrolle und Sicherheit auf API-Ebene](#35-zugriffskontrolle-und-sicherheit-auf-api-ebene)
 4. [Such-Architektur](#4-such-architektur)
    - 4.1 [CirrusSearch vs. FacettedSearch](#41-cirrussearch-vs-facettedsearch)
    - 4.2 [Begründung der Wahl](#42-begründung-der-wahl)
@@ -71,13 +73,17 @@ Das Projekt **Semantic Wikibase** verfolgt die Vision, eine offene, kollaborativ
 
 ### 1.3 Zweck dieses Dokuments
 
-Diese Software Architecture Specification (SAS) beschreibt auf Basis von IEEE 1471-2000 die vollständige Softwarearchitektur der Semantic Wikibase Plattform. Sie dokumentiert:
+Diese Software Architecture Specification (SAS) beschreibt auf Basis von IEEE 1471-2000 die übergeordnete Softwarearchitektur der Semantic Wikibase Plattform. Der Fokus liegt dabei auf dem Zusammenspiel der zentralen Systemkomponenten, der API-Gateway-Struktur, der Wikibase-Integration sowie den nicht-funktionalen Anforderungen.
 
-1. Die implementierten API-Endpunkte und deren OpenAPI-Spezifikation
-2. Die Transformationsschicht zwischen externen Ontologien (QUDT, VEC, KBL) und dem AAS-CD-Metamodell nach IEC 61360
+Die detaillierte Beschreibung einzelner APIs, Mapper und Mapping-Regeln wird bewusst nicht vollständig im SAS wiederholt, sondern in der Moduldokumentation (MOD) beschrieben. Dadurch bleibt das SAS auf die Gesamtarchitektur fokussiert, während das MOD die konkrete Modul- und Implementierungsebene dokumentiert.
+
+Dieses Dokument beschreibt insbesondere:
+
+1. Die Gesamtarchitektur der Semantic Wikibase
+2. Das Zusammenspiel zwischen API-Gateway, Einzel-APIs, Mappern und Wikibase
 3. Die Such-Architektur der Wikibase-Erweiterung
-4. Das interne und externe Datenmodell
-5. Nicht-funktionale Anforderungen bezüglich Sicherheit und Skalierbarkeit
+4. Das interne und externe Datenmodell auf Architekturebene
+5. Nicht-funktionale Anforderungen bezüglich Sicherheit, Skalierbarkeit und Betrieb
 
 ---
 
@@ -138,332 +144,130 @@ Das System besteht aus vier logischen Schichten, die miteinander interagieren:
 
 ### 2.2 Komponentenbeschreibung
 
-| Komponente | Technologie | Zweck |
-|---|---|---|
-| **FastAPI QUDT-API** | Python 3, FastAPI, Uvicorn | Standalone REST-Endpunkt für QUDT-zu-IEC61360-Mapping |
-| **Flask Wikibase-API** | Python 3, Flask, Blueprints | Erweiterbare API-Schicht über der Wikibase-Instanz |
-| **QUDT Service** | Python 3, `requests`, SPARQL | Abfrage des QUDT Fuseki-Endpunkts, 2-Schritt SPARQL-Auflösung |
-| **QUDT Mapper** | Python 3, `rdflib` | Lokales TTL-basiertes Mapping ohne Netzwerkzugriff |
-| **KBL Mapper** | Python 3, `requests`, XML/XSD | Mapping von KBL-XSD-Strukturen auf IEC 61360 |
-| **VEC Mapper** | Python 3, `rdflib` | Mapping der VEC-Ontologie (OWL/TTL) auf IEC 61360 |
-| **Wikibase** | MediaWiki, Wikibase Extension | Persistente Wissensdatenbank für Concept Descriptions |
-| **SPARQL Endpoint** | Blazegraph / WDQS | RDF-Abfrageendpunkt für Wikibase-Daten |
-| **Nginx Reverse Proxy** | Nginx | Pretty URIs, SSL-Terminierung, Routing |
+Die folgende Tabelle beschreibt die zentralen Architekturkomponenten der Semantic Wikibase. Während das SAS die Rolle der Komponenten im Gesamtsystem beschreibt, werden die einzelnen Mapper, APIs und Mapping-Regeln in der Moduldokumentation detailliert erläutert.
+
+| Komponente | Technologie | Zweck | Detailbeschreibung |
+|---|---|---|---|
+| **API-Gateway / Facade** | Python, FastAPI / Flask | Zentrale Schnittstelle für externe Clients. Nimmt Anfragen entgegen und leitet diese an die passende Einzel-API bzw. den passenden Mapper weiter. | [MOD Kapitel 3.2](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#32-abgrenzung-zwischen-api-gateway-und-einzel-apis) |
+| **QUDT-API** | Python 3, FastAPI / Flask | Stellt REST-Endpunkte für QUDT-Abfragen bereit und ermöglicht das Mapping von QUDT-Daten auf das gemeinsame Zielmodell. | [MOD Kapitel 1](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#1-openapi-spezifikation), [MOD Kapitel 4.1](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#41-qudt) |
+| **QUDT-Mapper** | Python 3, `rdflib`, SPARQL | Verarbeitet QUDT-Daten aus RDF-, TTL- oder SPARQL-Quellen und überführt sie in das IEC61360-nahe Zielmodell. | [MOD Kapitel 4.1](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#41-qudt) |
+| **VEC-Mapper** | Python 3, `rdflib` | Verarbeitet die VEC-Ontologie auf Basis von RDF/OWL/TTL und erstellt daraus ConceptDescriptions. | [MOD Kapitel 4.2](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#42-vec) |
+| **KBL-Mapper** | Python 3, `requests`, XML/XSD | Analysiert KBL-XSD-Strukturen und bildet Elemente, Typen, Attribute und Enumerationen auf das Zielmodell ab. | [MOD Kapitel 4.3](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#43-kbl) |
+| **Gemeinsames Zielmodell** | JSON, IEC61360-nahes Datenmodell | Vereinheitlicht die Ausgaben aller angebundenen Datenquellen. | [MOD Kapitel 5](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#5-gemeinsames-mapping-über-alle-quellen), [MOD Kapitel 6](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#6-gemeinsames-zielmodell) |
+| **Wikibase** | MediaWiki, Wikibase Extension | Dient als zentrale Plattform zur Verwaltung und Bereitstellung semantischer Definitionen. | [MOD Kapitel 7](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#7-wikibase-datenstruktur-und-ablage-der-gemappten-informationen), [MOD Kapitel 9](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#9-wikibase-integration) |
+| **SPARQL Endpoint** | Blazegraph / WDQS | Ermöglicht RDF-Abfragen auf Wikibase-Daten und unterstützt semantische Such- und Integrationsszenarien. | [MOD Kapitel 9](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#9-wikibase-integration) |
+| **Reverse Proxy / Routing** | Nginx / Traefik | Zuständig für Pretty URIs, Routing und perspektivisch SSL-Terminierung. | [MOD Kapitel 9](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#9-wikibase-integration) |
 
 ---
 
-## 3. Detaillierte API-Architektur
+## 3. API-Architektur und Gateway-Konzept
 
-### 3.1 OpenAPI-Spezifikation
+### 3.1 Rolle der API-Architektur
 
-Die API-Spezifikation ist im Repository unter `SOURCE/API_QUDT/Source_Code/openapi.yaml` abgelegt und wurde nach OpenAPI 3.0.3 erstellt. Die Spezifikation beschreibt eine **QUDT-zu-IEC61360-Mapping-API** mit zwei Haupt-Endpunkten.
+Die API-Architektur der Semantic Wikibase dient als Vermittlungsschicht zwischen externen Clients, den angebundenen Datenquellen und der Wikibase. Externe Systeme wie AAS-Clients, Entwicklerwerkzeuge oder Benutzeroberflächen sollen semantische Definitionen über REST-Endpunkte abrufen können, ohne die internen Datenquellen direkt ansprechen zu müssen.
 
-#### 3.1.1 Endpunkt: `GET /`
+Im aktuellen Projektstand stehen vor allem folgende Aufgaben im Fokus:
 
-```
-GET /
-```
+- Entgegennahme von Suchanfragen über REST-Endpunkte
+- Weiterleitung an passende Einzel-APIs bzw. Mapper
+- Verarbeitung externer Datenquellen wie QUDT, VEC und KBL
+- Transformation der Quelldaten in ein gemeinsames IEC61360-nahes JSON-Zielmodell
+- Bereitstellung der Ergebnisse für API-Clients und perspektivisch für die Ablage in Wikibase
 
-**Beschreibung:** Root-Endpunkt mit Basisinformationen zur API.
+Die detaillierte Beschreibung der einzelnen APIs, Mapper und Mapping-Regeln befindet sich in der Moduldokumentation.
 
-**Antwort (HTTP 200):**
-```json
-{
-  "message": "QUDT to IEC61360 Mapping API",
-  "swagger": "/docs",
-  "endpoint": "/map"
-}
-```
+Siehe hierzu:
+- [MOD Kapitel 3: Architektur der API](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#3-architektur-der-api)
+- [MOD Kapitel 4: Datenquellen und Mappings](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#4-datenquellen-und-mappings)
+- [MOD Kapitel 5: Gemeinsames Mapping über alle Quellen](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#5-gemeinsames-mapping-über-alle-quellen)
 
-#### 3.1.2 Endpunkt: `GET /map`
+---
 
-```
-GET /map?search={begriff}&lang={sprache}&types={typen}
-```
+### 3.2 API-Gateway und Einzel-APIs
 
-Dies ist der zentrale Endpunkt der API. Er nimmt einen Suchbegriff, eine optionale Sprache und optionale QUDT-Typ-Filter entgegen, führt eine SPARQL-Abfrage gegen den QUDT-Endpunkt durch und gibt eine IEC 61360-konforme ConceptDescription zurück.
+Die Architektur unterscheidet zwischen einer zentralen Gateway-API und mehreren fachlichen Einzel-APIs bzw. Mappern.
 
-**Query-Parameter:**
+Das API-Gateway fungiert als zentrale Einstiegsschicht. Es nimmt Anfragen von externen Clients entgegen und entscheidet anhand der Anfrageparameter, welche Datenquelle bzw. welches Mapping-Modul verwendet werden soll. Dadurch müssen externe Systeme nicht wissen, ob die angefragten Informationen aus QUDT, VEC oder KBL stammen.
 
-| Parameter | Typ | Pflicht | Standardwert | Beschreibung |
-|-----------|-----|---------|--------------|--------------|
-| `search` | string | ja | – | Suchbegriff, vollständige QUDT-URI oder CURIE (z. B. `unit:V`) |
-| `lang` | enum (`en`, `de`) | nein | `en` | Sprache für Labels und Beschreibungen |
-| `types` | array[enum] | nein | alle Typen | QUDT-Typen: `unit`, `quantitykind`, `dimensionvector`, `constant`, `sou`, `soqk` |
+Die Einzel-APIs und Mapper übernehmen die konkrete Verarbeitung der jeweiligen Quelle:
 
-**Suchmodi:**
-- **term**: Der Suchbegriff ist ein Klarbegriff wie `Volt` oder `Ampere`
-- **id**: Der Suchbegriff ist eine vollständige QUDT-URI (`http://qudt.org/vocab/unit/V`) oder eine CURIE (`unit:V`)
+| Komponente | Aufgabe |
+|---|---|
+| API-Gateway | Zentrale Annahme und Weiterleitung von Anfragen |
+| QUDT-API / QUDT-Mapper | Verarbeitung von QUDT-Daten wie Einheiten, Symbolen und QuantityKinds |
+| VEC-API / VEC-Mapper | Verarbeitung der VEC-Ontologie auf Basis von RDF/OWL/TTL |
+| KBL-API / KBL-Mapper | Verarbeitung von KBL-XSD-Strukturen |
+| Gemeinsames Zielmodell | Vereinheitlichung der Ergebnisse im IEC61360-nahen JSON-Format |
+| Wikibase | Persistente Verwaltung und Bereitstellung semantischer Definitionen |
 
-**Antwortstruktur (HTTP 200 – Treffer gefunden):**
+Diese Trennung unterstützt eine modulare Erweiterung der Plattform. Neue Datenquellen können ergänzt werden, ohne die gesamte API-Struktur neu aufzubauen.
 
-```json
-{
-  "query": {
-    "search": "Volt",
-    "mode": "term",
-    "lang": "en",
-    "types": ["unit"]
-  },
-  "total": 1,
-  "result": {
-    "modelType": "ConceptDescription",
-    "id": "http://qudt.org/vocab/unit/V",
-    "idShort": "V",
-    "embeddedDataSpecifications": [
-      {
-        "dataSpecification": {
-          "type": "ExternalReference",
-          "keys": [
-            {
-              "type": "GlobalReference",
-              "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0"
-            }
-          ]
-        },
-        "dataSpecificationContent": {
-          "modelType": "DataSpecificationIec61360",
-          "semanticId":        { "property": "P1",  "value": "http://qudt.org/vocab/unit/V" },
-          "preferredName":     { "property": "P35", "value": [{"value": "Volt", "lang": "en"}] },
-          "shortName":         { "property": "P36", "value": null },
-          "unit":              { "property": "P37", "value": "Volt" },
-          "sourceOfDefinition":{ "property": "P40", "value": null },
-          "Symbol":            { "property": "P41", "value": "V" },
-          "dataType":          { "property": "P42", "value": "qudt:Unit" },
-          "unitId":            { "property": "P43", "value": null },
-          "Definition":        { "property": "P44", "value": null },
-          "valueFormat":       { "property": "P45", "value": null },
-          "valueList":         { "property": "P46", "value": null },
-          "value":             { "property": "P47", "value": null },
-          "levelType":         { "property": "P48", "value": null }
-        }
-      }
-    ],
-    "additionalProperties": {}
-  }
-}
-```
+---
 
-**Fehler-Antworten:**
+### 3.3 Datenfluss der API
 
-| HTTP-Code | Ursache | Antwort-Body |
-|-----------|---------|--------------|
-| 400 | Leerer `search`-Parameter | `{"detail": "Parameter 'search' darf nicht leer sein."}` |
-| 500 | QUDT-Endpunkt nicht erreichbar | `{"detail": "Fehler beim Zugriff auf QUDT."}` |
-
-#### 3.1.3 Flask-Blueprint-Endpunkt: `GET /api/v3/search`
-
-Neben der FastAPI-Implementierung existiert eine Flask-basierte Architektur unter `SOURCE/Wikibase_API/`. Die `app.py` registriert den Blueprint `api_v3` auf dem Pfad `/api/v3`:
-
-```python
-app.register_blueprint(api_v3, url_prefix="/api/v3")
-```
-
-Der Blueprint definiert:
-```
-GET /api/v3/info     → Gibt API-Name und Version zurück
-GET /api/v3/search   → Suche: ?search=Volt&lang=en&types=unit,quantitykind
-```
-
-Der `/api/v3/search`-Endpunkt delegiert an den `search_qudt()`-Service in `qudt_service.py` und gibt eine identische JSON-Struktur zurück wie der FastAPI-Endpunkt.
-
-### 3.2 AAS-CD Daten-Mapping (Transformationsschicht)
-
-#### 3.2.1 Überblick des Mapping-Prozesses
-
-Die Transformationsschicht ist das Kernstück der API. Sie konvertiert RDF-Tripel aus QUDT (oder anderen Quellen) in AAS-konforme `ConceptDescription`-JSON-Objekte nach IEC 61360. Der Prozess umfasst sechs Schritte:
+Der grundlegende Datenfluss sieht wie folgt aus:
 
 ```
-[1] Eingabe validieren          (normalize_lang, normalize_types)
-       │
-       ▼
-[2] Suchmodus erkennen          (detect_search_mode)
-       │
-       ▼
-[3] SPARQL Kandidatenabfrage    (build_candidate_query → run_sparql)
-       │
-       ▼
-[4] Beste URI ermitteln         (candidates[0]["entity"]["value"])
-       │
-       ▼
-[5] SPARQL Detailabfrage        (build_detail_query → run_sparql)
-       │
-       ▼
-[6] RDF → IEC61360 mappen       (map_rows_to_semantichub)
-       │
-       ▼
-[7] JSON-Antwort zurückgeben
+Externer Client
+      |
+      v
+API-Gateway
+      |
+      v
+Auswahl der passenden Einzel-API / des passenden Mappers
+      |
+      v
+Abruf und Analyse der externen Datenquelle
+      |
+      v
+Transformation in das gemeinsame IEC61360-nahe Zielmodell
+      |
+      v
+JSON-Antwort an Client / perspektivische Ablage in Wikibase
 ```
 
-#### 3.2.2 Mapping-Tabelle: QUDT-Prädikate auf IEC 61360-Felder
+Beispielhaft kann eine Anfrage nach einer Einheit wie `Volt` über das Gateway verarbeitet und an die QUDT-API weitergeleitet werden. Der QUDT-Mapper extrahiert relevante RDF-Properties und erzeugt daraus eine ConceptDescription im gemeinsamen Zielmodell.
 
-Die zentrale Funktion `map_rows_to_semantichub()` in `qudt_service.py` iteriert über alle RDF-Tripel des gefundenen Objekts und ordnet jeden Prädikat einem IEC 61360-Feld zu:
+Für VEC und KBL erfolgt derselbe Ablauf, jedoch mit anderen Quellformaten. VEC basiert auf RDF/OWL/TTL, während KBL auf XML/XSD-Strukturen basiert.
 
-| IEC 61360-Feld | Property-Nr. | QUDT RDF-Prädikat | Bemerkung |
-|----------------|--------------|-------------------|-----------|
-| `semanticId` | P1 | Subject-URI (direkt) | Globale eindeutige ID des Konzepts |
-| `preferredName` | P35 | `rdfs:label` | Mehrsprachige Liste von `{value, lang}` |
-| `shortName` | P36 | lokaler URI-Name | Aus URI extrahiert, max. 64 Zeichen |
-| `unit` | P37 | `rdfs:label` (erster Treffer) | Fallback: erstes Label als Einheitenname |
-| `sourceOfDefinition` | P40 | `rdfs:isDefinedBy`, `qudt:informativeReference` | Liste von Quell-URIs |
-| `Symbol` | P41 | `qudt:symbol` | Einheitensymbol (z. B. `V` für Volt) |
-| `dataType` | P42 | `rdf:type` | QUDT-Klasse (z. B. `qudt:Unit`) |
-| `unitId` | P43 | `qudt:iec61360Code` | IEC 61360-Einheiten-Code |
-| `Definition` | P44 | `dcterms:description`, `qudt:latexDefinition` | Textuelle und LaTeX-Definitionen |
-| `valueFormat` | P45 | `qudt:siUnitsExpression` | SI-Einheitenausdruck |
-| `valueList` | P46 | – | Nicht aus QUDT ableitbar, `null` |
-| `value` | P47 | – | Nicht für Einheiten, `null` |
-| `levelType` | P48 | – | MIN/NOM/TYP/MAX, `null` bei Einheiten |
+---
 
-**Nicht gemappte Prädikate** werden in `additionalProperties` gesammelt, z. B.:
-- `qudt:conversionMultiplier`
-- `qudt:hasDimensionVector`
-- `qudt:hasQuantityKind`
-- `qudt:ucumCode`
-- `qudt:wikidataMatch`
+### 3.4 Abgrenzung zur Moduldokumentation
 
-#### 3.2.3 CURIE-Expansion
+Dieses SAS beschreibt die übergeordnete Architektur, die beteiligten Komponenten und deren Zusammenspiel. Die konkrete technische Umsetzung einzelner Mapper, die detaillierten Mapping-Tabellen und die Behandlung einzelner IEC61360-Felder werden nicht im SAS wiederholt, sondern in der Moduldokumentation beschrieben.
 
-Vor der SPARQL-Abfrage werden CURIEs (Compact URIs) in vollständige URIs expandiert:
+Dadurch wird eine klare Trennung erreicht:
 
-```python
-curie_map = {
-    "unit":           "http://qudt.org/vocab/unit/",
-    "quantitykind":   "http://qudt.org/vocab/quantitykind/",
-    "qkdv":           "http://qudt.org/vocab/dimensionvector/",
-    "dimensionvector":"http://qudt.org/vocab/dimensionvector/",
-    "constant":       "http://qudt.org/vocab/constant/",
-    "sou":            "http://qudt.org/vocab/sou/",
-    "soqk":           "http://qudt.org/vocab/soqk/"
-}
-```
+| Dokument | Fokus |
+|---|---|
+| SAS | Gesamtarchitektur, Komponenten, Datenfluss, Schnittstellen, Qualitätsaspekte |
+| MOD | Einzelmodule, Mapper, Mapping-Regeln, Zielmodell, Modultests |
 
-Beispiel: `unit:V` → `http://qudt.org/vocab/unit/V`
+Die detaillierten Modulbeschreibungen befinden sich in:
 
-#### 3.2.4 Klassenstruktur: `empty_concept_description()`
+- [MOD Kapitel 4.1 QUDT](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#41-qudt)
+- [MOD Kapitel 4.2 VEC](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#42-vec)
+- [MOD Kapitel 4.3 KBL](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#43-kbl)
+- [MOD Kapitel 12 Tests der Module](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#12-tests-der-module)
 
-Die Funktion `empty_concept_description(uri: str)` erzeugt das Grundgerüst jeder ConceptDescription. Jedes IEC-Feld ist als Objekt `{"property": "P{n}", "value": ...}` strukturiert:
+---
 
-```python
-def empty_concept_description(uri: str) -> Dict[str, Any]:
-    return {
-        "modelType": "ConceptDescription",
-        "id": uri,
-        "idShort": local_name(uri),
-        "embeddedDataSpecifications": [
-            {
-                "dataSpecification": {
-                    "type": "ExternalReference",
-                    "keys": [{
-                        "type": "GlobalReference",
-                        "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0"
-                    }]
-                },
-                "dataSpecificationContent": {
-                    "modelType": "DataSpecificationIec61360",
-                    "semanticId":         {"property": "P1",  "value": uri},
-                    "preferredName":      {"property": "P35", "value": []},
-                    "shortName":          {"property": "P36", "value": None},
-                    "unit":               {"property": "P37", "value": None},
-                    "sourceOfDefinition": {"property": "P40", "value": []},
-                    "Symbol":             {"property": "P41", "value": None},
-                    "dataType":           {"property": "P42", "value": None},
-                    "unitId":             {"property": "P43", "value": None},
-                    "Definition":         {"property": "P44", "value": []},
-                    "valueFormat":        {"property": "P45", "value": None},
-                    "valueList":          {"property": "P46", "value": None},
-                    "value":              {"property": "P47", "value": None},
-                    "levelType":          {"property": "P48", "value": None}
-                }
-            }
-        ],
-        "additionalProperties": {}
-    }
-```
+### 3.5 Zugriffskontrolle und Sicherheit auf API-Ebene
 
-### 3.3 Filter- und Sortierlogik
+Die aktuelle API-Implementierung ist primär für Entwicklungs- und Demonstrationszwecke vorgesehen. Für einen produktiven Betrieb ist ein rollenbasiertes Zugriffskonzept geplant.
 
-#### 3.3.1 SPARQL-Kandidatenabfrage mit Ranking
-
-Die Funktion `build_candidate_query()` baut eine SPARQL-Abfrage mit einem mehrstufigen Ranking. Der begriffs-basierte Suchmodus wendet vier Prioritätsstufen an:
-
-```sparql
-BIND(
-  IF(BOUND(?label) && LCASE(STR(?label)) = LCASE("Volt"), 0,
-    IF(LCASE(REPLACE(STR(?entity), "^.+[/#]", "")) = LCASE("Volt"), 1,
-      IF(BOUND(?symbol) && LCASE(STR(?symbol)) = LCASE("Volt"), 2, 3)
-    )
-  ) AS ?rank
-)
-ORDER BY ?rank STRLEN(STR(?label)) ?entity
-LIMIT 1
-```
-
-| Rang | Priorität | Kriterium |
-|------|-----------|-----------|
-| 0 | Höchste | Exakter Match auf `rdfs:label` (case-insensitive) |
-| 1 | Hoch | Exakter Match auf lokalen URI-Namen |
-| 2 | Mittel | Exakter Match auf `qudt:symbol` |
-| 3 | Niedrig | Teilstring-Match auf `rdfs:label` |
-
-Bei gleichem Rang wird nach Labellänge und dann nach URI alphabetisch sortiert, um deterministische Ergebnisse zu gewährleisten.
-
-#### 3.3.2 Typ-Filter
-
-Die Query verwendet `VALUES ?entityType { ... }` um die Suche auf ausgewählte QUDT-Typen zu beschränken. Zusätzlich gibt es einen URI-Präfix-Filter (`STRSTARTS`), der verhindert, dass Ressourcen aus unerwarteten QUDT-Namespaces zurückgegeben werden:
-
-```sparql
-VALUES ?entityType {
-  <http://qudt.org/schema/qudt/Unit>
-}
-
-?entity a ?entityType .
-
-FILTER(
-  STRSTARTS(STR(?entity), "http://qudt.org/vocab/unit/")
-)
-```
-
-#### 3.3.3 Sprachfilter in der Detailabfrage
-
-Die Detailabfrage (`build_detail_query`) filtert Literale nach Sprache, gibt aber immer englische Labels und Nicht-Literale (URIs) zurück:
-
-```sparql
-FILTER(
-  !isLiteral(?o) ||
-  LANG(?o) = "de"  ||
-  LANG(?o) = ""    ||
-  LANG(?o) = "en"  ||
-  ?p = rdfs:label  ||
-  ?p = dcterms:description
-)
-```
-
-### 3.4 Konzept für rollenbasierte Zugriffskontrolle
-
-Die API-Implementierung enthält aktuell keinen direkten Authentifizierungs- oder Autorisierungsmechanismus. Die bestehende SAS v1.1 und das CRS beschreiben das geplante Rechtemanagement jedoch ausführlich.
-
-#### 3.4.1 Geplante Rollen
+Grundsätzlich werden folgende Rollen betrachtet:
 
 | Rolle | Rechte | Beschreibung |
-|-------|--------|--------------|
-| **Anonymer Nutzer** | Lesen (GET) | Kann alle veröffentlichten Concept Descriptions abfragen |
-| **Angemeldeter Nutzer** | Lesen + Erstellen | Kann neue Einträge in Wikibase anlegen |
-| **Editor / Kurator** | Lesen + Schreiben + Löschen | Kann Einträge bearbeiten und pflegen |
-| **Administrator** | Vollzugriff | Systemverwaltung, Benutzerverwaltung |
-| **API-Dienst (M2M)** | Lesen via Token | Maschineller Zugriff über API-Token (OAuth2) |
+|---|---|---|
+| Anonymer Nutzer | Lesen | Kann veröffentlichte ConceptDescriptions abrufen |
+| Angemeldeter Nutzer | Lesen und Erstellen | Kann neue Einträge anlegen |
+| Editor / Kurator | Lesen, Schreiben und Pflegen | Kann Einträge bearbeiten und kuratieren |
+| Administrator | Vollzugriff | Verwaltet System, Benutzer und Rechte |
+| API-Dienst | Maschineller Zugriff | Greift über Token oder API-Key auf REST-Endpunkte zu |
 
-#### 3.4.2 Architekturkonzept
-
-Die geplante Implementierung sieht folgende Schichten vor:
-
-1. **Wikibase-native Rechteverwaltung**: MediaWiki bietet ein differenziertes Rechtesystem (`$wgGroupPermissions`), das für Lese-/Schreibzugriffe auf Items genutzt wird.
-
-2. **API-Gateway-Authentifizierung**: Die Semantic Facade validiert API-Tokens (Bearer Token / OAuth2 Client Credentials) für programmatischen Zugriff. Nur validierte Token erhalten Schreibrechte (`POST`, `PUT`).
-
-3. **FoP Consult GmbH Integration** (geplant): Für den produktiven Einsatz ist die Integration eines externen Identity-Providers vorgesehen. Die REST-API soll OAuth2 mit JWT-Tokens verwenden, wobei Claims wie `role: editor` die Zugriffsstufe bestimmen.
-
-4. **Audit-Log**: Jede Änderung an Wikibase-Items wird durch das MediaWiki-Revisionssystem versioniert und ist nachvollziehbar.
+Für die produktive Nutzung sind zusätzlich Authentifizierung, Autorisierung, Rate Limiting, CORS-Einschränkungen und TLS-Absicherung vorzusehen.
 
 ---
 
@@ -714,38 +518,26 @@ Die externe JSON-Darstellung, wie sie die API zurückgibt, folgt dem AAS-Metamod
 
 ### 5.3 Datenquellen und Source-Mapping
 
-Das Repository implementiert Mapper für drei externe Quellen, die alle auf das gemeinsame IEC 61360-Ausgabeformat abbilden:
+Die Semantic Wikibase bindet im aktuellen Projektstand drei externe Datenquellen an:
 
-#### 5.3.1 QUDT-Mapper
+- QUDT
+- VEC
+- KBL
 
-- **Quelle**: QUDT Fuseki SPARQL-Endpunkt (`https://qudt.org/fuseki/qudt/query`)
-- **Typen**: Unit, QuantityKind, DimensionVector, PhysicalConstant, SystemOfUnits, SystemOfQuantityKinds
-- **Mapping**: RDF-Prädikate → IEC 61360 Felder (vollständig, siehe Abschnitt 3.2.2)
-- **Besonderheit**: Zwei-Schritt SPARQL (Kandidatensuche + Detailabfrage), Ranking-Algorithmus
+Diese Quellen unterscheiden sich in ihrer technischen Struktur. QUDT und VEC basieren auf RDF-, TTL- bzw. OWL-Strukturen, während KBL auf XML/XSD basiert. Aus architektonischer Sicht werden diese Unterschiede durch separate Mapper gekapselt. Jeder Mapper übernimmt die Verarbeitung seiner jeweiligen Quelle und überführt die Daten anschließend in das gemeinsame IEC61360-nahe Zielmodell.
 
-#### 5.3.2 KBL-Mapper (`kbl_xsd_mapper.py`)
+| Datenquelle | Quellformat | Verarbeitung | Ergebnis |
+|---|---|---|---|
+| QUDT | RDF / TTL / SPARQL | QUDT-API und QUDT-Mapper | ConceptDescriptions für Einheiten, Größen und Symbole |
+| VEC | RDF / OWL / TTL | VEC-Mapper | ConceptDescriptions für VEC-Konzepte |
+| KBL | XML / XSD | KBL-Mapper | ConceptDescriptions für KBL-Elemente, Typen und Enumerationen |
 
-- **Quelle**: KBL 2.5 XSD-Schema (`ecad-wiki.prostep.org`)
-- **Typen**: `xs:complexType`, `xs:simpleType`, `xs:element`
-- **Mapping-Tabelle** (KBL → IEC 61360):
+Die detaillierten Mapping-Regeln, Feldzuordnungen und Besonderheiten der einzelnen Quellen sind in der Moduldokumentation beschrieben:
 
-| IEC-Feld | Property | Quelle |
-|----------|----------|--------|
-| `semanticId` | P1 | XSD-URL + `#Typname` |
-| `preferredName` | P35 | XSD-Typname |
-| `shortName` | P36 | XSD-Typname |
-| `sourceOfDefinition` | P40 | XSD-URL |
-| `dataType` | P42 | XSDComplexType / XSDSimpleType |
-| `definition` | P44 | Generiert |
-
-- **Einschränkung**: KBL ist keine Ontologie, enthält keine Labels, Definitionen oder Einheiten → viele Felder bleiben `null`
-
-#### 5.3.3 VEC-Mapper (`vec_var_API.py`)
-
-- **Quelle**: VEC 2.2.0 Ontologie (`ecad-wiki.prostep.org`, TTL/OWL)
-- **Typen**: OWL-Klassen, RDF-Ressourcen
-- **Mapping**: Analog zu QUDT, nutzt `rdflib` zum Parsen der lokalen TTL-Datei
-- **Stärke**: VEC ist eine echte Ontologie (OWL/RDF), daher können `rdfs:label`, `rdfs:comment` und Vererbungsbeziehungen direkt gemappt werden
+- [MOD Kapitel 4.1 QUDT](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#41-qudt)
+- [MOD Kapitel 4.2 VEC](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#42-vec)
+- [MOD Kapitel 4.3 KBL](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#43-kbl)
+- [MOD Kapitel 5 Gemeinsames Mapping über alle Quellen](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#5-gemeinsames-mapping-über-alle-quellen)
 
 ---
 
@@ -755,7 +547,7 @@ Das Repository implementiert Mapper für drei externe Quellen, die alle auf das 
 
 #### 6.1.1 API-Latenz-Anforderungen
 
-Gemäß CRS und SAS v1.1 gelten folgende Performance-Ziele:
+Gemäß CRS und den Projektanforderungen gelten folgende Performance-Ziele:
 
 | Anforderung | Zielwert | Aktueller Status |
 |------------|----------|-----------------|
@@ -859,17 +651,19 @@ $wgGroupPermissions['bot']['apihighlimits'] = true;
 
 ### 7.1 Zusammenfassung der Architektur
 
-Die Semantic Wikibase Architektur realisiert eine moderne, offene Plattform für industrielle Concept Descriptions gemäß IEC 61360 und AAS-Standard. Die wesentlichen Architekturentscheidungen sind:
+Die Semantic Wikibase Architektur realisiert eine offene Plattform zur Verwaltung und Bereitstellung industrieller Concept Descriptions gemäß IEC61360-nahem Zielmodell und AAS-Kontext. Die wesentlichen Architekturentscheidungen sind:
 
-1. **Wikibase als Single Source of Truth**: Alle Concept Descriptions werden einmalig in Wikibase persistiert. AAS-Backends und externe Clients greifen lesend über REST-API und SPARQL zu.
+1. **Wikibase als zentrale semantische Plattform**: Die Wikibase dient als zentrale Umgebung zur Verwaltung, Pflege und Bereitstellung semantischer Definitionen. ConceptDescriptions können dort als strukturierte Items mit Properties und Statements abgebildet werden.
 
-2. **Zustandslose API-Facade**: Die API-Schicht (FastAPI / Flask) transformiert Anfragen zwischen AAS-Clients und Wikibase bzw. externen Ontologien. Es findet keine Datenhaltung in der Facade statt.
+2. **API-Gateway als zentrale Zugriffsschicht**: Externe Clients greifen nicht direkt auf einzelne Datenquellen zu, sondern über eine zentrale API-Schicht. Diese nimmt Anfragen entgegen und leitet sie abhängig von Quelle oder Suchkontext an die passenden Einzel-APIs bzw. Mapper weiter.
 
-3. **Multi-Source-Mapping**: Das Repository implementiert Mapper für drei externe Quellen (QUDT, KBL, VEC), die alle auf die gleiche IEC 61360-JSON-Ausgabestruktur abbilden.
+3. **Modulare Mapper-Struktur**: Die Datenquellen QUDT, VEC und KBL werden über getrennte Mapper verarbeitet. Dadurch bleiben Unterschiede zwischen RDF/TTL/OWL-Quellen und XML/XSD-Quellen innerhalb der jeweiligen Module gekapselt.
 
-4. **Zweistufige SPARQL-Suche**: Die QUDT-Integration verwendet einen robusten Zwei-Schritt-Ansatz (Kandidatenauswahl mit Ranking → Detailabfrage), der sowohl Begriffssuche als auch URI/CURIE-Suche unterstützt.
+4. **Gemeinsames Zielmodell**: Alle Mapper führen ihre Ergebnisse in ein einheitliches IEC61360-nahes JSON-Zielmodell über. Dadurch können externe Clients unabhängig von der ursprünglichen Datenquelle eine konsistente Antwortstruktur verwenden.
 
-5. **Erweiterbare Architektur**: Das Blueprint-Muster in Flask und die klare Trennung von Service-Layer (`qudt_service.py`) und API-Layer (`api_v3_blueprint.py`) erlauben die einfache Ergänzung neuer Datenquellen und Endpunkte.
+5. **Erweiterbarkeit der Architektur**: Durch die Trennung von Gateway, Einzel-APIs, Mapping-Schicht und Wikibase können weitere Datenquellen oder zusätzliche Schnittstellen später ergänzt werden, ohne die gesamte Architektur neu aufzubauen.
+
+Die detaillierten Mapping-Regeln und konkreten Feldzuordnungen sind in der Moduldokumentation beschrieben.
 
 ### 7.2 Bekannte Einschränkungen und offene Punkte
 
@@ -886,9 +680,9 @@ Die Semantic Wikibase Architektur realisiert eine moderne, offene Plattform für
 
 ### 7.3 Technische Schulden
 
-- Die aktuelle `api_qudt.py` (FastAPI) und `qudt_service.py` (Flask) enthalten duplizierte Logik (SPARQL-Bau, Mapping-Funktionen). Eine gemeinsame Library oder ein gemeinsames Package sollte extrahiert werden.
-- Der QUDT-Mapper verwendet direkte HTTP-Requests ohne Retry-Logik. Für Produktionsbetrieb sollte `tenacity` oder ein ähnliches Retry-Framework integriert werden.
-- Fehler aus dem QUDT-Endpunkt werden in `qudt_service.py` als rohe HTTP-Fehler weitergeleitet; strukturiertes Error-Handling mit dedizierten Fehlerklassen fehlt.
+- Einzelne API- und Mapping-Komponenten enthalten teilweise ähnliche Logik zur Datenabfrage, Transformation und Fehlerbehandlung. Perspektivisch sollte gemeinsame Logik in eine gemeinsame Library oder ein gemeinsames Package ausgelagert werden.
+- Für externe Datenquellen fehlt teilweise eine robuste Retry- und Timeout-Strategie. Für einen produktiven Betrieb sollten Wiederholungsmechanismen und klar definierte Fehlerfälle ergänzt werden.
+- Das Error-Handling sollte vereinheitlicht werden, damit Fehler aus externen Quellen, Mappern und API-Endpunkten strukturiert und konsistent zurückgegeben werden.
 
 ### 7.4 Roadmap und nächste Schritte
 
@@ -939,60 +733,36 @@ requests
 rdflib
 ```
 
-### A.2 QUDT Typ-Konfiguration
+### A.2 Hinweise zu Mapper-Konfigurationen
 
-```python
-TYPE_CONFIG = {
-    "unit": {
-        "classUri":    "http://qudt.org/schema/qudt/Unit",
-        "vocabPrefix": "http://qudt.org/vocab/unit/",
-        "short":       "qudt:Unit"
-    },
-    "quantitykind": {
-        "classUri":    "http://qudt.org/schema/qudt/QuantityKind",
-        "vocabPrefix": "http://qudt.org/vocab/quantitykind/",
-        "short":       "qudt:QuantityKind"
-    },
-    "dimensionvector": {
-        "classUri":    "http://qudt.org/schema/qudt/QuantityKindDimensionVector",
-        "vocabPrefix": "http://qudt.org/vocab/dimensionvector/",
-        "short":       "qudt:QuantityKindDimensionVector"
-    },
-    "constant": {
-        "classUri":    "http://qudt.org/schema/qudt/PhysicalConstant",
-        "vocabPrefix": "http://qudt.org/vocab/constant/",
-        "short":       "qudt:PhysicalConstant"
-    },
-    "sou": {
-        "classUri":    "http://qudt.org/schema/qudt/SystemOfUnits",
-        "vocabPrefix": "http://qudt.org/vocab/sou/",
-        "short":       "qudt:SystemOfUnits"
-    },
-    "soqk": {
-        "classUri":    "http://qudt.org/schema/qudt/SystemOfQuantityKinds",
-        "vocabPrefix": "http://qudt.org/vocab/soqk/",
-        "short":       "qudt:SystemOfQuantityKinds"
-    }
-}
-```
+Die konkreten Konfigurationen der einzelnen Mapper, beispielsweise erlaubte QUDT-Typen, Quell-URIs, Namespace-Präfixe oder Mapping-spezifische Einstellungen, sind Bestandteil der jeweiligen Implementierung.
+
+Im SAS werden diese Details nicht vollständig aufgeführt, da sie zur Modulebene gehören und in der Moduldokumentation bzw. im Quellcode nachvollziehbar sind.
+
+Weitere Informationen befinden sich in:
+
+- [MOD Kapitel 4.1 QUDT](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#41-qudt)
+- [MOD Kapitel 4.2 VEC](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#42-vec)
+- [MOD Kapitel 4.3 KBL](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#43-kbl)
+- [MOD Kapitel 5 Gemeinsames Mapping über alle Quellen](TINF24F_4-MOD-Semantic-Wikibase-0v1.md#5-gemeinsames-mapping-über-alle-quellen)
 
 ### A.3 Referenzen
 
-| Dokument | Pfad im Repository | Beschreibung |
-|----------|--------------------|--------------|
-| OpenAPI-Spezifikation | `SOURCE/API_QUDT/Source_Code/openapi.yaml` | REST-API Spec |
-| QUDT API (FastAPI) | `SOURCE/API_QUDT/Source_Code/api_qudt.py` | FastAPI-Implementierung |
-| Wikibase API (Flask) | `SOURCE/Wikibase_API/app.py` | Flask-App-Einstiegspunkt |
-| QUDT Service | `SOURCE/Wikibase_API/api_v3/qudt_service.py` | SPARQL-Service-Layer |
-| QUDT Mapper (lokal) | `SOURCE/source_mapping/QUDT/qudt_mapper.py` | TTL-basierter Mapper |
-| KBL Mapper | `SOURCE/source_mapping/KBL/kbl_xsd_mapper.py` | XSD-Mapper |
-| VEC API | `SOURCE/source_mapping/VEC/vec_var_API.py` | VEC-Ontologie-Mapper |
-| Volt-Beispiel-JSON | `SOURCE/source_mapping/QUDT/Volt.json` | Beispielausgabe |
+| Dokument / Artefakt | Pfad im Repository | Beschreibung |
+|---|---|---|
+| Moduldokumentation (MOD) | `PROJECT/TINF24F_4-MOD-Semantic-Wikibase-0v1.md` | Detailbeschreibung der APIs, Mapper, Mapping-Regeln, Zielmodelle und Modultests |
+| OpenAPI-Spezifikation | `SOURCE/API_QUDT/Source_Code/openapi.yaml` | Maschinenlesbare Beschreibung der QUDT-API |
+| QUDT API | `SOURCE/API_QUDT/Source_Code/api_qudt.py` | Implementierung der QUDT-API |
+| Wikibase API | `SOURCE/Wikibase_API/app.py` | Flask-App-Einstiegspunkt für die Wikibase-API |
+| QUDT Service | `SOURCE/Wikibase_API/api_v3/qudt_service.py` | Service-Schicht für QUDT-Abfragen |
+| QUDT Mapper | `SOURCE/source_mapping/QUDT/qudt_mapper.py` | Mapping von QUDT-Daten auf das gemeinsame Zielmodell |
+| KBL Mapper | `SOURCE/source_mapping/KBL/kbl_xsd_mapper.py` | Mapping von KBL-XSD-Strukturen auf das gemeinsame Zielmodell |
+| VEC Mapper | `SOURCE/source_mapping/VEC/vec_var_API.py` | Mapping der VEC-Ontologie auf das gemeinsame Zielmodell |
 | Lastenheft (CRS) | `PROJECT/CRS.md` | Kundenanforderungen |
+| Pflichtenheft (SRS) | `PROJECT/SRS.md` | Technische und funktionale Systemspezifikation |
 | Business Case | `PROJECT/BC.md` | Wirtschaftliche Begründung |
-| SAS v1.1 | `PROJECT/SAS.md` | Erste SAS-Version |
-| Begriffserklärungen | `Erklaerungen.md` | Glossar |
+| Projektplan | `PROJECT/PM.md` | Zeitplanung, Organisation und Projektstruktur |
 
 ---
 
-*Dieses Dokument wurde auf Basis einer vollständigen Analyse des Repositories `DHBW-TINF24F/Team4-Semantic-Wikibase` erstellt und dokumentiert den aktuellen Implementierungsstand sowie die geplante Zielarchitektur des Semantic Wikibase Projekts.*
+*Dieses Dokument beschreibt die übergeordnete Softwarearchitektur des Projekts `DHBW-TINF24F/Team4-Semantic-Wikibase`. Detaillierte Beschreibungen einzelner APIs, Mapper, Mapping-Regeln und Modultests sind in der Moduldokumentation (MOD) enthalten.*
