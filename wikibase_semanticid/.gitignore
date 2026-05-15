@@ -1,0 +1,10 @@
+.env
+log
+config/*.ini
+config/*.json
+config/*.php
+!config/Extensions.php
+
+# Extension composer dependencies
+config/extensions/*/vendor/
+config/extensions/*/composer.lock

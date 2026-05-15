@@ -1,0 +1,7 @@
+{
+	"@metadata": {
+		"authors": []
+	},
+	"uniquepropertyvalidator-desc": "Validates that specified properties have unique values across all items and properties",
+	"uniquepropertyvalidator-duplicate-value": "The value \"$2\" for property $1 already exists on entity [[$3]]. This property requires unique values."
+}

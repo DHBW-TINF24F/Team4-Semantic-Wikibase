@@ -1,0 +1,7 @@
+[submodule "config/extensions/EntitySchema"]
+	path = config/extensions/EntitySchema
+	url = https://gerrit.wikimedia.org/r/mediawiki/extensions/EntitySchema
+[submodule "entityshape-api/entityshape"]
+	path = entityshape-api/entityshape
+	url = https://github.com/Teester/entityshape
+	branch = master
