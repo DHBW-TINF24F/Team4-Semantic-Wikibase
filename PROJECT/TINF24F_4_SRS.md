@@ -38,11 +38,11 @@
       - [5.1.2 FA.002 - REST‑API zum Abrufen von Concept Descriptions](#512-fa002---restapi-zum-abrufen-von-concept-descriptions)
       - [5.1.3 FA.003 - REST‑API Sprache](#513-fa003---restapi-sprache)
       - [5.1.4 FA.004 - Edit‑Workflow](#514-fa004---editworkflow)
-      - [5.1.5 FA.005 - Verlinkung externen Quellen](#515-fa005---verlinkung-externen-quellen)
+      - [5.1.5 FA.005 - Verlinkung externer Quellen](#515-fa005---verlinkung-externer-quellen)
       - [5.1.6 FA.006 - Leichte Spezifikation \& Governance](#516-fa006---leichte-spezifikation--governance)
       - [5.1.7 FA.007 - Verwaltung und Bereitstellung standardisierbarer Begriffe](#517-fa007---verwaltung-und-bereitstellung-standardisierbarer-begriffe)
       - [5.1.08 FA.008 - Automatisierter Import externer Concept Descriptions per URI](#5108-fa008---automatisierter-import-externer-concept-descriptions-per-uri)
-      - [5.1.09 FA.009 - Überarbeitete und strukturierte Startseite mit verbesserter Suchfunktion](#519-fa009---überarbeitete-und-strukturierte-startseite-mit-verbesserter-suchfunktion)
+      - [5.1.9 FA.009 - Überarbeitete und strukturierte Startseite mit verbesserter Suchfunktion](#519-fa009---überarbeitete-und-strukturierte-startseite-mit-verbesserter-suchfunktion)
       - [5.1.10 FA.010 - Quellenspezifische Mapper für Semantic Definitions auf IEC61360](#5110-fa010---quellenspezifische-mapper-für-semantic-definitions-auf-iec61360)
     - [5.2 Nicht-funktionale Anforderungen (NFR)](#52-nicht-funktionale-anforderungen-nfr)
       - [5.2.1  NFA.001 - Verfügbarkeit / Stabilität](#521--nfa001---verfügbarkeit--stabilität)
@@ -196,6 +196,8 @@ Siehe auch: [Use Case 05 - Pflege der Datensätze - im CRS](TINF24F_4_CRS.md#45-
 
 [Issue: API gemäß AAS Concept Description Specification](https://github.com/DHBW-TINF24F/Team4-Semantic-Wikibase/issues/27#issue-4106472057)
 
+[Issue von Repo-Semantichub-io: API gemäß AAS Concept Description Specification](https://github.com/foprs/wikibase_semanticid/issues/21)
+
 
 #### 5.1.3 FA.003 - REST‑API Sprache
 
@@ -206,6 +208,8 @@ Siehe auch: [Use Case 05 - Pflege der Datensätze - im CRS](TINF24F_4_CRS.md#45-
 |Priorität| Notwendig|
 
 [Issue: API gemäß AAS Concept Description Specification](https://github.com/DHBW-TINF24F/Team4-Semantic-Wikibase/issues/27#issue-4106472057)
+
+[Issue von Repo-Semantichub-io: API gemäß AAS Concept Description Specification](https://github.com/foprs/wikibase_semanticid/issues/21)
 
 #### 5.1.4 FA.004 - Edit‑Workflow
 
@@ -263,6 +267,10 @@ Siehe auch: [Use Case 05 - Pflege der Datensätze - im CRS](TINF24F_4_CRS.md#45-
 
 [Issue: Implementierung verbesserter Suchfunktion](https://github.com/DHBW-TINF24F/Team4-Semantic-Wikibase/issues/25#issue-4106445553)
 
+[Issue von Repo-Semantichub-io: Implementierung verbesserter Suchfunktion](https://github.com/foprs/wikibase_semanticid/issues/19)
+
+[Issue von Repo-Semantichub-io: Neue Startseitenstruktur mit den vorgegebenen Inhalten](https://github.com/foprs/wikibase_semanticid/issues/20)
+
 
 #### 5.1.10 FA.010 - Quellenspezifische Mapper für Semantic Definitions auf IEC61360
 
@@ -273,6 +281,8 @@ Siehe auch: [Use Case 05 - Pflege der Datensätze - im CRS](TINF24F_4_CRS.md#45-
 |Priorität| Notwendig|
 
 [Issue: API gemäß AAS Concept Description Specification](https://github.com/DHBW-TINF24F/Team4-Semantic-Wikibase/issues/27#issue-4106472057)
+
+[Issue von Repo-Semantichub-io: API gemäß AAS Concept Description Specification](https://github.com/foprs/wikibase_semanticid/issues/21)
 
 
 ### 5.2 Nicht-funktionale Anforderungen (NFR)
