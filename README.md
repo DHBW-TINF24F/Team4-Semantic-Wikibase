@@ -1,7 +1,7 @@
 # Team4-Semantic-Wikibase
 
 
-Dieses Repository enthält die Ergebnisse des DHBW-Projekts Semantic Wikibase des Teams 4 (TINF24F). Das Projekt fokussiert auf die Entwicklung und Implementierung von semantischen Technologien im Kontext von Wikibase-Systemen. Hierfür wurde speziell ein Implementierungsvorschlag der API-Anbindung für die Semantic-Hub-Wikibase entwickelt[Semantic-Hub Repository](https://github.com/foprs/wikibase_semanticid).
+Dieses Repository enthält die Ergebnisse des DHBW-Projekts Semantic Wikibase des Teams 4 (TINF24F). Das Projekt fokussiert auf die Entwicklung und Implementierung von semantischen Technologien im Kontext von Wikibase-Systemen. Hierfür wurde speziell ein Implementierungsvorschlag der API-Anbindung für die Semantic-Hub-Wikibase entwickelt [Semantic-Hub Repository](https://github.com/foprs/wikibase_semanticid).
 
 Detaillierte Informationen zur Projektbeschreibung finden sich in der [offiziellen Projektdokumentation](https://github.com/DHBW-TINF24F/.github/blob/main/project4_semantic_wikibase.md).
 
