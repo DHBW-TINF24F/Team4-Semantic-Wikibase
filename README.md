@@ -1,7 +1,7 @@
 # Team4-Semantic-Wikibase
 
 
-Dieses Repository enthält die Ergebnisse des DHBW-Projekts Semantic Wikibase des Teams 4 (TINF24F). Das Projekt fokussiert auf die Entwicklung und Implementierung von semantischen Technologien im Kontext von Wikibase-Systemen.
+Dieses Repository enthält die Ergebnisse des DHBW-Projekts Semantic Wikibase des Teams 4 (TINF24F). Das Projekt fokussiert auf die Entwicklung und Implementierung von semantischen Technologien im Kontext von Wikibase-Systemen. Hierfür wurde speziell ein Implementierungsvorschlag der API-Anbindung für die Semantic-Hub-Wikibase entwickelt[Semantic-Hub Repository](https://github.com/foprs/wikibase_semanticid).
 
 Detaillierte Informationen zur Projektbeschreibung finden sich in der [offiziellen Projektdokumentation](https://github.com/DHBW-TINF24F/.github/blob/main/project4_semantic_wikibase.md).
 
@@ -20,7 +20,11 @@ Etablierte semantische Referenzsysteme (z.B. IEC-CDD, ECLASS, UNSPSC, ETIM) biet
 
 **Ziel ist es, eine Plattform zu bauen, auf der jeder solche Begriffe anlegen, beschreiben und wiederverwenden kann**. Ähnlich wie bei Wikipedia, aber speziell für industrielle Begriffe und semantische Daten.
 
-**Innerhalb dieses Projekts** wurde die Suchfunktion der Wikibase optimiert und APIs mit quellenspezifischen Mappern für QUDT, KBL und VEC entwickelt, die externe Daten automatisiert auf das IEC61360-Datenmodell abbilden.
+**Innerhalb dieses Projekts** wurde die Suchfunktion der Wikibase optimiert und APIs mit quellenspezifischen Mappern für QUDT, KBL und VEC entwickelt, die externe Daten automatisiert auf das IEC61360-Datenmodell abbilden. Hierzu sind folgende Issues gegeben:
+- [Test EntitySchema-bezogene Features](https://github.com/foprs/wikibase_semanticid/issues/18)
+- [Implementierung verbesserter Suchfunktion](https://github.com/foprs/wikibase_semanticid/issues/19)
+- [Neue Startseitenstruktur mit den vorgegebenen Inhalten](https://github.com/foprs/wikibase_semanticid/issues/20)
+- [API gemäß AAS Concept Description Specification](https://github.com/foprs/wikibase_semanticid/issues/21)
 
 Weitere Informationen sind im [Benutzerhandbuch](https://github.com/DHBW-TINF24F/Team4-Semantic-Wikibase/blob/d30f840d06a78725a317fbb8e5b3604773a431bf/Benutzer_manual.md) zusehen.
 
