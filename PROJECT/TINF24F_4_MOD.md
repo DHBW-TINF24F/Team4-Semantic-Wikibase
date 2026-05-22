@@ -291,6 +291,18 @@ Dabei werden unter anderem folgende Eigenschaften übernommen:
 
 Nicht alle IEC61360-Properties können direkt aus QUDT befüllt werden, weshalb einige Felder standardmäßig auf null gesetzt werden. Das dient zunächst dazu, eine einheitliche und vollständig IEC61360-konforme Datenstruktur bereitzustellen, sodass alle erzeugten ConceptDescriptions denselben Aufbau besitzen. Zusätzlich existieren für manche IEC61360-Felder keine direkten semantischen Entsprechungen im QUDT-Datenmodell, beispielsweise für levelType, valueList oder value. Andere Felder könnten zwar theoretisch abgeleitet werden, sind im aktuellen Stand jedoch noch nicht implementiert. Durch das explizite Setzen auf null wird außerdem eindeutig gekennzeichnet, dass für diese Properties momentan kein Wert vorhanden ist.
 
+Zur besseren Nachvollziehbarkeit des QUDT-Mappings zeigen die folgenden visuellen Beispiele, welche RDF-/TTL-Rohdaten aus der Quelle entnommen werden und wie diese anschließend in die JSON-Struktur der Concept Description übertragen werden.
+
+![QUDT RDF-Rohdaten](images/mod_qudt_rdf_rohdaten.png)
+
+*Abbildung: Ausschnitt der QUDT-Rohdaten am Beispiel „Volt“. Sichtbar sind unter anderem RDF-/TTL-Eigenschaften wie `dcterms:description`, `qudt:applicableSystem` und die Semantic-ID des Eintrags.*
+
+![QUDT Ergebnis JSON](images/mod_qudt_ergebnis_json.png)
+
+*Abbildung: Ergebnis des QUDT-Mappings als JSON-Ausschnitt. Die farbigen Markierungen und Pfeile zeigen beispielhaft, wie RDF-Properties wie `rdfs:label`, `dcterms:description` und `qudt:latexDefinition` in die entsprechenden JSON-Felder übertragen werden.*
+
+Die folgende Tabelle zeigt, welche QUDT-Properties im aktuellen Mapping berücksichtigt werden und wie sie auf die Felder des gemeinsamen Zielmodells abgebildet werden.
+
 | QUDT / RDF Property | Quelle im Code | IEC61360 Feld | SemanticHub Property-Nr. | Mapping-Logik | Warum ggf. `null` |
 |---|---|---|---|---|---|
 | Entity URI | `entity_uri` | `semanticId` | `P1` | Die gefundene QUDT-URI wird direkt als Semantic ID übernommen. | Niemals `null`, da immer aus dem Treffer erzeugt. |
@@ -319,6 +331,16 @@ Die VEC-Ontologie (Vehicle Electric Container) wird verwendet, um semantische Fa
 Die Ontologie liegt als RDF/TTL-Modell vor und wird über Python-Mapper verarbeitet.
 
 Die Daten werden analysiert und anschließend in das gemeinsame IEC61360-Zielmodell überführt.
+
+Zur besseren Nachvollziehbarkeit des VEC-Mappings zeigen die folgenden visuellen Beispiele den Weg von den RDF-/TTL-Rohdaten aus der VEC-Ontologie zur erzeugten JSON-Struktur.
+
+![VEC RDF-Rohdaten](images/mod_vec_rdf_rohdaten.png)
+
+*Abbildung: Ausschnitt der VEC-Rohdaten am Beispiel „Connection“. Sichtbar sind unter anderem der Eintrag aus der VEC-Modelldokumentation sowie der zugehörige TTL-Ausschnitt mit `rdf:type`, `rdfs:comment`, `rdfs:label` und `rdfs:subClassOf`.*
+
+![VEC Ergebnis JSON](images/mod_vec_ergebnis_json.png)
+
+*Abbildung: Ergebnis des VEC-Mappings als JSON-Ausschnitt. Die farbigen Markierungen und Pfeile zeigen beispielhaft, wie VEC-Eigenschaften auf Felder wie `preferredName`, `Definition`, `dataType` und `additionalProperties` übertragen werden.*
 
 Die folgende Tabelle zeigt, welche VEC-Properties im aktuellen Mapping berücksichtigt werden und wie sie auf die Felder des gemeinsamen Zielmodells abgebildet werden.
 
@@ -350,6 +372,16 @@ KBL (Kabelbaumliste) basiert auf XML/XSD-Strukturen und beschreibt Kabelbaumdate
 Die Daten werden über eigene Mapping-Module eingelesen und analysiert.
 
 Anschließend erfolgt die Überführung der Inhalte in das standardisierte JSON-Zielmodell der Semantic Wikibase.
+
+Zur besseren Nachvollziehbarkeit des KBL-Mappings zeigen die folgenden visuellen Beispiele, wie XML-Schema-Elemente in das gemeinsame JSON-Zielmodell übertragen werden. Da KBL nicht als RDF-/TTL-Ontologie, sondern als XSD-Struktur vorliegt, unterscheidet sich die Ausgangsstruktur von QUDT und VEC.
+
+![KBL XSD-Rohdaten](images/mod_kbl_xsd_rohdaten.png)
+
+*Abbildung: Ausschnitt der KBL-XSD-Rohdaten am Beispiel „Wire_occurrence“. Sichtbar sind unter anderem `xs:complexType`, `xs:extension` und `xs:element`, die für die spätere JSON-Struktur ausgewertet werden.*
+
+![KBL Ergebnis JSON](images/mod_kbl_ergebnis_json.png)
+
+*Abbildung: Ergebnis des KBL-Mappings als JSON-Ausschnitt. Die farbigen Markierungen und Pfeile zeigen beispielhaft, wie XSD-Bestandteile auf Felder wie `semanticId`, `dataType`, `children` und `additionalProperties` abgebildet werden.*
 
 Die folgende Tabelle zeigt, wie XSD-Elemente, Typen, Attribute und Dokumentationen aus KBL auf die Felder des gemeinsamen Zielmodells abgebildet werden.
 
