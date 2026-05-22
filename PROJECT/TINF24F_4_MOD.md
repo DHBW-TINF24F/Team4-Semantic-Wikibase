@@ -11,6 +11,7 @@
 | 1.0     | 27.04.2026 | Lucrezia Trabalza | Erstellung & erster Entwurf |
 | 1.1     | 12.05.2026 | Lucrezia Trabalza, Marina Hidalgo Burova | Erweiterung der Moduldokumentation um OpenAPI-Spezifikation, Mapping-Zusammenführung, API-Architektur, Datenquellen, Wikibase-Integration, Suchfunktion, Fehlerbehandlung und Tests |
 | 1.2     | 14.05.2026 | Lucrezia Trabalza, Marina Hidalgo Burova | Ergänzung der gemeinsamen Mapping-Vergleichstabelle für QUDT, VEC und KBL sowie Erweiterung um Wikibase-Datenstruktur und Abgrenzung zwischen API-Gateway und Einzel-APIs |
+| 1.3     | 22.05.2026 | Lucrezia Trabalza | Ergänzung visueller Mapping-Beispiele für QUDT, VEC und KBL zur besseren Nachvollziehbarkeit der Rohdaten-zu-JSON-Transformation |
 
 ---
 
